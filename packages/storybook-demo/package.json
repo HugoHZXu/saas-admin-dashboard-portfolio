@@ -1,0 +1,25 @@
+{
+  "name": "storybook-demo",
+  "version": "0.0.0",
+  "private": true,
+  "dependencies": {
+    "hugo-ui": "file:../hugoUI",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
+  },
+  "devDependencies": {
+    "@storybook/addon-a11y": "^7.6.17",
+    "@storybook/addon-essentials": "^7.6.17",
+    "@storybook/addon-interactions": "^7.6.17",
+    "@storybook/addon-links": "^7.6.17",
+    "@storybook/react-vite": "^7.6.17",
+    "chromatic": "^10.5.1",
+    "storybook": "^7.6.17"
+  },
+  "scripts": {
+    "storybook": "storybook dev -p 6006",
+    "build-storybook": "storybook build",
+    "chromatic": "chromatic --project-token=$CHROMATIC_PROJECT_TOKEN --build-script-name=build-storybook",
+    "lint": "eslint \"src/**/*.{ts,tsx}\""
+  }
+}
