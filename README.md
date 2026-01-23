@@ -16,6 +16,41 @@ Open http://localhost:6006 to view the stories.
 - `packages/hugo-ui`: React component library
 - `packages/storybook-demo`: Storybook app showcasing `hugo-ui`
 
+## Theme provider usage
+
+Use `HugoUIProvider` at the app root to inject the theme once:
+
+```tsx
+import { HugoUIProvider, hugoUITheme } from 'hugo-ui';
+
+function App() {
+  return (
+    <HugoUIProvider theme={hugoUITheme}>
+      {/* app components */}
+    </HugoUIProvider>
+  );
+}
+```
+
+If you already have a custom MUI theme, pass it in to merge:
+
+```tsx
+import { createTheme } from '@mui/material/styles';
+import { HugoUIProvider, hugoUITheme } from 'hugo-ui';
+
+const baseTheme = createTheme({
+  // your theme overrides
+});
+
+function App() {
+  return (
+    <HugoUIProvider theme={baseTheme}>
+      {/* app components */}
+    </HugoUIProvider>
+  );
+}
+```
+
 ## Lint and format
 
 ```bash

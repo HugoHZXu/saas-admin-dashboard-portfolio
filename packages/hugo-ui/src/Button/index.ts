@@ -1,4 +1,4 @@
-export { HugoUIButton as Button } from './Button/Button';
+export { HugoUIButton } from './Button';
 export type {
   HugoUIButtonCommonProps,
   HugoUIButtonStyleProps,
@@ -11,7 +11,10 @@ export type {
   HugoUIDestructButtonStyleProps,
   HugoUIDestructButtonProps,
   HugoUIButtonProps,
-} from './Button/Button';
-export { hugoUITheme } from './styles/theme';
-export { HugoUIProvider } from './provider';
-export type { HugoUIProviderProps } from './provider';
+} from './Button';
+export type {
+  HugoUIButtonColorTheme,
+  HugoUIButtonLevel,
+  HugoUIButtonSize,
+  HugoUIButtonDrawingStyle,
+} from './buttonTypes';
