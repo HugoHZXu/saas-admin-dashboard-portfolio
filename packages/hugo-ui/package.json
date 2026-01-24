@@ -24,6 +24,10 @@
   "peerDependencies": {
     "@emotion/react": "11.11.4",
     "@emotion/styled": "11.11.5",
+    "@fontsource/noto-sans": "5.0.7",
+    "@fontsource/noto-sans-arabic": "5.0.7",
+    "@fontsource/noto-sans-jp": "5.0.7",
+    "@fontsource/noto-sans-thai": "5.0.7",
     "@mui/icons-material": "5.15.15",
     "@mui/material": "5.15.15",
     "@mui/system": "5.15.15",
@@ -34,7 +38,21 @@
     "react-intl": "6.6.4"
   },
   "peerDependenciesMeta": {
-    "moment": { "optional": true }
+    "moment": {
+      "optional": true
+    },
+    "@fontsource/noto-sans": {
+      "optional": true
+    },
+    "@fontsource/noto-sans-arabic": {
+      "optional": true
+    },
+    "@fontsource/noto-sans-jp": {
+      "optional": true
+    },
+    "@fontsource/noto-sans-thai": {
+      "optional": true
+    }
   },
   "devDependencies": {
     "@testing-library/react": "14.2.1",

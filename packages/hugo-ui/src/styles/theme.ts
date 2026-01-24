@@ -2,7 +2,7 @@ import { createTheme } from '@mui/material/styles';
 import { CSSProperties } from 'react';
 
 export const TEXT = '#49494C';
-export const FONT_FAMILY = 'sans-serif, BlinkMacSystemFont, system-ui, -apple-system';
+export const FONT_FAMILY = "'Noto Sans', sans-serif, BlinkMacSystemFont, system-ui, -apple-system";
 
 export const DARK_PURPLE = '#350B59';
 export const MID_PURPLE = '#5D3C7A';

@@ -23,6 +23,24 @@ export function App() {
 }
 ```
 
+## Fonts (online/offline)
+
+HugoUI can load Noto Sans automatically at runtime. By default, `HugoUIProvider` tries to load
+local `@fontsource` files first (offline), and falls back to Google Fonts if they are not present.
+
+Install the local font packages for offline use:
+
+```bash
+npm install @fontsource/noto-sans @fontsource/noto-sans-jp @fontsource/noto-sans-thai @fontsource/noto-sans-arabic
+```
+
+You can control loading behavior:
+
+```tsx
+<HugoUIProvider theme={hugoUITheme} fontLoading="auto" />
+// fontLoading: 'auto' | 'local' | 'remote' | 'none'
+```
+
 ## Subpath exports
 
 ```ts
