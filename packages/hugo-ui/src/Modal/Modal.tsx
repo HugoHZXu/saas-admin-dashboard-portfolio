@@ -1,4 +1,4 @@
-import React, { useMemo, useEffect, useState } from 'react';
+import React, { useMemo, useEffect, useState, useId } from 'react';
 import { useIntl } from 'react-intl';
 import { ThemeProvider } from '@mui/material/styles';
 import Zoom, { ZoomProps } from '@mui/material/Zoom';
@@ -152,6 +152,7 @@ export const HugoUIModal = ({
   ...props
 }: HugoUIModalProps) => {
   const intl = useIntl();
+  const dialogTitleId = useId();
 
   const fullScreen = useMediaQuery('(max-width:686px)') || isPhone();
 
@@ -162,6 +163,7 @@ export const HugoUIModal = ({
 
   const _subTitle = type === 'announcement' ? title || subTitle : subTitle;
   const _headerComponent = type === 'announcement' ? adColumn : headerComponent;
+  const dialogAriaLabel = typeof title === 'string' ? title : undefined;
 
   const _showLoadingIndicator =
     showLoadingIndicator === undefined ? !showActions : showLoadingIndicator;
@@ -303,6 +305,7 @@ export const HugoUIModal = ({
           closeable={showCloseable}
           onClose={onClose}
           prefixIconName={headerPrefixIconName}
+          titleId={dialogAriaLabel ? undefined : dialogTitleId}
         />
       </React.Fragment>
     );
@@ -322,7 +325,13 @@ export const HugoUIModal = ({
           },
           className
         )}
-        onBackdropClick={onClose}
+        aria-label={dialogAriaLabel}
+        aria-labelledby={dialogAriaLabel || _headerComponent || !title ? undefined : dialogTitleId}
+        onClose={(_, reason) => {
+          if (reason === 'backdropClick') {
+            onClose?.();
+          }
+        }}
         TransitionComponent={TransitionZoom}
         transitionDuration={{
           appear: 300,

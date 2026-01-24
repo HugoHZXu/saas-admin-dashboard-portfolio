@@ -19,6 +19,7 @@ export interface HugoUIModalTitleProps extends HugoUIBaseProps, Omit<DialogTitle
   onClose?: () => void;
   title?: React.ReactNode;
   prefixIconName?: string;
+  titleId?: string;
 }
 
 export const HugoUIModalTitle = ({
@@ -28,6 +29,7 @@ export const HugoUIModalTitle = ({
   closeable = true,
   onClose,
   prefixIconName,
+  titleId,
 }: HugoUIModalTitleProps) => {
   const intl = useIntl();
 
@@ -122,7 +124,7 @@ export const HugoUIModalTitle = ({
           [`${TITLE_ROOT_PREFIX}-hasCloseBtn`]: closeable,
         })}
       >
-        <DialogTitle className={classnames(`${TITLE_ROOT_PREFIX}-${type}`, className)}>
+        <DialogTitle id={titleId} className={classnames(`${TITLE_ROOT_PREFIX}-${type}`, className)}>
           {renderIcon()}
           {titleDisp}
         </DialogTitle>

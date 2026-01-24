@@ -262,15 +262,15 @@ export const MiniInput = SingleTemplate.bind({});
 MiniInput.args = {
   mini: true,
   id: 'MiniInput',
-  value: 'value',
+  label: 'Mini Input',
 };
 
 export const MiniInputStatus: StoryFn<typeof Input> = (args) => (
   <div style={StyledColumn}>
     <div style={{ ...StyledRow, justifyContent: 'space-evenly' }}>
       <div style={{ width: 200 }}>
-        <Input {...args} id={`${args.id}-1`} color="success" label="Success" />
-        <Input {...args} id={`${args.id}-2`} color="error" label="Error" />
+        <Input {...args} id={`${args.id}-1`} color="success" label="Success Input" />
+        <Input {...args} id={`${args.id}-2`} color="error" label="Error Input" />
         <Input {...args} id={`${args.id}-3`} label="Loading" loading />
         <Input {...args} id={`${args.id}-4`} label="Disabled" disabled />
         <Input {...args} id={`${args.id}-5`} label="Active" />
@@ -282,7 +282,6 @@ MiniInputStatus.args = {
   mini: true,
   style: { marginBottom: 10 },
   id: 'MiniInputStatus',
-  value: 'value',
 };
 MiniInputStatus.play = async () => {
   const focusVisibleElem = document.querySelectorAll('.MuiOutlinedInput-input')[4] as HTMLElement;

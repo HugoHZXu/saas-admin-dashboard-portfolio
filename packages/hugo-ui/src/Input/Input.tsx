@@ -189,11 +189,7 @@ export const HugoUIInput = (props: HugoUIInputProps) => {
       })}
     >
       <div className="HugoUIInput-helperText-content">
-        {extraMessage && (
-          <div aria-atomic="true" aria-live="polite">
-            {renderInputStatus()}
-          </div>
-        )}
+        {extraMessage && <div>{renderInputStatus()}</div>}
         {helperText}
       </div>
       {multiline && showCount && (
@@ -229,11 +225,7 @@ export const HugoUIInput = (props: HugoUIInputProps) => {
       typeof icon === 'object' ? (
         icon
       ) : mini && (color === 'success' || color === 'error') ? (
-        <div
-          aria-atomic="true"
-          aria-live="polite"
-          style={{ display: 'flex', alignItems: 'center', height: 20 }}
-        >
+        <div aria-hidden="true" style={{ display: 'flex', alignItems: 'center', height: 20 }}>
           {color === 'success' ? (
             <CheckCircleIcon
               id={`HugoUIInput-miniIcon-${id}`}
@@ -289,6 +281,12 @@ export const HugoUIInput = (props: HugoUIInputProps) => {
       }
     };
 
+  const helperTextId = `HugoUIInput-helperText-${id}`;
+  const labelId = `HugoUIInputText-${id}`;
+  const describedByIds = [(helperText || extraMessage || (multiline && showCount)) && helperTextId]
+    .filter(Boolean)
+    .join(' ');
+
   return (
     <ThemeProvider theme={inputTheme}>
       <InputContainer
@@ -328,7 +326,8 @@ export const HugoUIInput = (props: HugoUIInputProps) => {
             onFocus: handleInputFocused,
             'aria-required': !!required,
             'aria-busy': loading,
-            'aria-labelledby': `HugoUIInputText-${id} HugoUIInput-miniIcon-${id} HugoUIInput-helperText-${id}`,
+            'aria-labelledby': labelId,
+            'aria-describedby': describedByIds || undefined,
             'aria-invalid': color === 'error',
             required: !!required,
             onAnimationStart: makeAnimationStartHandler(setHasAutofillValue),
@@ -344,7 +343,7 @@ export const HugoUIInput = (props: HugoUIInputProps) => {
           onMouseDown={handleClick}
           onBlur={handleBlur}
           InputLabelProps={{
-            id: `HugoUIInputText-${id}`,
+            id: labelId,
             shrink: inputHasFocus || hasAutofillValue || !!value,
             ...(inputProps?.id ? { htmlFor: inputProps?.id } : {}),
             ...InputLabelProps,

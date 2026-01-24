@@ -506,7 +506,7 @@ export const MultipleModals2: StoryFn<typeof Modal> = () => {
                 step === 0
                   ? {
                       primary: {
-                        label: 'Eiusmod tempor',
+                        label: 'Next',
                         onClick: (e) => {
                           action('onClick')(e);
                           setStep(1);
@@ -526,7 +526,7 @@ export const MultipleModals2: StoryFn<typeof Modal> = () => {
                         },
                       },
                       secondary: {
-                        label: 'Incididunt ut',
+                        label: 'Previous',
                         onClick: (e) => {
                           action('onClick')(e);
                           setStep(0);
@@ -553,7 +553,8 @@ MultipleModals2.play = basicPlay;
 export const TitleWithTheMultipleLines = BasicTemplate.bind({});
 TitleWithTheMultipleLines.args = {
   ...basicAction,
-  title: 'Sed do eiusmod tempor',
+  title:
+    'Consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
   type: 'transactional',
   children: <ModalContentText>Phasellus viverra nulla ut metus varius laoreet.</ModalContentText>,
 };
