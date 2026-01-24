@@ -8,7 +8,9 @@
     "storybook": "npm -w packages/storybook-demo run storybook",
     "build-storybook": "npm -w packages/storybook-demo run build-storybook",
     "lint": "npm -ws run lint",
-    "format": "prettier \"**/*.{ts,tsx,js,jsx,json,md}\" --write"
+    "format": "prettier \"**/*.{ts,tsx,js,jsx,json,md}\" --write",
+    "build-hugo-ui": "npm -w packages/hugo-ui run build",
+    "publish-hugo-ui": "npm -w packages/hugo-ui publish"
   },
   "devDependencies": {
     "@types/node": "^20.11.30",
