@@ -1,8 +1,3 @@
-/* © 2022 Promethean. All Rights Reserved.
- *
- * Unauthorized copying of this file or any part of this file
- * via any medium is strictly prohibited.
- */
 import React from 'react';
 import classnames from 'classnames';
 import { StyledLoading, ROOT_PREFIX } from './loadingStyles';

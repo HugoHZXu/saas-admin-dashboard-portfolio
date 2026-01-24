@@ -1,4 +1,6 @@
-export { HugoUIButton as Button } from './Button/Button';
+export { HugoUIButton as Button, HugoUIButton } from './Button/Button';
+export { HugoUIInput as Input } from './Input/Input';
+export type { HugoUIInputProps, HugoUIInputExtraProps, HugoUIInputThemeType } from './Input/Input';
 export type {
   HugoUIButtonCommonProps,
   HugoUIButtonStyleProps,

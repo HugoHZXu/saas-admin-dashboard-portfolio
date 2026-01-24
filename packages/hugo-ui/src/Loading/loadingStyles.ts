@@ -1,8 +1,3 @@
-/* © 2022 Promethean. All Rights Reserved.
- *
- * Unauthorized copying of this file or any part of this file
- * via any medium is strictly prohibited.
- */
 import { styled } from '@mui/system';
 import CircularProgress from '@mui/material/CircularProgress';
 import { TEXT } from '../styles/theme';

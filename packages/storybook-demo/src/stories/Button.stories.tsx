@@ -1,8 +1,3 @@
-/* © 2023 Promethean. All Rights Reserved.
- *
- * Unauthorized copying of this file or any part of this file
- * via any medium is strictly prohibited.
- */
 import React, { useState } from 'react';
 import CloseIcon from '@mui/icons-material/Close';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
@@ -88,11 +83,8 @@ const hiddenKeys = [
 export default {
   title: 'HugoUI/Atoms/Button',
   component: Button,
+  tags: ['autodocs'],
   parameters: {
-    design: {
-      type: 'figspec',
-      url: 'https://www.figma.com/file/pAIJ6tkYEtUPRkxjiiwjd9/DS---Buttons?type=design&node-id=19%3A5028&mode=design&t=MCz8QEgBM64U1IbX-1',
-    },
     pseudo: {
       hover: ['#hover'],
       active: ['#active'],
