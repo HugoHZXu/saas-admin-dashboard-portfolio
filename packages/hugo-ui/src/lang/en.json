@@ -1,0 +1,11 @@
+{
+  "hugoUI.button.loading": "Loading",
+  "hugoUI.button.save": "Save",
+  "hugoUI.button.cancel": "Cancel",
+  "hugoUI.button.destruct": "Destruct",
+  "hugoUI.iconLabel.close": "close",
+  "hugoUI.statusIcon.success": "success",
+  "hugoUI.statusIcon.error": "error",
+  "hugoUI.statusIcon.alert": "alert",
+  "hugoUI.statusIcon.warn": "warning"
+}

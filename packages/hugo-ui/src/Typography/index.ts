@@ -1,2 +1,2 @@
-export { HugoUITypography } from './typography'
-export type { HugoUITypographyProps, HugoUITypographyVariantType } from './typography'
+export { HugoUITypography } from './Typography';
+export type { HugoUITypographyProps, HugoUITypographyVariantType } from './Typography';

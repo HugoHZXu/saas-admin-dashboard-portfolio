@@ -1,0 +1,11 @@
+{
+  "hugoUI.button.loading": "加载中",
+  "hugoUI.button.save": "保存",
+  "hugoUI.button.cancel": "取消",
+  "hugoUI.button.destruct": "删除",
+  "hugoUI.iconLabel.close": "关闭",
+  "hugoUI.statusIcon.success": "成功",
+  "hugoUI.statusIcon.error": "错误",
+  "hugoUI.statusIcon.alert": "警告",
+  "hugoUI.statusIcon.warn": "提醒"
+}

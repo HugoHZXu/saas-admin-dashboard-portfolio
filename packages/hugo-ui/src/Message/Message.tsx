@@ -1,7 +1,7 @@
 import React from 'react';
 import classnames from 'classnames';
 import { visuallyHidden } from '@mui/utils';
-import { HugoUITypography } from '../Typography/Typography';
+import { HugoUITypography } from '../Typography';
 import { StyledMessage, ROOT_PREFIX } from './messageStyles';
 import { HugoUIBaseProps } from '../types/base';
 import { onEnterKeyPress } from '../utils/wcagUtils';

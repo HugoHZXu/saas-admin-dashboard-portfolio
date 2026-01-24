@@ -1,2 +1,2 @@
-export { HugoUIMessage } from './message'
-export type { HugoUIMessageType, HugoUIMessageAlign, HugoUIMessageProps } from './message'
+export { HugoUIMessage } from './Message';
+export type { HugoUIMessageType, HugoUIMessageAlign, HugoUIMessageProps } from './Message';

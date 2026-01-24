@@ -63,8 +63,6 @@ export const StyledMessage = styled('div')({
       paddingBottom: 40,
       [`&.${ROOT_PREFIX}-hasExtraText`]: {
         paddingTop: 32,
-        '.HugoUIStatusIcon': {
-        },
         [`.${ROOT_PREFIX}-extraText`]: {
           paddingLeft: 50,
         },

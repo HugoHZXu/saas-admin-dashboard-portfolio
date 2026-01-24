@@ -12,12 +12,6 @@
     "noEmit": false,
     "sourceMap": true
   },
-  "include": ["src"]
-  ,
-  "exclude": [
-    "**/*.test.*",
-    "**/*.stories.*",
-    "**/__tests__/**",
-    "src/utils/testUtils.tsx"
-  ]
+  "include": ["src"],
+  "exclude": ["**/*.test.*", "**/*.stories.*", "**/__tests__/**", "src/utils/testUtils.tsx"]
 }

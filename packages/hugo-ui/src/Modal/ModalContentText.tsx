@@ -1,5 +1,5 @@
 import React from 'react';
-import { HugoUITypography, HugoUITypographyProps } from '../Typography/Typography';
+import { HugoUITypography, HugoUITypographyProps } from '../Typography';
 
 export interface HugoUIModalContentTextProps extends Omit<HugoUITypographyProps, 'variant'> {
   variant?: HugoUITypographyProps['variant'];

@@ -7,7 +7,7 @@ import CloseIcon from '@mui/icons-material/Close';
 import WarningAmberIcon from '@mui/icons-material/WarningAmber';
 import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
 import ErrorIcon from '@mui/icons-material/Error';
-import { HugoUIModalType } from './modal';
+import { HugoUIModalType } from './Modal';
 import { HugoUIBaseProps } from '../types/base';
 import { createDialogTitleTheme, StyledModalHeader, TITLE_ROOT_PREFIX } from './modalStyles';
 import { useIntl } from 'react-intl';

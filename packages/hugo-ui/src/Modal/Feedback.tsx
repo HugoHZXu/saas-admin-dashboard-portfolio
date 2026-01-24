@@ -1,5 +1,5 @@
 import React from 'react';
-import { HugoUIMessage } from '../Message/Message';
+import { HugoUIMessage } from '../Message';
 import { HugoUIBaseProps } from '../types/base';
 import type { ElementType } from 'react';
 
