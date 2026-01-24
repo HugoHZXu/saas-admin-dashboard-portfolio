@@ -232,7 +232,11 @@ export const HugoUIInput = (props: HugoUIInputProps) => {
       typeof icon === 'object' ? (
         icon
       ) : mini && (color === 'success' || color === 'error') ? (
-        <div aria-atomic="true" aria-live="polite">
+        <div
+          aria-atomic="true"
+          aria-live="polite"
+          style={{ display: 'flex', alignItems: 'center', height: 20 }}
+        >
           {color === 'success' ? (
             <CheckCircleIcon
               id={`HugoUIInput-miniIcon-${id}`}

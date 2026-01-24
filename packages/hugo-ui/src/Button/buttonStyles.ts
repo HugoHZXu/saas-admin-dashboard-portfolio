@@ -67,6 +67,13 @@ const buttonSizes = {
     paddingBottom: 14,
     paddingLeft: 32,
     paddingRight: 32,
+    '.MuiButton-startIcon, .MuiButton-endIcon': {
+      '& svg': {
+        width: 24,
+        height: 24,
+        fontSize: 24,
+      },
+    },
     '&.HugoUIButton-hasStartIcon': {
       paddingTop: 12,
       paddingBottom: 12,
@@ -103,6 +110,13 @@ const buttonSizes = {
     paddingBottom: 10.5,
     paddingLeft: 24,
     paddingRight: 24,
+    '.MuiButton-startIcon, .MuiButton-endIcon': {
+      '& svg': {
+        width: 24,
+        height: 24,
+        fontSize: 24,
+      },
+    },
     '&.HugoUIButton-hasStartIcon': {
       lineHeight: '24px',
       paddingTop: 8,
@@ -143,6 +157,17 @@ const buttonSizes = {
     paddingBottom: 4,
     paddingLeft: 16,
     paddingRight: 16,
+    '.MuiButton-startIcon, .MuiButton-endIcon': {
+      display: 'inline-flex',
+      alignItems: 'center',
+      alignSelf: 'center',
+      height: 16,
+      '& svg': {
+        width: 16,
+        height: 16,
+        fontSize: 16,
+      },
+    },
     '&.HugoUIButton-hasStartIcon': {
       lineHeight: '16px',
       paddingTop: 2,
@@ -180,6 +205,13 @@ const filledButtonFocusedSizes = {
     paddingBottom: 11,
     paddingLeft: 29,
     paddingRight: 29,
+    '.MuiButton-startIcon, .MuiButton-endIcon': {
+      '& svg': {
+        width: 24,
+        height: 24,
+        fontSize: 24,
+      },
+    },
     '&.HugoUIButton-hasStartIcon': {
       paddingTop: 9,
       paddingBottom: 9,
@@ -208,6 +240,13 @@ const filledButtonFocusedSizes = {
     paddingBottom: 7.5,
     paddingLeft: 21,
     paddingRight: 21,
+    '.MuiButton-startIcon, .MuiButton-endIcon': {
+      '& svg': {
+        width: 24,
+        height: 24,
+        fontSize: 24,
+      },
+    },
     '&.HugoUIButton-hasStartIcon': {
       lineHeight: '24px',
       paddingTop: 5,
@@ -240,6 +279,17 @@ const filledButtonFocusedSizes = {
     paddingBottom: 0,
     paddingLeft: 13,
     paddingRight: 13,
+    '.MuiButton-startIcon, .MuiButton-endIcon': {
+      display: 'inline-flex',
+      alignItems: 'center',
+      alignSelf: 'center',
+      height: 16,
+      '& svg': {
+        width: 16,
+        height: 16,
+        fontSize: 16,
+      },
+    },
     '&.HugoUIButton-hasStartIcon': {
       lineHeight: '16px',
       paddingTop: 1,

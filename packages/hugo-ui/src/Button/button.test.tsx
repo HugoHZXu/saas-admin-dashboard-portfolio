@@ -1,4 +1,4 @@
-import { HugoUIButton } from './button';
+import { HugoUIButton } from './Button';
 import { render } from '../utils/testUtils';
 
 describe('Color Theme', () => {

@@ -1,4 +1,5 @@
 import React, { useState, useRef, ChangeEvent } from 'react';
+import StarIcon from '@mui/icons-material/Star';
 import { StoryFn, Meta } from '@storybook/react';
 import { fireEvent, userEvent, within, expect } from '@storybook/test';
 import { Input, Button } from 'hugo-ui';
@@ -322,7 +323,7 @@ Placeholder.play = async () => {
 
 export const CustomIcon = SingleTemplate.bind({});
 CustomIcon.args = {
-  icon: <span className="icon-correct-answer2" />,
+  icon: <StarIcon fontSize="small" />,
   id: 'CustomIcon',
 };
 

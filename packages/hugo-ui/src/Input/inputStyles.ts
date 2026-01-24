@@ -300,6 +300,11 @@ export const inputTheme = createTheme({
               rowGap: 8,
             },
           },
+          '.HugoUIInput-status': {
+            display: 'inline-flex',
+            alignItems: 'center',
+            columnGap: 4,
+          },
           '.HugoUIInput-helperText-dark': {
             color: theme.hugoUIColors.NEUTRAL_WHITE,
           },

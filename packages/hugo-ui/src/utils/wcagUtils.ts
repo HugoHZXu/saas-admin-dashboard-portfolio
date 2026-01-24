@@ -5,9 +5,9 @@ import React from 'react';
  * @param e
  * @param callback
  */
-export function onEnterKeyPress(
-  e: React.KeyboardEvent<HTMLElement>,
-  callback?: (event: React.KeyboardEvent<HTMLElement>) => void
+export function onEnterKeyPress<T extends HTMLElement>(
+  e: React.KeyboardEvent<T>,
+  callback?: (event: React.KeyboardEvent<T>) => void
 ): void {
   if (e.key === 'Enter') {
     e.preventDefault();

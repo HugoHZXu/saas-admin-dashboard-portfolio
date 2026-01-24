@@ -14,9 +14,9 @@ export function InputStatus({ message, status }: InputStatusProps) {
   return (
     <span className="HugoUIInput-status" style={{ color }}>
       {isSuccess ? (
-        <CheckCircleIcon fontSize="small" sx={{ color }} />
+        <CheckCircleIcon sx={{ color, fontSize: 16 }} />
       ) : (
-        <ErrorIcon fontSize="small" sx={{ color }} />
+        <ErrorIcon sx={{ color, fontSize: 16 }} />
       )}
       {message}
     </span>
