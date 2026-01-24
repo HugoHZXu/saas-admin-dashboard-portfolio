@@ -206,10 +206,13 @@ export const HugoUIMessage = ({
         className={classnames('HugoUIStatusIcon', {
           [`${ROOT_PREFIX}-header`]: isHeader || extraText,
         })}
-        role={iconRole}
-        {..._iconAriaProps}
       >
-        <span className="HugoUIStatusIcon-icon" style={{ marginRight: statusSpacing }}>
+        <span
+          className="HugoUIStatusIcon-icon"
+          style={{ marginRight: statusSpacing }}
+          role={iconRole ?? 'img'}
+          {..._iconAriaProps}
+        >
           <StatusIcon fontSize="small" />
         </span>
         <span className="HugoUIStatusIcon-text">{children}</span>

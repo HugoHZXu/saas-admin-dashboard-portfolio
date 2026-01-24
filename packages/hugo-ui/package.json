@@ -28,13 +28,13 @@
     "@fontsource/noto-sans-arabic": "5.0.7",
     "@fontsource/noto-sans-jp": "5.0.7",
     "@fontsource/noto-sans-thai": "5.0.7",
-    "@mui/icons-material": "5.15.15",
-    "@mui/material": "5.15.15",
-    "@mui/system": "5.15.15",
-    "@mui/utils": "5.15.15",
+    "@mui/icons-material": "5.15.14",
+    "@mui/material": "5.15.14",
+    "@mui/system": "5.15.14",
+    "@mui/utils": "5.15.14",
     "moment": "2.29.x",
-    "react": "18.2.0",
-    "react-dom": "18.2.0",
+    "react": "18.3.1",
+    "react-dom": "18.3.1",
     "react-intl": "6.6.4"
   },
   "peerDependenciesMeta": {
@@ -55,18 +55,21 @@
     }
   },
   "devDependencies": {
-    "@testing-library/react": "14.2.1",
+    "@testing-library/react": "16.0.1",
     "@testing-library/user-event": "14.6.1",
     "@types/css-mediaquery": "0.1.4",
     "@types/jest": "29.5.12",
     "@vitejs/plugin-react": "4.3.1",
+    "jest": "29.7.0",
+    "jest-environment-jsdom": "29.7.0",
+    "ts-jest": "29.2.5",
     "vite": "5.2.10",
     "@emotion/react": "11.11.4",
     "@emotion/styled": "11.11.5",
-    "@mui/icons-material": "5.15.15",
-    "@mui/material": "5.15.15",
-    "@mui/system": "5.15.15",
-    "@mui/utils": "5.15.15",
+    "@mui/icons-material": "5.15.14",
+    "@mui/material": "5.15.14",
+    "@mui/system": "5.15.14",
+    "@mui/utils": "5.15.14",
     "moment": "2.29.4"
   },
   "scripts": {
@@ -74,6 +77,9 @@
     "typecheck": "tsc -p tsconfig.json --noEmit",
     "build": "vite build && tsc -p tsconfig.build.json",
     "clean": "rm -rf dist",
-    "publish": "npm publish"
+    "publish": "npm publish",
+    "test": "jest --config jest.config.cjs",
+    "test:coverage": "jest --config jest.config.cjs --coverage",
+    "test:watch": "jest --config jest.config.cjs --watch"
   }
 }

@@ -1,6 +1,6 @@
 import React from 'react';
 import { HugoUIInput } from './Input';
-import { render, fireEvent } from '../utils/testUtils';
+import { render, fireEvent, waitFor } from '../utils/testUtils';
 import { screen } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import InputAdornment from '@mui/material/InputAdornment';
@@ -42,6 +42,10 @@ describe('render Input', () => {
     setup({ mini: true, color: 'success', id: 'mini-success' });
     expect(document.querySelector('#HugoUIInput-miniIcon-mini-success')).toBeInTheDocument();
   });
+  it('render required label postfix', () => {
+    setup({ label: testLabel, required: true });
+    expect(document.querySelector('.HugoUIInput-label-requiredPostfix')).toBeInTheDocument();
+  });
   it('renders label instead of placeholder', () => {
     setup({
       label: testLabel,
@@ -81,7 +85,7 @@ describe('Input: interaction', () => {
   it('onChange', () => {
     setup({ onChange: handleInputChange });
     fireEvent.change(screen.getByRole('textbox'), { target: { value: '987654' } });
-    expect(handleInputChange).toBeCalled();
+    expect(handleInputChange).toHaveBeenCalled();
   });
   it('render dark backgrounds', () => {
     setup({ theme: 'dark' });
@@ -99,6 +103,26 @@ describe('Input: aria props', () => {
     setup({ color: 'success', extraMessage: 'Input success message' });
     const status = document.querySelector('.HugoUIInput-status');
     expect(status).toBeInTheDocument();
+  });
+  it('dark success state', () => {
+    setup({ theme: 'dark', color: 'success', extraMessage: 'Dark success' });
+    expect(document.querySelector('.HugoUIDarkStatus-root')).toBeInTheDocument();
+    expect(document.querySelector('.HugoUIDarkStatus-icon')).toBeInTheDocument();
+  });
+  it('dark error state', () => {
+    setup({ theme: 'dark', color: 'error', extraMessage: 'Dark error' });
+    expect(document.querySelector('.HugoUIDarkStatus-root')).toBeInTheDocument();
+    expect(document.querySelector('.HugoUIDarkStatus-icon')).toBeInTheDocument();
+  });
+  it('custom extraMessage element', () => {
+    setup({
+      extraMessage: <span data-testid="custom-extra">custom message</span>,
+    });
+    expect(screen.getByTestId('custom-extra')).toBeInTheDocument();
+  });
+  it('string extraMessage without status color', () => {
+    setup({ extraMessage: 'Plain message' });
+    expect(screen.getByText('Plain message')).toBeInTheDocument();
   });
   it('mini success', () => {
     setup({ mini: true, color: 'success', id: 'mini-success-aria' });
@@ -146,12 +170,24 @@ describe('Input: keyboard event', () => {
     expect(inputContainer.classList).not.toContain('HugoUIInput-clickFocus');
   });
 
+  it('handleBlur clears click focus and calls onBlur', () => {
+    const onBlurEvt = jest.fn();
+    setup({ label: 'label', onBlur: onBlurEvt });
+    const input = document.querySelector('input') as HTMLInputElement;
+    const inputContainer = document.querySelector('.HugoUIInput-hasLabel') as HTMLElement;
+    fireEvent.mouseDown(input);
+    expect(inputContainer.classList).toContain('HugoUIInput-clickFocus');
+    fireEvent.blur(input);
+    expect(onBlurEvt).toHaveBeenCalled();
+    expect(inputContainer.classList).not.toContain('HugoUIInput-clickFocus');
+  });
+
   it('Press Enter should trigger onBlur', () => {
     const onBlurEvt = jest.fn();
     setup({ onBlur: onBlurEvt });
     const input = document.querySelector('input') as HTMLInputElement;
     fireEvent.keyDown(input, { key: 'Enter' });
-    expect(onBlurEvt).toBeCalled();
+    expect(onBlurEvt).toHaveBeenCalled();
   });
 
   it("Multiple line input shouldn't trigger onBlur if Press Enter", () => {
@@ -159,6 +195,19 @@ describe('Input: keyboard event', () => {
     setup({ multiline: true, onBlur: onBlurEvt });
     const textarea = document.querySelector('textarea') as HTMLTextAreaElement;
     fireEvent.keyDown(textarea, { key: 'Enter' });
-    expect(onBlurEvt).not.toBeCalled();
+    expect(onBlurEvt).not.toHaveBeenCalled();
+  });
+
+  it('makeAnimationStartHandler runs for autofill animations', () => {
+    setup({ label: testLabel });
+    const input = document.querySelector('input') as HTMLInputElement;
+    const matches = jest.fn(() => true);
+    Object.defineProperty(input, 'matches', {
+      value: matches,
+      configurable: true,
+    });
+    fireEvent.animationStart(input, { animationName: 'mui-auto-fill' });
+    fireEvent.animationStart(input, { animationName: 'mui-auto-fill-cancel' });
+    expect(matches).toHaveBeenCalledTimes(2);
   });
 });

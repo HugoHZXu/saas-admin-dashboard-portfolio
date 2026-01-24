@@ -1,7 +1,24 @@
-import React from 'react';
-import { screen, render, fireEvent } from '../utils/testUtils';
+import '@testing-library/jest-dom';
+import { act } from 'react';
+import { screen, render, fireEvent, waitFor } from '../utils/testUtils';
 import { HugoUIModal } from './Modal';
 import { HugoUIModalContentText } from './ModalContentText';
+import useMediaQuery from '@mui/material/useMediaQuery';
+import { isPhone } from '../utils/platformUtils';
+
+jest.mock('@mui/material/useMediaQuery', () => ({
+  __esModule: true,
+  default: jest.fn(),
+}));
+
+jest.mock('../utils/platformUtils', () => ({
+  isPhone: jest.fn(),
+}));
+
+beforeEach(() => {
+  (useMediaQuery as jest.Mock).mockReturnValue(false);
+  (isPhone as jest.Mock).mockReturnValue(false);
+});
 
 describe('render HugoUIModal', () => {
   it('correctly render default modal - transactional', () => {
@@ -49,7 +66,9 @@ describe('render HugoUIModal', () => {
         This is test content
       </HugoUIModal>
     );
-    expect(document.querySelector('.HugoUIModal-subtitle').innerHTML).toBe('test title');
+    const subtitle = document.querySelector('.HugoUIModal-subtitle');
+    expect(subtitle).toBeTruthy();
+    expect(subtitle?.innerHTML).toBe('test title');
   });
 
   it('should show subtitle if the title is empty and the type is announcement', () => {
@@ -58,7 +77,9 @@ describe('render HugoUIModal', () => {
         This is test content
       </HugoUIModal>
     );
-    expect(document.querySelector('.HugoUIModal-subtitle').innerHTML).toBe('test subtitle');
+    const subtitle = document.querySelector('.HugoUIModal-subtitle');
+    expect(subtitle).toBeTruthy();
+    expect(subtitle?.innerHTML).toBe('test subtitle');
   });
 
   it('should show closeButton in title if user passes the prop, otherwise only error and information will show closeButton', () => {
@@ -67,21 +88,21 @@ describe('render HugoUIModal', () => {
         This is test content
       </HugoUIModal>
     );
-    expect(document.querySelector('.icon-close')).toBeTruthy();
+    expect(document.querySelector('.HugoUIModalTitle-close')).toBeTruthy();
 
     rerender(
       <HugoUIModal open={true} title="title" closeButton={false} type="error">
         This is test content
       </HugoUIModal>
     );
-    expect(document.querySelector('.icon-close')).toBeTruthy();
+    expect(document.querySelector('.HugoUIModalTitle-close')).toBeTruthy();
 
     rerender(
       <HugoUIModal open={true} title="title" closeButton={false} type="transactional">
         This is test content
       </HugoUIModal>
     );
-    expect(document.querySelector('.icon-close')).toBeFalsy();
+    expect(document.querySelector('.HugoUIModalTitle-close')).toBeFalsy();
   });
 
   it('should show icon in title if the type is error, warning and destructure', () => {
@@ -90,21 +111,21 @@ describe('render HugoUIModal', () => {
         This is test content
       </HugoUIModal>
     );
-    expect(document.querySelector('.icon-alert')).toBeTruthy();
+    expect(document.querySelector('.HugoUIModalTitle-icon')).toBeTruthy();
 
     rerender(
       <HugoUIModal open={true} title="title" type="warning">
         This is test content
       </HugoUIModal>
     );
-    expect(document.querySelector('.icon-notification')).toBeTruthy();
+    expect(document.querySelector('.HugoUIModalTitle-icon')).toBeTruthy();
 
     rerender(
       <HugoUIModal open={true} title="title" type="destructive">
         This is test content
       </HugoUIModal>
     );
-    expect(document.querySelector('.icon-error')).toBeTruthy();
+    expect(document.querySelector('.HugoUIModalTitle-icon')).toBeTruthy();
 
     rerender(
       <HugoUIModal open={true} title="title">
@@ -180,7 +201,7 @@ describe('render HugoUIModal', () => {
   });
 
   it('should renter tertiary button as custom component', () => {
-    const { rerender } = render(
+    render(
       <HugoUIModal
         open={true}
         loading={true}
@@ -215,13 +236,13 @@ describe('render HugoUIModal', () => {
     expect(
       document
         .querySelector('.HugoUIButton-primaryLevel')
-        .classList.contains('HugoUIButton-loading-center')
+        ?.classList.contains('HugoUIButton-loading-center')
     ).toBeTruthy();
     expect(
-      document.querySelector('.HugoUIButton-secondaryLevel').classList.contains('Mui-disabled')
+      document.querySelector('.HugoUIButton-secondaryLevel')?.classList.contains('Mui-disabled')
     ).toBeTruthy();
     expect(
-      document.querySelector('.HugoUILink').classList.contains('HugoUILink-disabled')
+      document.querySelector('.HugoUILink')?.classList.contains('HugoUILink-disabled')
     ).toBeTruthy();
   });
 
@@ -236,6 +257,73 @@ describe('render HugoUIModal', () => {
       </HugoUIModal>
     );
     expect(screen.getByRole('alertdialog')).toHaveStyle('max-height: calc(100% - 56px - 48px);');
+  });
+
+  it('sets fullScreen maxHeight for landscape', () => {
+    (useMediaQuery as jest.Mock).mockReturnValue(true);
+    (isPhone as jest.Mock).mockReturnValue(false);
+    Object.defineProperty(window, 'innerHeight', { value: 700, configurable: true });
+    render(
+      <HugoUIModal open={true} type="transactional" isTouchDeviceLandscapeView>
+        This is test content
+      </HugoUIModal>
+    );
+    const paper = document.querySelector('.MuiPaper-root') as HTMLElement | null;
+    expect(paper).toBeTruthy();
+    expect(paper?.style.maxHeight).toBe('700px');
+  });
+
+  it('sets fullScreen maxHeight for portrait', () => {
+    (useMediaQuery as jest.Mock).mockReturnValue(true);
+    (isPhone as jest.Mock).mockReturnValue(false);
+    render(
+      <HugoUIModal open={true} type="transactional">
+        This is test content
+      </HugoUIModal>
+    );
+    const paper = document.querySelector('.MuiPaper-root') as HTMLElement | null;
+    expect(paper).toBeTruthy();
+    expect(paper?.style.maxHeight).toBe('100%');
+  });
+
+  it('sets marginTop when content scrolls in landscape', () => {
+    (useMediaQuery as jest.Mock).mockReturnValue(false);
+    (isPhone as jest.Mock).mockReturnValue(false);
+    Object.defineProperty(window, 'innerHeight', { value: 800, configurable: true });
+    const scrollHeightDescriptor = Object.getOwnPropertyDescriptor(
+      HTMLElement.prototype,
+      'scrollHeight'
+    );
+    const clientHeightDescriptor = Object.getOwnPropertyDescriptor(
+      HTMLElement.prototype,
+      'clientHeight'
+    );
+    Object.defineProperty(HTMLElement.prototype, 'scrollHeight', {
+      configurable: true,
+      get: () => 200,
+    });
+    Object.defineProperty(HTMLElement.prototype, 'clientHeight', {
+      configurable: true,
+      get: () => 100,
+    });
+
+    render(
+      <HugoUIModal open={true} offsetY={80} isTouchDeviceLandscapeView>
+        <HugoUIModalContentText>scroll content</HugoUIModalContentText>
+      </HugoUIModal>
+    );
+
+    const paper = document.querySelector('.MuiPaper-root') as HTMLElement | null;
+    expect(paper).toBeTruthy();
+    expect(paper?.style.marginTop).toBe('80px');
+    expect(paper?.style.maxHeight).toBe('672px');
+
+    if (scrollHeightDescriptor) {
+      Object.defineProperty(HTMLElement.prototype, 'scrollHeight', scrollHeightDescriptor);
+    }
+    if (clientHeightDescriptor) {
+      Object.defineProperty(HTMLElement.prototype, 'clientHeight', clientHeightDescriptor);
+    }
   });
 });
 
@@ -289,7 +377,9 @@ describe('test keyboard trigger Modal events', () => {
         This is test content
       </HugoUIModal>
     );
-    fireEvent.keyUp(document.querySelector('.MuiDialog-container'), {
+    const dialogContainer = document.querySelector('.MuiDialog-container');
+    expect(dialogContainer).toBeTruthy();
+    fireEvent.keyUp(dialogContainer as Element, {
       key: 'Escape',
       code: 'Escape',
       keyCode: 27,
@@ -306,29 +396,73 @@ describe('test expected aria labels and props', () => {
         This is test content
       </HugoUIModal>
     );
-    expect(document.querySelector('.HugoUIModalTitle-icon').getAttribute('role')).toBe('img');
-    expect(document.querySelector('.HugoUIModalTitle-icon').getAttribute('aria-label')).toBe(
-      'alert'
-    );
+    const errorIcon = document.querySelector('.HugoUIModalTitle-icon');
+    expect(errorIcon).toBeTruthy();
+    expect(errorIcon?.getAttribute('role')).toBe('img');
+    expect(errorIcon?.getAttribute('aria-label')).toBe('alert');
 
     rerender(
       <HugoUIModal open={true} title="title" type="warning">
         This is test content
       </HugoUIModal>
     );
-    expect(document.querySelector('.HugoUIModalTitle-icon').getAttribute('role')).toBe('img');
-    expect(document.querySelector('.HugoUIModalTitle-icon').getAttribute('aria-label')).toBe(
-      'warning'
-    );
+    const warningIcon = document.querySelector('.HugoUIModalTitle-icon');
+    expect(warningIcon).toBeTruthy();
+    expect(warningIcon?.getAttribute('role')).toBe('img');
+    expect(warningIcon?.getAttribute('aria-label')).toBe('warning');
 
     rerender(
       <HugoUIModal open={true} title="title" type="destructive">
         This is test content
       </HugoUIModal>
     );
-    expect(document.querySelector('.HugoUIModalTitle-icon').getAttribute('role')).toBe('img');
-    expect(document.querySelector('.HugoUIModalTitle-icon').getAttribute('aria-label')).toBe(
-      'alert'
+    const destructiveIcon = document.querySelector('.HugoUIModalTitle-icon');
+    expect(destructiveIcon).toBeTruthy();
+    expect(destructiveIcon?.getAttribute('role')).toBe('img');
+    expect(destructiveIcon?.getAttribute('aria-label')).toBe('alert');
+  });
+});
+
+describe('loading indicator', () => {
+  it('announces loading after delay', async () => {
+    jest.useFakeTimers();
+    render(
+      <HugoUIModal open={true} loading={true} showLoadingIndicator>
+        This is test content
+      </HugoUIModal>
     );
+    expect(document.querySelector('.HugoUIModalContent-loadingIndicator')).toBeTruthy();
+    act(() => {
+      jest.advanceTimersByTime(200);
+    });
+    await waitFor(() => {
+      expect(document.querySelector('[aria-live="polite"]')).toHaveTextContent('Loading');
+    });
+    jest.useRealTimers();
+  });
+});
+
+describe('loading constraints', () => {
+  it('prioritizes secondary loading when indicator hidden', () => {
+    (useMediaQuery as jest.Mock).mockReturnValue(false);
+    (isPhone as jest.Mock).mockReturnValue(false);
+    render(
+      <HugoUIModal
+        open={true}
+        loading={true}
+        showLoadingIndicator={false}
+        buttonDefs={{ secondary: { loading: true } }}
+      >
+        This is test content
+      </HugoUIModal>
+    );
+    expect(
+      document
+        .querySelector('.HugoUIButton-secondaryLevel')
+        ?.classList.contains('HugoUIButton-loading-center')
+    ).toBeTruthy();
+    expect(
+      document.querySelector('.HugoUIButton-primaryLevel')?.classList.contains('Mui-disabled')
+    ).toBeTruthy();
   });
 });

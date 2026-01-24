@@ -1,20 +1,19 @@
-import React from 'react';
-import { act, render } from '@testing-library/react';
-import { IntlProvider } from 'react-intl';
-import { ThemeProvider, createTheme } from '@mui/material/styles';
+import React, { ReactNode } from 'react';
+import { act, render, RenderOptions } from '@testing-library/react';
+import { HugoUIProvider } from '../provider/HugoUIProvider';
+import { hugoUITheme } from '../styles/theme';
+import enMessages from '../lang/en.json';
 import mediaQuery, { MediaValues } from 'css-mediaquery';
 
-const theme = createTheme({});
-
-export const AllTheProviders = ({ children }: any) => {
+export const AllTheProviders = ({ children }: { children: ReactNode }) => {
   return (
-    <IntlProvider locale="en">
-      <ThemeProvider theme={theme}>{children}</ThemeProvider>
-    </IntlProvider>
+    <HugoUIProvider theme={hugoUITheme} locale="en" messages={enMessages} fontLoading="none">
+      {children}
+    </HugoUIProvider>
   );
 };
 
-const customRender = (ui: any, options: any = {}) =>
+const customRender = (ui: React.ReactElement, options: RenderOptions = {}) =>
   render(ui, { wrapper: AllTheProviders, ...options });
 
 export const createMatchMedia = (values: MediaValues) => {

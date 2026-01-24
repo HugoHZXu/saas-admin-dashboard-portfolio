@@ -10,9 +10,13 @@
     "lint": "npm -ws run lint",
     "format": "prettier \"**/*.{ts,tsx,js,jsx,json,md}\" --write",
     "build-hugo-ui": "npm -w packages/hugo-ui run build",
-    "publish-hugo-ui": "npm -w packages/hugo-ui publish"
+    "publish-hugo-ui": "npm -w packages/hugo-ui publish",
+    "test": "npm -w packages/hugo-ui run test",
+    "test:watch": "npm -w packages/hugo-ui run test:watch",
+    "test:coverage": "npm -w packages/hugo-ui run test:coverage"
   },
   "devDependencies": {
+    "@types/jest": "^30.0.0",
     "@types/node": "^20.11.30",
     "@types/react": "^18.2.66",
     "@types/react-dom": "^18.2.22",

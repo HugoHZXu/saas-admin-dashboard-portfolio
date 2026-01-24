@@ -73,8 +73,6 @@ export const HugoUIInput = (props: HugoUIInputProps) => {
     className,
     multiline,
     value: _value = '',
-    // ToDo: condense all of these
-    // it seems to be confusing to have the separate callback functions and both input props
     onChange,
     onBlur,
     InputProps,
@@ -225,7 +223,6 @@ export const HugoUIInput = (props: HugoUIInputProps) => {
 
   let adornmentIcon;
   if (loading) {
-    // ToDo: spike to figure out how to get aria-live and/or aria-busy to update
     adornmentIcon = <HugoUILoading size={'small'} />;
   } else {
     adornmentIcon =
@@ -350,12 +347,11 @@ export const HugoUIInput = (props: HugoUIInputProps) => {
             id: `HugoUIInputText-${id}`,
             shrink: inputHasFocus || hasAutofillValue || !!value,
             ...(inputProps?.id ? { htmlFor: inputProps?.id } : {}),
-            ...(theme === 'dark'
-              ? {
-                  ...InputLabelProps,
-                  className: classnames(InputLabelProps?.className, 'HugoUIInput-label-dark'),
-                }
-              : InputLabelProps),
+            ...InputLabelProps,
+            className: classnames(InputLabelProps?.className, {
+              'HugoUIInput-label-dark': theme === 'dark',
+              'HugoUIInput-label-required': !!required,
+            }),
           }}
           fullWidth={fullWidth}
           {...otherProps}

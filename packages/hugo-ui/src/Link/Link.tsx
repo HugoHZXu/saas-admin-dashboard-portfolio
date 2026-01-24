@@ -76,6 +76,7 @@ export const HugoUILink = React.forwardRef<HTMLAnchorElement, HugoUILinkProps>((
     size = 'medium',
     loading = false,
     onClick,
+    onKeyUp,
     tabIndex = 0,
     component = 'a',
     ...otherProps
@@ -112,6 +113,7 @@ export const HugoUILink = React.forwardRef<HTMLAnchorElement, HugoUILinkProps>((
       onKeyDown={(e) => onEnterKeyPress(e, handleKeyDown)}
       onKeyUp={(e) => {
         // prevents onclick event triggering when tab focus to it
+        onKeyUp?.(e);
         e.preventDefault();
       }}
       as={component}

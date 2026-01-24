@@ -1,5 +1,5 @@
 import { HugoUIButton } from './Button';
-import { render } from '../utils/testUtils';
+import { render, screen } from '../utils/testUtils';
 
 describe('Color Theme', () => {
   it('render primary', () => {
@@ -33,7 +33,7 @@ describe('Color Theme', () => {
   it('render tertiary text light purple', () => {
     render(<HugoUIButton level="tertiary" colorTheme="purple" drawingStyle="text" />);
     expect(document.querySelector('.HugoUIButton-textDrawingStyle')).not.toBe(null);
-    expect(document.querySelector('.HugoUIButton-lavenderColor')).not.toBe(null);
+    expect(document.querySelector('.HugoUIButton-purpleColor')).not.toBe(null);
   });
   it('render tertiary filled', () => {
     render(<HugoUIButton level="tertiary" colorTheme="grey" />);
@@ -84,5 +84,18 @@ describe('Icon', () => {
   it('render icon only', () => {
     render(<HugoUIButton startIcon={<span className="icon-expand-more" />} />);
     expect(document.querySelector('.HugoUIButton-icon-only')).not.toBe(null);
+  });
+});
+
+describe('Aria', () => {
+  it('uses aria-label when labelHidden', () => {
+    render(
+      <HugoUIButton labelHidden startIcon={<span className="icon-expand-more" />}>
+        Hidden Label
+      </HugoUIButton>
+    );
+    const button = screen.getByRole('button');
+    expect(button).toHaveAttribute('aria-label', 'Hidden Label');
+    expect(screen.queryByText('Hidden Label')).toBeNull();
   });
 });

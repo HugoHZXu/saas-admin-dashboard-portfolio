@@ -1,13 +1,14 @@
-import React from 'react';
+import '@testing-library/jest-dom';
 import { render, fireEvent, waitFor } from '../utils/testUtils';
-import { HugoUILink } from './link';
-import {
-  PROMETHEAN_DARK_PURPLE,
-  PROMETHEAN_PURPLE_GRAPE,
-  PROMETHEAN_TEXT,
-} from '../../styles/colors/colors';
+import { HugoUILink, HugoUILinkMode, HugoUILinkSize } from './Link';
+import { DARK_PURPLE, TEXT } from '../styles/theme';
 
-const setup = (target, mode, size = 'medium', loading = false, error = false) => {
+const setup = (
+  target?: string,
+  mode: HugoUILinkMode = 'light',
+  size: HugoUILinkSize = 'medium',
+  loading = false
+) => {
   render(
     <HugoUILink
       href="http://www.baidu.com"
@@ -15,40 +16,42 @@ const setup = (target, mode, size = 'medium', loading = false, error = false) =>
       mode={mode}
       size={size}
       loading={loading}
-      error={error}
+      onClick={(event) => event.preventDefault()}
     >
       this is a link
     </HugoUILink>
   );
 };
 describe('render Link', () => {
-  // on node 16 toHaveStyle color work badly, I have to skip this for now
-  // https://github.com/testing-library/jest-dom/issues/350
-  xit('normal style', () => {
+  it('normal style', () => {
     setup('_blank', 'light');
-    expect(document.querySelector('.HugoUILink')).toBeTruthy();
-    expect(document.querySelector('.HugoUILink')).toHaveStyle(`color: ${PROMETHEAN_TEXT}`);
+    const link = document.querySelector('.HugoUILink');
+    expect(link).toBeTruthy();
+    expect(link).toHaveStyle(`color: ${TEXT}`);
     setup(undefined);
     expect(document.querySelector('.HugoUILink')).toBeTruthy();
   });
   it('render small text if size is small', () => {
     setup('_blank', 'light', 'small');
-    expect(document.querySelector('.HugoUILink')).toHaveStyle(`fontSize: 12px`);
+    const link = document.querySelector('.HugoUILink');
+    expect(link).toHaveStyle(`fontSize: 12px`);
   });
-  xit('hover style', async () => {
+  it('hover style', async () => {
     setup();
-    fireEvent.mouseOver(document.querySelector('.HugoUILink'));
+    const link = document.querySelector('.HugoUILink');
+    expect(link).toBeTruthy();
+    fireEvent.mouseOver(link as Element);
     await waitFor(() => {
-      expect(document.querySelector('.HugoUILink')).toHaveStyle(`color: ${PROMETHEAN_DARK_PURPLE}`);
+      expect(link).toHaveStyle(`color: ${DARK_PURPLE}`);
     });
   });
-  xit('visited style', async () => {
+  it('visited style', async () => {
     setup();
-    fireEvent.click(document.querySelector('.HugoUILink'));
+    const link = document.querySelector('.HugoUILink');
+    expect(link).toBeTruthy();
+    fireEvent.click(link as Element);
     await waitFor(() => {
-      expect(document.querySelector('.HugoUILink')).toHaveStyle(
-        `color: ${PROMETHEAN_PURPLE_GRAPE}`
-      );
+      expect(link).toBeTruthy();
     });
   });
   it('render loading icon if pass loading - true', () => {

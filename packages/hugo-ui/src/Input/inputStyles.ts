@@ -270,7 +270,7 @@ export const inputTheme = createTheme({
               transform: `translate(15px, 3px) scale(${INPUT_LABEL_SHRINK_FACTOR})`,
             },
           },
-          '&:has(.HugoUIInput-label-requiredPostfix)': {
+          '&.HugoUIInput-label-required': {
             display: 'flex',
           },
           '.HugoUIInput-label-requiredPostfix': {
