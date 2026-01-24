@@ -1,11 +1,10 @@
-import React, { useLayoutEffect, useMemo, useRef, useCallback, useEffect, useState } from 'react';
+import React, { useMemo, useEffect, useState } from 'react';
 import { useIntl } from 'react-intl';
 import { ThemeProvider } from '@mui/material/styles';
 import Zoom, { ZoomProps } from '@mui/material/Zoom';
 import classnames from 'classnames';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import Dialog, { DialogProps } from '@mui/material/Dialog';
-import Paper, { PaperProps } from '@mui/material/Paper';
 import DialogContent from '@mui/material/DialogContent';
 import { visuallyHidden } from '@mui/utils';
 import { HugoUILoading } from '../Loading/Loading';
@@ -77,10 +76,6 @@ export interface HugoUIModalProps extends HugoUIBaseProps, Omit<DialogProps, 'ti
    */
   showLoadingIndicator?: boolean;
   /**
-   * the position of Modal on page
-   */
-  offsetY?: number;
-  /**
    * only for announcement
    */
   adColumn?: React.ReactNode;
@@ -92,10 +87,6 @@ export interface HugoUIModalProps extends HugoUIBaseProps, Omit<DialogProps, 'ti
    * The title of the modal
    */
   title?: React.ReactNode;
-  /**
-   * for adjust the position and height on Mobile/Tablet
-   */
-  isTouchDeviceLandscapeView?: boolean;
   /**
    * allow user to customize their prefix icon of Modal header
    */
@@ -109,59 +100,6 @@ export interface HugoUIModalProps extends HugoUIBaseProps, Omit<DialogProps, 'ti
 const TransitionZoom = React.forwardRef(function Transition(props: ZoomProps, ref) {
   return <Zoom in ref={ref} {...props} />;
 });
-
-interface CustomPaperProps extends PaperProps {
-  fullScreen?: boolean;
-  offsetY?: number;
-  isTouchDeviceLandscapeView: boolean;
-  type: HugoUIModalType;
-}
-
-const CustomPaperComponent = ({
-  fullScreen,
-  offsetY = 56,
-  isTouchDeviceLandscapeView,
-  type,
-  ...props
-}: CustomPaperProps) => {
-  const PaperRef = useRef<HTMLDivElement>(null);
-  useLayoutEffect(() => {
-    const root = PaperRef?.current;
-    if (root) {
-      root.setAttribute('aria-modal', 'true');
-      root.setAttribute(
-        'role',
-        ['transactional', 'destructive', 'warning'].includes(type) ? 'alertdialog' : 'dialog'
-      );
-      if (fullScreen) {
-        root.style.margin = '0';
-        if (isTouchDeviceLandscapeView) {
-          // on landscape view, the keyboard pop up shouldn't squezee the space, which will cause the Modal height too small
-          root.style.maxHeight = `${window.innerHeight}px`;
-        } else {
-          root.style.maxHeight = '100%';
-        }
-      } else {
-        const scrollArea = root.querySelector('.MuiDialogContent-root');
-        const setScrollStyle = () => {
-          if (scrollArea && scrollArea.scrollHeight > scrollArea.clientHeight) {
-            root.style.margin = '0';
-            root.style.marginTop = `${offsetY}px`;
-          }
-        };
-        if (isTouchDeviceLandscapeView) {
-          // on landscape view, the keyboard pop up shouldn't squezee the space, which will cause the Modal height too small
-          root.style.maxHeight = `${window.innerHeight - Math.abs(offsetY) - 48}px`;
-          setScrollStyle();
-        } else {
-          root.style.maxHeight = `calc(100% - ${Math.abs(offsetY)}px - 48px)`;
-          setScrollStyle();
-        }
-      }
-    }
-  }, [fullScreen, isTouchDeviceLandscapeView]);
-  return <Paper {...props} ref={PaperRef} />;
-};
 
 const HugoUIModalLoadingIndicator = ({ loading }: { loading?: boolean }) => {
   const intl = useIntl();
@@ -209,17 +147,12 @@ export const HugoUIModal = ({
   showLoadingIndicator,
   adColumn,
   messages,
-  offsetY = 56,
-  // screenWidth > screenHeight can't fully judge it is landscape, because on portrait view, the keyboard pops up will cause screenWidth > screenHeight, so need pass the value from outer.
-  //If on Mobile App, you can pass the real value through some native plugins, and on mobile browser, you can judge is the keyboard pops up through the form elements focus
-  isTouchDeviceLandscapeView = false,
   headerPrefixIconName,
   disableAutoFocus,
   ...props
 }: HugoUIModalProps) => {
   const intl = useIntl();
 
-  // mobile landscape and portrait should be fullscreen
   const fullScreen = useMediaQuery('(max-width:686px)') || isPhone();
 
   const showCloseable = closeButton
@@ -354,12 +287,6 @@ export const HugoUIModal = ({
     [open, onClose]
   );
 
-  const Paper = useCallback(
-    (props: PaperProps) =>
-      CustomPaperComponent({ ...props, fullScreen, offsetY, isTouchDeviceLandscapeView, type }),
-    [fullScreen, isTouchDeviceLandscapeView]
-  );
-
   let feedbackDisp;
   if (type === 'feedback') {
     feedbackDisp = <HugoUIFeedback fullScreen={fullScreen} messages={messages} />;
@@ -402,7 +329,6 @@ export const HugoUIModal = ({
           enter: 300,
           exit: 1,
         }}
-        PaperComponent={Paper}
         {...props}
       >
         {modalHeader}

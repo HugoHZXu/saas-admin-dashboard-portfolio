@@ -1,0 +1,32 @@
+export const TEXT = '#49494C';
+
+export const DARK_PURPLE = '#350B59';
+export const MID_PURPLE = '#5D3C7A';
+export const PURPLE_GRAPE = '#7D3F98';
+export const PURPLE_PLUM = '#9955C6';
+export const LAVENDER = '#DA99FF';
+export const LIGHT_PURPLE = '#EED3FF';
+export const SUCCESS_GREEN = '#008805';
+export const SUCCESS_GREEN_BG = '#F2FAF3';
+export const ERROR_OR_DESTRUCT = '#CB2A2A';
+export const DESTRUCT_STATE_1 = '#982020';
+export const DESTRUCT_STATE_2 = '#651515';
+export const ERROR_BG = '#FCF4F4';
+export const BLUE = '#1573D4';
+export const ALERT = '#EB6A00';
+export const NEUTRAL_PLUM = '#F6F1FF';
+export const NEUTRAL_LIGHT_PLUM = '#F4F2F6';
+export const NEUTRAL_DARK_PLUM = '#A19ABA';
+export const NEUTRAL_DARK_GREY = '#CCCCCC';
+export const NEUTRAL_MID_GREY = '#F2F2F2';
+export const NEUTRAL_LIGHT_GREY = '#FAFAFA';
+export const NEUTRAL_WHITE = '#FFFFFF';
+export const TEXT_HEADER = '#282036';
+
+export const NEUTRAL_GREY_200 = '#F2F2F2';
+export const NEUTRAL_GREY_500 = '#E0E0E0';
+export const NEUTRAL_GREY_600 = '#C8C8C8';
+export const NEUTRAL_GREY_800 = '#9E9E9E';
+export const NEUTRAL_GREY_1100 = '#5C5C5C';
+export const NEUTRAL_GREY_1200 = '#3D3D3D';
+export const PLUM_100 = '#F6F1FF';

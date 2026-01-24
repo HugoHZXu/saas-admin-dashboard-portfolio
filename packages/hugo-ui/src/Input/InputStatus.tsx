@@ -1,7 +1,7 @@
 import React from 'react';
 import ErrorIcon from '@mui/icons-material/Error';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
-import { ERROR_OR_DESTRUCT, SUCCESS_GREEN } from '../styles/theme';
+import { ERROR_OR_DESTRUCT, SUCCESS_GREEN } from '../styles/color';
 
 export type InputStatusProps = {
   message: React.ReactNode;

@@ -1,221 +1,69 @@
 import { createTheme } from '@mui/material/styles';
 import { CSSProperties } from 'react';
+import {
+  ALERT,
+  BLUE,
+  DARK_PURPLE,
+  DESTRUCT_STATE_1,
+  DESTRUCT_STATE_2,
+  ERROR_BG,
+  ERROR_OR_DESTRUCT,
+  LAVENDER,
+  LIGHT_PURPLE,
+  MID_PURPLE,
+  NEUTRAL_DARK_GREY,
+  NEUTRAL_DARK_PLUM,
+  NEUTRAL_GREY_1100,
+  NEUTRAL_GREY_1200,
+  NEUTRAL_GREY_200,
+  NEUTRAL_GREY_500,
+  NEUTRAL_GREY_600,
+  NEUTRAL_GREY_800,
+  NEUTRAL_LIGHT_GREY,
+  NEUTRAL_LIGHT_PLUM,
+  NEUTRAL_MID_GREY,
+  NEUTRAL_PLUM,
+  NEUTRAL_WHITE,
+  PLUM_100,
+  PURPLE_GRAPE,
+  PURPLE_PLUM,
+  SUCCESS_GREEN,
+  SUCCESS_GREEN_BG,
+  TEXT,
+  TEXT_HEADER,
+} from './color';
+import {
+  FONT_FAMILY,
+  TYPOGRAPHY_BODY,
+  TYPOGRAPHY_BODY_LINK,
+  TYPOGRAPHY_BUTTON,
+  TYPOGRAPHY_BUTTON_UPPERCASE,
+  TYPOGRAPHY_EYEBROW,
+  TYPOGRAPHY_EYEBROW_UPPERCASE,
+  TYPOGRAPHY_H1,
+  TYPOGRAPHY_H2,
+  TYPOGRAPHY_H3,
+  TYPOGRAPHY_H4,
+  TYPOGRAPHY_H5,
+  TYPOGRAPHY_SMALL_TEXT,
+  TYPOGRAPHY_SMALL_TEXT_UPPERCASE,
+  TYPOGRAPHY_SUBTITLE_01,
+  TYPOGRAPHY_SUBTITLE_02,
+  TYPOGRAPHY_SUBTITLE_03,
+  TYPOGRAPHY_SUBTITLE_04,
+} from './typography';
+import {
+  HEAVY_SHADOW,
+  HEAVY_SHADOW_UP,
+  INNER_SHADOW,
+  LIGHT_SHADOW,
+  MEDIUM_SHADOW,
+  NO_SHADOW,
+} from './elevation';
 
-export const TEXT = '#49494C';
-export const FONT_FAMILY = "'Noto Sans', sans-serif, BlinkMacSystemFont, system-ui, -apple-system";
-
-export const DARK_PURPLE = '#350B59';
-export const MID_PURPLE = '#5D3C7A';
-export const PURPLE_GRAPE = '#7D3F98';
-export const PURPLE_PLUM = '#9955C6';
-export const LAVENDER = '#DA99FF';
-export const LIGHT_PURPLE = '#EED3FF';
-export const SUCCESS_GREEN = '#008805';
-export const SUCCESS_GREEN_BG = '#F2FAF3';
-export const ERROR_OR_DESTRUCT = '#CB2A2A';
-export const DESTRUCT_STATE_1 = '#982020';
-export const DESTRUCT_STATE_2 = '#651515';
-export const ERROR_BG = '#FCF4F4';
-export const BLUE = '#1573D4';
-export const ALERT = '#EB6A00';
-export const NEUTRAL_PLUM = '#F6F1FF';
-export const NEUTRAL_LIGHT_PLUM = '#F4F2F6';
-export const NEUTRAL_DARK_PLUM = '#A19ABA';
-export const NEUTRAL_DARK_GREY = '#CCCCCC';
-export const NEUTRAL_MID_GREY = '#F2F2F2';
-export const NEUTRAL_LIGHT_GREY = '#FAFAFA';
-export const NEUTRAL_WHITE = '#FFFFFF';
-export const TEXT_HEADER = '#282036';
-
-export const NEUTRAL_GREY_200 = '#F2F2F2';
-export const NEUTRAL_GREY_500 = '#E0E0E0';
-export const NEUTRAL_GREY_600 = '#C8C8C8';
-export const NEUTRAL_GREY_800 = '#9E9E9E';
-export const NEUTRAL_GREY_1100 = '#5C5C5C';
-export const NEUTRAL_GREY_1200 = '#3D3D3D';
-export const PLUM_100 = '#F6F1FF';
-
-export const TYPOGRAPHY_BODY = {
-  fontSize: 14,
-  lineHeight: '24px',
-  fontWeight: 400,
-  letterSpacing: 'normal',
-  fontFamily: FONT_FAMILY,
-  color: TEXT,
-};
-
-export const TYPOGRAPHY_BUTTON = {
-  fontSize: 14,
-  lineHeight: '19px',
-  fontWeight: 600,
-  letterSpacing: '0.02em',
-  fontFamily: FONT_FAMILY,
-  color: TEXT,
-};
-
-export const TYPOGRAPHY_BUTTON_SMALL = {
-  fontSize: 12,
-  lineHeight: '16px',
-  fontWeight: 600,
-  letterSpacing: 'normal',
-  fontFamily: FONT_FAMILY,
-  color: TEXT,
-};
-
-export const TYPOGRAPHY_SMALL_TEXT = {
-  fontSize: 12,
-  lineHeight: '20px',
-  fontWeight: 400,
-  letterSpacing: 'normal',
-  fontFamily: FONT_FAMILY,
-  color: TEXT,
-};
-
-export const TYPOGRAPHY_BODY_LINK = {
-  ...TYPOGRAPHY_BODY,
-  textDecoration: 'underline',
-  cursor: 'pointer',
-};
-
-export const TYPOGRAPHY_SMALL_TEXT_LINK = {
-  ...TYPOGRAPHY_SMALL_TEXT,
-  textDecoration: 'underline',
-  cursor: 'pointer',
-};
-
-export const TYPOGRAPHY_EYEBROW = {
-  fontSize: 10,
-  fontWeight: 400,
-  lineHeight: '16px',
-  letterSpacing: 'normal',
-  fontFamily: FONT_FAMILY,
-  color: TEXT,
-};
-
-export const TYPOGRAPHY_H1 = {
-  fontSize: 72,
-  lineHeight: '88px',
-  fontWeight: 300,
-  letterSpacing: 'normal',
-  fontFamily: FONT_FAMILY,
-  color: TEXT,
-};
-
-export const TYPOGRAPHY_H2 = {
-  fontSize: 48,
-  lineHeight: '56px',
-  fontWeight: 300,
-  letterSpacing: 'normal',
-  fontFamily: FONT_FAMILY,
-  color: TEXT,
-};
-
-export const TYPOGRAPHY_H3 = {
-  fontSize: 32,
-  lineHeight: '40px',
-  fontWeight: 400,
-  letterSpacing: 'normal',
-  fontFamily: FONT_FAMILY,
-  color: TEXT,
-};
-
-export const TYPOGRAPHY_H4 = {
-  fontSize: 24,
-  lineHeight: '32px',
-  fontWeight: 400,
-  letterSpacing: 'normal',
-  fontFamily: FONT_FAMILY,
-  color: TEXT,
-};
-
-export const TYPOGRAPHY_H5 = {
-  fontSize: 20,
-  lineHeight: '24px',
-  fontWeight: 400,
-  letterSpacing: '0.02em',
-  fontFamily: FONT_FAMILY,
-  color: TEXT,
-};
-
-export const TYPOGRAPHY_SUBTITLE_01 = {
-  fontSize: 18,
-  lineHeight: '24px',
-  fontWeight: 400,
-  letterSpacing: '0.02em',
-  fontFamily: FONT_FAMILY,
-  color: TEXT,
-};
-
-export const TYPOGRAPHY_SUBTITLE_02 = {
-  fontSize: 16,
-  lineHeight: '24px',
-  fontWeight: 400,
-  letterSpacing: '0.02em',
-  fontFamily: FONT_FAMILY,
-  color: TEXT,
-};
-
-export const TYPOGRAPHY_SUBTITLE_03 = {
-  fontSize: 14,
-  lineHeight: '24px',
-  fontWeight: 600,
-  letterSpacing: '0.01em',
-  fontFamily: FONT_FAMILY,
-  color: TEXT,
-};
-
-export const TYPOGRAPHY_SUBTITLE_04 = {
-  fontSize: 14,
-  lineHeight: '24px',
-  fontWeight: 400,
-  letterSpacing: '0.01em',
-  fontFamily: FONT_FAMILY,
-  color: TEXT,
-};
-
-export const TYPOGRAPHY_BUTTON_UPPERCASE = {
-  ...TYPOGRAPHY_BUTTON,
-  textTransform: 'uppercase',
-  letterSpacing: '0.02em',
-};
-
-export const TYPOGRAPHY_SMALL_TEXT_UPPERCASE = {
-  ...TYPOGRAPHY_SMALL_TEXT,
-  letterSpacing: '0.02em',
-  textTransform: 'uppercase',
-};
-
-export const TYPOGRAPHY_EYEBROW_UPPERCASE = {
-  ...TYPOGRAPHY_EYEBROW,
-  letterSpacing: '0.1em',
-  textTransform: 'uppercase',
-};
-
-export const NO_SHADOW = {
-  boxShadow: 'none',
-};
-
-export const INNER_SHADOW = {
-  boxShadow: 'inset 0.5px 0.5px 1px rgba(0, 0, 0, 0.2)',
-};
-
-export const LIGHT_SHADOW = {
-  boxShadow: '0px 2px 4px rgba(0, 0, 0, 0.25)',
-};
-
-export const MEDIUM_SHADOW = {
-  boxShadow: '0px 4px 8px rgba(0, 0, 0, 0.25)',
-};
-
-export const HEAVY_SHADOW = {
-  boxShadow: '0px 8px 16px rgba(0, 0, 0, 0.25)',
-};
-
-export const HEAVY_SHADOW_UP = {
-  boxShadow: '0px -3px 12px rgba(0, 0, 0, 0.25)',
-};
-
-// ***** this file appears to be unused
+export * from './color';
+export * from './typography';
+export * from './elevation';
 
 declare module '@mui/material/styles' {
   interface Theme {

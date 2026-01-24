@@ -27,7 +27,6 @@ export default {
     ...groupArgs(['headerComponent', 'headerPrefixIconName', 'closeButton'], 'header'),
     ...groupArgs(['subTitle', 'children', 'adColumn', 'messages'], 'Content'),
     ...groupArgs(['buttonDefs', 'footerComponent'], 'footer'),
-    ...groupArgs(['offsetY', 'isTouchDeviceLandscapeView'], 'Position'),
     ...hideAttributes(hiddenKeys),
   },
 } as Meta<typeof Modal>;

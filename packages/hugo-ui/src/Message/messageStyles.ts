@@ -1,20 +1,8 @@
-import { styled } from '@mui/system';
-import {
-  BLUE,
-  ERROR_OR_DESTRUCT,
-  ERROR_BG,
-  NEUTRAL_LIGHT_GREY,
-  SUCCESS_GREEN_BG,
-  SUCCESS_GREEN,
-  TEXT,
-  TEXT_HEADER,
-  TYPOGRAPHY_BODY,
-  TYPOGRAPHY_SUBTITLE_01,
-} from '../styles/theme';
+import { styled } from '@mui/material/styles';
 
 export const ROOT_PREFIX = 'HugoUIMessage';
 
-export const StyledMessage = styled('div')({
+export const StyledMessage = styled('div')(({ theme }) => ({
   display: 'flex',
   alignItems: 'center',
   padding: 24,
@@ -30,8 +18,8 @@ export const StyledMessage = styled('div')({
       },
       '.HugoUIStatusIcon-text': {
         flex: '1 1 auto',
-        ...TYPOGRAPHY_SUBTITLE_01,
-        color: `${TEXT} !important`,
+        ...theme.hugoUITypography.subtitle1,
+        color: `${theme.hugoUIColors.TEXT} !important`,
       },
       '.HugoUIStatusIcon.HugoUIMessage-header .HugoUIStatusIcon-icon': {
         width: 42,
@@ -46,13 +34,13 @@ export const StyledMessage = styled('div')({
         flexDirection: 'column',
         alignItems: 'flex-start',
         [`.${ROOT_PREFIX}-extraText`]: {
-          ...TYPOGRAPHY_BODY,
+          ...theme.hugoUITypography.body,
         },
       },
       [`.${ROOT_PREFIX}-header`]: {
         '.HugoUIStatusIcon-text': {
-          ...TYPOGRAPHY_SUBTITLE_01,
-          color: `${TEXT_HEADER} !important`,
+          ...theme.hugoUITypography.subtitle1,
+          color: `${theme.hugoUIColors.TEXT_HEADER} !important`,
         },
       },
     },
@@ -73,7 +61,7 @@ export const StyledMessage = styled('div')({
         alignItems: 'flex-start',
       },
       '.HugoUIStatusIcon-text': {
-        ...TYPOGRAPHY_BODY,
+        ...theme.hugoUITypography.body,
       },
       '.HugoUIStatusIcon-icon': {
         width: 24,
@@ -82,7 +70,7 @@ export const StyledMessage = styled('div')({
           width: 24,
           height: 24,
           fontSize: 24,
-          color: TEXT,
+          color: theme.hugoUIColors.TEXT,
         },
       },
       [`&.${ROOT_PREFIX}-hasExtraText`]: {
@@ -96,7 +84,7 @@ export const StyledMessage = styled('div')({
           },
         },
         '.HugoUIStatusIcon-text': {
-          ...TYPOGRAPHY_BODY,
+          ...theme.hugoUITypography.body,
         },
         [`& .${ROOT_PREFIX}-extraText`]: {
           paddingLeft: 28,
@@ -120,7 +108,7 @@ export const StyledMessage = styled('div')({
         justifyContent: 'space-around',
         alignItems: 'center',
         '& .icon-close': {
-          color: TEXT,
+          color: theme.hugoUIColors.TEXT,
           fontSize: 16,
           width: 16,
           height: 16,
@@ -130,7 +118,7 @@ export const StyledMessage = styled('div')({
           alignItems: 'center',
         },
         ':focus-visible > .icon-close': {
-          borderColor: BLUE,
+          borderColor: theme.hugoUIColors.BLUE,
         },
       },
     },
@@ -138,28 +126,28 @@ export const StyledMessage = styled('div')({
       justifyContent: 'center',
     },
     '&-error': {
-      backgroundColor: ERROR_BG,
+      backgroundColor: theme.hugoUIColors.ERROR_BG,
       '.HugoUIStatusIcon-icon svg': {
-        color: ERROR_OR_DESTRUCT,
+        color: theme.hugoUIColors.ERROR_OR_DESTRUCT,
       },
     },
     '&-success': {
-      backgroundColor: SUCCESS_GREEN_BG,
+      backgroundColor: theme.hugoUIColors.SUCCESS_GREEN_BG,
       '.HugoUIStatusIcon-icon svg': {
-        color: SUCCESS_GREEN,
+        color: theme.hugoUIColors.SUCCESS_GREEN,
       },
     },
     '&-alert': {
-      backgroundColor: ERROR_BG,
+      backgroundColor: theme.hugoUIColors.ERROR_BG,
       '.HugoUIStatusIcon-icon svg': {
-        color: ERROR_OR_DESTRUCT,
+        color: theme.hugoUIColors.ERROR_OR_DESTRUCT,
       },
     },
     '&-destructiveSuccess': {
-      backgroundColor: NEUTRAL_LIGHT_GREY,
+      backgroundColor: theme.hugoUIColors.NEUTRAL_LIGHT_GREY,
       '.HugoUIStatusIcon-icon svg': {
-        color: SUCCESS_GREEN,
+        color: theme.hugoUIColors.SUCCESS_GREEN,
       },
     },
   },
-});
+}));

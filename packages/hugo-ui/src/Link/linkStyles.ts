@@ -2,8 +2,6 @@ import { styled } from '@mui/system';
 import {
   BLUE,
   DARK_PURPLE,
-  TYPOGRAPHY_BODY_LINK,
-  TYPOGRAPHY_SMALL_TEXT_LINK,
   LIGHT_PURPLE,
   NEUTRAL_DARK_GREY,
   NEUTRAL_LIGHT_PLUM,
@@ -13,7 +11,8 @@ import {
   ERROR_OR_DESTRUCT,
   DESTRUCT_STATE_1,
   DESTRUCT_STATE_2,
-} from '../styles/theme';
+} from '../styles/color';
+import { TYPOGRAPHY_BODY_LINK, TYPOGRAPHY_SMALL_TEXT_LINK } from '../styles/typography';
 
 interface StyledLinkProps {
   mode: 'white' | 'light' | 'dark' | 'error';
@@ -115,7 +114,7 @@ const LinkBaseStyle = ({ mode }: StyledLinkProps) => ({
   },
 });
 
-export const StyledLink = styled('a')(({ mode }: StyledLinkProps) => ({
+export const StyledLink = styled('a')<StyledLinkProps>(({ mode }) => ({
   '&.HugoUILink': {
     ...TYPOGRAPHY_BODY_LINK,
     display: 'inline-block',

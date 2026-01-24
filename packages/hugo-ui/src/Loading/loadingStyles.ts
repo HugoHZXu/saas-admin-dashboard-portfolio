@@ -1,6 +1,6 @@
 import { styled } from '@mui/system';
 import CircularProgress from '@mui/material/CircularProgress';
-import { TEXT } from '../styles/theme';
+import { TEXT } from '../styles/color';
 import { HugoUILoadingSize } from './Loading';
 
 export const ROOT_PREFIX = 'HugoUILoading';

@@ -1,7 +1,7 @@
 import '@testing-library/jest-dom';
 import { render, fireEvent, waitFor } from '../utils/testUtils';
 import { HugoUILink, HugoUILinkMode, HugoUILinkSize } from './Link';
-import { DARK_PURPLE, TEXT } from '../styles/theme';
+import { DARK_PURPLE, TEXT } from '../styles/color';
 
 const setup = (
   target?: string,

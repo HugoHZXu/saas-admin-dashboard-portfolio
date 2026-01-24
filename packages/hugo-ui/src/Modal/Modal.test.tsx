@@ -256,74 +256,7 @@ describe('render HugoUIModal', () => {
         ))}
       </HugoUIModal>
     );
-    expect(screen.getByRole('alertdialog')).toHaveStyle('max-height: calc(100% - 56px - 48px);');
-  });
-
-  it('sets fullScreen maxHeight for landscape', () => {
-    (useMediaQuery as jest.Mock).mockReturnValue(true);
-    (isPhone as jest.Mock).mockReturnValue(false);
-    Object.defineProperty(window, 'innerHeight', { value: 700, configurable: true });
-    render(
-      <HugoUIModal open={true} type="transactional" isTouchDeviceLandscapeView>
-        This is test content
-      </HugoUIModal>
-    );
-    const paper = document.querySelector('.MuiPaper-root') as HTMLElement | null;
-    expect(paper).toBeTruthy();
-    expect(paper?.style.maxHeight).toBe('700px');
-  });
-
-  it('sets fullScreen maxHeight for portrait', () => {
-    (useMediaQuery as jest.Mock).mockReturnValue(true);
-    (isPhone as jest.Mock).mockReturnValue(false);
-    render(
-      <HugoUIModal open={true} type="transactional">
-        This is test content
-      </HugoUIModal>
-    );
-    const paper = document.querySelector('.MuiPaper-root') as HTMLElement | null;
-    expect(paper).toBeTruthy();
-    expect(paper?.style.maxHeight).toBe('100%');
-  });
-
-  it('sets marginTop when content scrolls in landscape', () => {
-    (useMediaQuery as jest.Mock).mockReturnValue(false);
-    (isPhone as jest.Mock).mockReturnValue(false);
-    Object.defineProperty(window, 'innerHeight', { value: 800, configurable: true });
-    const scrollHeightDescriptor = Object.getOwnPropertyDescriptor(
-      HTMLElement.prototype,
-      'scrollHeight'
-    );
-    const clientHeightDescriptor = Object.getOwnPropertyDescriptor(
-      HTMLElement.prototype,
-      'clientHeight'
-    );
-    Object.defineProperty(HTMLElement.prototype, 'scrollHeight', {
-      configurable: true,
-      get: () => 200,
-    });
-    Object.defineProperty(HTMLElement.prototype, 'clientHeight', {
-      configurable: true,
-      get: () => 100,
-    });
-
-    render(
-      <HugoUIModal open={true} offsetY={80} isTouchDeviceLandscapeView>
-        <HugoUIModalContentText>scroll content</HugoUIModalContentText>
-      </HugoUIModal>
-    );
-
-    const paper = document.querySelector('.MuiPaper-root') as HTMLElement | null;
-    expect(paper).toBeTruthy();
-    expect(paper?.style.marginTop).toBe('80px');
-    expect(paper?.style.maxHeight).toBe('672px');
-
-    if (scrollHeightDescriptor) {
-      Object.defineProperty(HTMLElement.prototype, 'scrollHeight', scrollHeightDescriptor);
-    }
-    if (clientHeightDescriptor) {
-      Object.defineProperty(HTMLElement.prototype, 'clientHeight', clientHeightDescriptor);
-    }
+    expect(screen.getByRole('dialog')).toHaveStyle('max-height: calc(100% - 104px);');
   });
 });
 

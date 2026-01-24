@@ -11,7 +11,7 @@ import { visuallyHidden } from '@mui/utils';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import ErrorIcon from '@mui/icons-material/Error';
 import Box from '@mui/material/Box';
-import { ERROR_OR_DESTRUCT, SUCCESS_GREEN } from '../styles/theme';
+import { ERROR_OR_DESTRUCT, SUCCESS_GREEN } from '../styles/color';
 import { InputStatus } from './InputStatus';
 
 export type HugoUIInputThemeType = 'light' | 'dark';

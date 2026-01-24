@@ -11,7 +11,7 @@ import { HugoUIModalType } from './Modal';
 import { HugoUIBaseProps } from '../types/base';
 import { createDialogTitleTheme, StyledModalHeader, TITLE_ROOT_PREFIX } from './modalStyles';
 import { useIntl } from 'react-intl';
-import { ALERT, ERROR_OR_DESTRUCT, PURPLE_PLUM } from '../styles/theme';
+import { ALERT, ERROR_OR_DESTRUCT, PURPLE_PLUM } from '../styles/color';
 
 export interface HugoUIModalTitleProps extends HugoUIBaseProps, Omit<DialogTitleProps, 'title'> {
   type?: HugoUIModalType;
