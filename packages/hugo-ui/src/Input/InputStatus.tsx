@@ -1,7 +1,7 @@
 import React from 'react';
 import ErrorIcon from '@mui/icons-material/Error';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
-import { ERROR_OR_DESTRUCT, SUCCESS_GREEN } from '../styles/color';
+import { useTheme } from '@mui/material/styles';
 
 export type InputStatusProps = {
   message: React.ReactNode;
@@ -9,8 +9,11 @@ export type InputStatusProps = {
 };
 
 export function InputStatus({ message, status }: InputStatusProps) {
+  const theme = useTheme();
   const isSuccess = status === 'success';
-  const color = isSuccess ? SUCCESS_GREEN : ERROR_OR_DESTRUCT;
+  const color = isSuccess
+    ? theme.hugoUIColorRoles.status.success
+    : theme.hugoUIColorRoles.status.error;
   return (
     <span className="HugoUIInput-status" style={{ color }}>
       {isSuccess ? (

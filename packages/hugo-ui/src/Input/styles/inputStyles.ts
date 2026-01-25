@@ -1,26 +1,8 @@
-import { createTheme, styled } from '@mui/material/styles';
+import { createTheme, styled, ThemeOptions } from '@mui/material/styles';
 import type { Theme } from '@mui/material/styles';
-const getBorderTokens = (theme: Theme) => ({
-  BASIC_BORDER: `1px solid ${theme.hugoUIColors.NEUTRAL_GREY_800}`,
-  FOCUS_BORDER: `2px solid ${theme.hugoUIColors.BLUE}`,
-  ACTIVE_BORDER: `1px solid ${theme.hugoUIColors.PURPLE_GRAPE}`,
-  SUCCESS_BORDER: `1px solid ${theme.hugoUIColors.SUCCESS_GREEN}`,
-  ERROR_BORDER: `1px solid ${theme.hugoUIColors.ERROR_OR_DESTRUCT}`,
-  DISABLED_BORDER: `1px solid ${theme.hugoUIColors.NEUTRAL_DARK_GREY}`,
-  BASIC_BORDER_DARK: `2px solid ${theme.hugoUIColors.NEUTRAL_DARK_PLUM}`,
-  ACTIVE_BORDER_DARK: `2px solid ${theme.hugoUIColors.PURPLE_GRAPE}`,
-  SUCCESS_BORDER_DARK: `2px solid ${theme.hugoUIColors.SUCCESS_GREEN}`,
-  ERROR_BORDER_DARK: `2px solid ${theme.hugoUIColors.ERROR_OR_DESTRUCT}`,
-  DISABLED_BORDER_DARK: `2px solid ${theme.hugoUIColors.NEUTRAL_DARK_GREY}`,
-  FOCUS_BORDER_DARK: `2px solid ${theme.hugoUIColors.NEUTRAL_WHITE}`,
-  FOCUS_INNER_BORDER_DARK: `1px solid ${theme.hugoUIColors.DARK_PURPLE}`,
-  FOCUS_SHADOW: `0 0 0 2px ${theme.hugoUIColors.BLUE}`,
-});
-const AUTOFILL_SHADOW = '0 0 0 30px white inset !important';
+import { AUTOFILL_SHADOW, getBorderTokens, INPUT_LABEL_SHRINK_FACTOR } from './inputTokens';
 
-export const INPUT_LABEL_SHRINK_FACTOR = 0.75;
-
-export const inputTheme = createTheme({
+export const createInputThemeOverrides = (): ThemeOptions => ({
   components: {
     MuiOutlinedInput: {
       styleOverrides: {
@@ -42,10 +24,10 @@ export const inputTheme = createTheme({
             fontFamily: theme.hugoUITypography.body.fontFamily,
             input: {
               ...theme.hugoUITypography.subtitle2,
-              color: theme.hugoUIColors.TEXT,
+              color: theme.hugoUIColorRoles.text.default,
               opacity: 0.76,
               '&.Mui-disabled': {
-                WebkitTextFillColor: theme.hugoUIColors.NEUTRAL_DARK_GREY,
+                WebkitTextFillColor: theme.hugoUIColorRoles.text.disabled,
               },
               height: 24,
               padding: '12px 16px 12px 16px',
@@ -62,23 +44,23 @@ export const inputTheme = createTheme({
                 WebkitBoxShadow: AUTOFILL_SHADOW,
               },
               '&::placeholder': {
-                color: theme.hugoUIColors.TEXT,
+                color: theme.hugoUIColorRoles.text.default,
                 opacity: 0.76,
               },
             },
             '&.HugoUIInput-hasInput': {
-              color: theme.hugoUIColors.TEXT_HEADER,
+              color: theme.hugoUIColorRoles.text.primary,
             },
             '&.MuiInputBase-multiline': {
               ...theme.hugoUITypography.subtitle2,
-              color: theme.hugoUIColors.TEXT_HEADER,
+              color: theme.hugoUIColorRoles.text.primary,
               padding: '12px 16px 12px 16px',
             },
             textarea: {
-              color: theme.hugoUIColors.TEXT,
+              color: theme.hugoUIColorRoles.text.default,
               opacity: 0.76,
               '&.Mui-disabled': {
-                WebkitTextFillColor: theme.hugoUIColors.NEUTRAL_DARK_GREY,
+                WebkitTextFillColor: theme.hugoUIColorRoles.text.disabled,
               },
               '&:-webkit-autofill': {
                 WebkitBoxShadow: AUTOFILL_SHADOW,
@@ -98,7 +80,7 @@ export const inputTheme = createTheme({
             },
             '[class^="icon-visibility"]': {
               cursor: 'pointer',
-              color: theme.hugoUIColors.TEXT,
+              color: theme.hugoUIColorRoles.text.default,
               outline: 'none',
               borderRadius: 0,
               '&:focus-visible': {
@@ -127,7 +109,7 @@ export const inputTheme = createTheme({
               },
               '[class^="icon-"]': {
                 pointerEvents: 'none',
-                color: theme.hugoUIColors.NEUTRAL_DARK_GREY,
+                color: theme.hugoUIColorRoles.text.disabled,
               },
             },
           };
@@ -143,11 +125,11 @@ export const inputTheme = createTheme({
           // MuiFilledInput is not working
           '&.HugoUIInput-hasInput': {
             input: {
-              color: theme.hugoUIColors.TEXT_HEADER,
+              color: theme.hugoUIColorRoles.text.primary,
               opacity: 1,
             },
             textArea: {
-              color: theme.hugoUIColors.TEXT_HEADER,
+              color: theme.hugoUIColorRoles.text.primary,
               opacity: 1,
             },
           },
@@ -172,14 +154,14 @@ export const inputTheme = createTheme({
           } = getBorderTokens(theme);
           return {
             minHeight: '48px',
-            backgroundColor: `${theme.hugoUIColors.NEUTRAL_WHITE} !important`,
+            backgroundColor: `${theme.hugoUIColorRoles.surface.default} !important`,
             border: BASIC_BORDER_DARK,
             borderRadius: 4,
             input: {
               ...theme.hugoUITypography.subtitle2,
-              color: theme.hugoUIColors.TEXT_HEADER,
+              color: theme.hugoUIColorRoles.text.primary,
               '&.Mui-disabled': {
-                WebkitTextFillColor: theme.hugoUIColors.NEUTRAL_DARK_GREY,
+                WebkitTextFillColor: theme.hugoUIColorRoles.text.disabled,
               },
               height: 24,
               padding: '15px 14px 5px 14px',
@@ -199,10 +181,10 @@ export const inputTheme = createTheme({
             },
             '&.MuiInputBase-multiline': {
               ...theme.hugoUITypography.subtitle2,
-              color: theme.hugoUIColors.TEXT_HEADER,
+              color: theme.hugoUIColorRoles.text.primary,
               textarea: {
                 '&.Mui-disabled': {
-                  WebkitTextFillColor: theme.hugoUIColors.NEUTRAL_DARK_GREY,
+                  WebkitTextFillColor: theme.hugoUIColorRoles.text.disabled,
                 },
               },
               height: 128,
@@ -226,12 +208,12 @@ export const inputTheme = createTheme({
               border: DISABLED_BORDER_DARK,
               '[class^="icon-"]': {
                 pointerEvents: 'none',
-                color: theme.hugoUIColors.NEUTRAL_DARK_GREY,
+                color: theme.hugoUIColorRoles.text.disabled,
               },
             },
             '[class^="icon-visibility"]': {
               cursor: 'pointer',
-              color: theme.hugoUIColors.TEXT,
+              color: theme.hugoUIColorRoles.text.default,
               outline: 'none',
               borderRadius: 0,
               '&:focus-visible': {
@@ -257,10 +239,10 @@ export const inputTheme = createTheme({
             },
           },
           '&:not(&.MuiInputLabel-shrink):not(&.Mui-disabled)': {
-            color: theme.hugoUIColors.TEXT,
+            color: theme.hugoUIColorRoles.text.default,
           },
           '&.Mui-disabled': {
-            color: theme.hugoUIColors.NEUTRAL_DARK_GREY,
+            color: theme.hugoUIColorRoles.text.disabled,
           },
           '&.HugoUIInput-label-dark': {
             '&.MuiInputLabel-shrink': {
@@ -274,7 +256,7 @@ export const inputTheme = createTheme({
             display: 'flex',
           },
           '.HugoUIInput-label-requiredPostfix': {
-            color: theme.hugoUIColors.ERROR_OR_DESTRUCT,
+            color: theme.hugoUIColorRoles.status.error,
             lineHeight: '14px',
             paddingTop: 4,
           },
@@ -306,10 +288,10 @@ export const inputTheme = createTheme({
             columnGap: 4,
           },
           '.HugoUIInput-helperText-dark': {
-            color: theme.hugoUIColors.NEUTRAL_WHITE,
+            color: theme.hugoUIColorRoles.text.inverse,
           },
           '&.Mui-disabled': {
-            color: theme.hugoUIColors.NEUTRAL_DARK_GREY,
+            color: theme.hugoUIColorRoles.text.disabled,
           },
         }),
       },
@@ -516,7 +498,7 @@ export const inputTheme = createTheme({
                   padding: '4px 8px',
                   height: 24,
                   ...theme.hugoUITypography.subtitle4,
-                  color: theme.hugoUIColors.TEXT_HEADER,
+                  color: theme.hugoUIColorRoles.text.primary,
                   '&.MuiFilledInput-input': {
                     padding: '2px 6px',
                   },
@@ -555,6 +537,9 @@ export const inputTheme = createTheme({
     },
   },
 });
+
+export const createInputTheme = (parentTheme: Theme) =>
+  createTheme(parentTheme, createInputThemeOverrides());
 
 export const InputContainer = styled('div')(({ theme }) => {
   const { FOCUS_BORDER } = getBorderTokens(theme);

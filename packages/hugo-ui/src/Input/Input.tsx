@@ -2,8 +2,8 @@ import React, { ChangeEvent, useState, useEffect } from 'react';
 import classnames from 'classnames';
 import { useId } from '../utils/useId';
 import TextField, { TextFieldProps } from '@mui/material/TextField';
-import { inputTheme, InputContainer } from './inputStyles';
-import { ThemeProvider } from '@mui/material/styles';
+import { createInputTheme, InputContainer } from './styles/inputStyles';
+import { ThemeProvider, useTheme } from '@mui/material/styles';
 import { HugoUILoading } from '../Loading/Loading';
 import { useIntl } from 'react-intl';
 import { useFieldFocusOnWindowBlur } from '../utils/useFieldFocusOnWindowBlur';
@@ -11,7 +11,6 @@ import { visuallyHidden } from '@mui/utils';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import ErrorIcon from '@mui/icons-material/Error';
 import Box from '@mui/material/Box';
-import { ERROR_OR_DESTRUCT, SUCCESS_GREEN } from '../styles/color';
 import { InputStatus } from './InputStatus';
 
 export type HugoUIInputThemeType = 'light' | 'dark';
@@ -98,6 +97,10 @@ export const HugoUIInput = (props: HugoUIInputProps) => {
   const [hasAutofillValue, setHasAutofillValue] = useState<boolean>(false);
 
   const intl = useIntl();
+  const parentTheme = useTheme();
+  const inputTheme = React.useMemo(() => createInputTheme(parentTheme), [parentTheme]);
+  const successColor = parentTheme.hugoUIColorRoles.status.success;
+  const errorColor = parentTheme.hugoUIColorRoles.status.error;
 
   useEffect(() => {
     if (otherProps.autoFocus && !autoFocusByKeyboard) {
@@ -129,7 +132,7 @@ export const HugoUIInput = (props: HugoUIInputProps) => {
             sx={{
               display: 'flex',
               alignItems: 'center',
-              color: SUCCESS_GREEN,
+              color: successColor,
               fontSize: 12,
               lineHeight: '20px',
             }}
@@ -137,7 +140,7 @@ export const HugoUIInput = (props: HugoUIInputProps) => {
             <Box className="HugoUIDarkStatus-icon" sx={{ mr: '5px', display: 'flex', height: 20 }}>
               <CheckCircleIcon
                 fontSize="small"
-                sx={{ color: SUCCESS_GREEN }}
+                sx={{ color: successColor }}
                 titleAccess={intl.formatMessage({
                   id: 'hugoUI.statusIcon.success',
                   defaultMessage: 'success',
@@ -156,7 +159,7 @@ export const HugoUIInput = (props: HugoUIInputProps) => {
             sx={{
               display: 'flex',
               alignItems: 'center',
-              color: ERROR_OR_DESTRUCT,
+              color: errorColor,
               fontSize: 12,
               lineHeight: '20px',
             }}
@@ -164,7 +167,7 @@ export const HugoUIInput = (props: HugoUIInputProps) => {
             <Box className="HugoUIDarkStatus-icon" sx={{ mr: '5px', display: 'flex', height: 20 }}>
               <ErrorIcon
                 fontSize="small"
-                sx={{ color: ERROR_OR_DESTRUCT }}
+                sx={{ color: errorColor }}
                 titleAccess={intl.formatMessage({
                   id: 'hugoUI.statusIcon.error',
                   defaultMessage: 'error',
@@ -230,13 +233,13 @@ export const HugoUIInput = (props: HugoUIInputProps) => {
             <CheckCircleIcon
               id={`HugoUIInput-miniIcon-${id}`}
               fontSize="small"
-              sx={{ color: SUCCESS_GREEN }}
+              sx={{ color: successColor }}
             />
           ) : (
             <ErrorIcon
               id={`HugoUIInput-miniIcon-${id}`}
               fontSize="small"
-              sx={{ color: ERROR_OR_DESTRUCT }}
+              sx={{ color: errorColor }}
             />
           )}
         </div>

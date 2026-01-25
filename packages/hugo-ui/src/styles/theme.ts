@@ -251,7 +251,6 @@ export const hugoUITheme = createTheme({
         ...TYPOGRAPHY_BUTTON,
         whiteSpace: 'nowrap',
       },
-      // To avoid error: Type 'string' is not assignable to type 'TextTransform | undefined'.ts(2322)
       uppercase: TYPOGRAPHY_BUTTON_UPPERCASE,
       small: {
         fontSize: 12,
@@ -264,12 +263,10 @@ export const hugoUITheme = createTheme({
     },
     smallText: {
       base: TYPOGRAPHY_SMALL_TEXT,
-      // To avoid error: Type 'string' is not assignable to type 'TextTransform | undefined'.ts(2322)
       uppercase: TYPOGRAPHY_SMALL_TEXT_UPPERCASE,
     },
     eyebrow: {
       base: TYPOGRAPHY_EYEBROW,
-      // To avoid error: Type 'string' is not assignable to type 'TextTransform | undefined'.ts(2322)
       uppercase: TYPOGRAPHY_EYEBROW_UPPERCASE,
     },
   },

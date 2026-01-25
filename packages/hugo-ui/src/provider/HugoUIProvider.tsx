@@ -3,6 +3,7 @@ import { ThemeProvider, createTheme, Theme } from '@mui/material/styles';
 import { IntlProvider } from 'react-intl';
 import { hugoUITheme } from '../styles/theme';
 import { useFont, FontLoadingStrategy } from '../hooks/useFont';
+import { HugoUIGlobalStyles } from '../styles/globalStyles';
 
 export type HugoUIProviderProps = {
   children: ReactNode;
@@ -24,7 +25,10 @@ export function HugoUIProvider({
 
   return (
     <IntlProvider locale={locale} messages={messages}>
-      <ThemeProvider theme={mergedTheme}>{children}</ThemeProvider>
+      <ThemeProvider theme={mergedTheme}>
+        <HugoUIGlobalStyles />
+        {children}
+      </ThemeProvider>
     </IntlProvider>
   );
 }
