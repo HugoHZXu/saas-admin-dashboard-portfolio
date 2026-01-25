@@ -3,6 +3,7 @@ import { Title, Description, Primary, ArgsTable, Stories } from '@storybook/bloc
 import { HugoUIProvider, hugoUITheme } from 'hugo-ui';
 import enMessages from '../../hugo-ui/src/lang/en.json';
 import zhMessages from '../../hugo-ui/src/lang/zh.json';
+import arMessages from '../../hugo-ui/src/lang/ar.json';
 import { expect } from '@storybook/test';
 import * as matchers from '@testing-library/jest-dom/matchers';
 
@@ -11,11 +12,13 @@ expect.extend(matchers);
 const locales = {
   en: { title: 'English', left: 'EN', right: 'EN' },
   zh: { title: '中文', left: '中文', right: '中' },
+  ar: { title: 'Arabic', left: 'AR', right: 'AR' },
 };
 
 const messagesByLocale = {
   en: enMessages,
   zh: zhMessages,
+  ar: arMessages,
 };
 
 const preview: Preview = {

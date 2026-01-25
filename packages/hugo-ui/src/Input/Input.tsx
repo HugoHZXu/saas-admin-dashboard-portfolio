@@ -246,9 +246,6 @@ export const HugoUIInput = (props: HugoUIInputProps) => {
       ) : null;
   }
 
-  // when used in the search component, the input label should not
-  //  shrink up to the top.  The label needs to be displayed as
-  //  a placeholder in this case
   let placeholderText = placeholder;
   let labelNode;
   if (otherProps.name === 'search') {

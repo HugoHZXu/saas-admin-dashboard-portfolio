@@ -1,0 +1,11 @@
+{
+  "hugoUI.button.loading": "جارٍ التحميل",
+  "hugoUI.button.save": "حفظ",
+  "hugoUI.button.cancel": "إلغاء",
+  "hugoUI.button.destruct": "تدمير",
+  "hugoUI.iconLabel.close": "إغلاق",
+  "hugoUI.statusIcon.success": "نجاح",
+  "hugoUI.statusIcon.error": "خطأ",
+  "hugoUI.statusIcon.alert": "تنبيه",
+  "hugoUI.statusIcon.warn": "تحذير"
+}
