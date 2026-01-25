@@ -1,9 +1,8 @@
 import { styled } from '@mui/system';
+import type { Theme } from '@mui/material/styles';
 import CircularProgress from '@mui/material/CircularProgress';
-import { TEXT } from '../styles/color';
-import { HugoUILoadingSize } from './Loading';
-
-export const ROOT_PREFIX = 'HugoUILoading';
+import { HugoUILoadingSize } from '../Loading';
+import { createLoadingTokens, ROOT_PREFIX } from './loadingTokens';
 
 interface CustomStyleProps {
   size: HugoUILoadingSize;
@@ -21,9 +20,10 @@ export const generateNumberSizeCss = (size: HugoUILoadingSize) => {
   return {};
 };
 
-export const StyledLoading = styled(CircularProgress)<CustomStyleProps>(
-  ({ size }: { size: HugoUILoadingSize }) => ({
-    color: TEXT,
+export const StyledLoading = styled(CircularProgress)<CustomStyleProps>(({ theme, size }) => {
+  const tokens = createLoadingTokens(theme as Theme);
+  return {
+    color: tokens.colors.text,
     [`&.${ROOT_PREFIX}`]: {
       '&-x-small': {
         width: '16px',
@@ -43,5 +43,5 @@ export const StyledLoading = styled(CircularProgress)<CustomStyleProps>(
       },
       ...generateNumberSizeCss(size),
     },
-  })
-);
+  };
+});

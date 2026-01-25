@@ -1,5 +1,9 @@
 import { createTheme, CSSObject, Theme, ThemeOptions } from '@mui/material/styles';
-import { HugoUIButtonLevel, HugoUIButtonColorTheme, HugoUIButtonDrawingStyle } from '../buttonTypes';
+import {
+  HugoUIButtonLevel,
+  HugoUIButtonColorTheme,
+  HugoUIButtonDrawingStyle,
+} from '../buttonTypes';
 import { ButtonStatusType, createButtonTokens, getButtonSurfaceContext } from './buttonTokens';
 import { createButtonSizes, BUTTON_ICON_NORMAL, BUTTON_ICON_SMALL } from './buttonSizes';
 

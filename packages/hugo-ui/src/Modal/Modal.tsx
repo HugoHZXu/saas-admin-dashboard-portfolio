@@ -1,6 +1,6 @@
 import React, { useMemo, useEffect, useState, useId } from 'react';
 import { useIntl } from 'react-intl';
-import { ThemeProvider } from '@mui/material/styles';
+import { ThemeProvider, useTheme } from '@mui/material/styles';
 import Zoom, { ZoomProps } from '@mui/material/Zoom';
 import classnames from 'classnames';
 import useMediaQuery from '@mui/material/useMediaQuery';
@@ -18,7 +18,8 @@ import {
 import { HugoUIFeedback, HugoUIFeedbackMessageType } from './Feedback';
 import { HugoUIButtonSize } from '../Button';
 import { HugoUIBaseProps } from '../types/base';
-import { createDialogTheme, ROOT_PREFIX, CONTENT_ROOT_PREFIX } from './modalStyles';
+import { createDialogTheme } from './styles/modalStyles';
+import { ROOT_PREFIX, CONTENT_ROOT_PREFIX } from './styles/modalTokens';
 import { isPhone } from '../utils/platformUtils';
 
 export type HugoUIModalType =
@@ -90,7 +91,7 @@ export interface HugoUIModalProps extends HugoUIBaseProps, Omit<DialogProps, 'ti
   /**
    * allow user to customize their prefix icon of Modal header
    */
-  headerPrefixIconName?: string;
+  headerPrefixIcon?: React.ReactElement;
   /**
    * allows user to disable the auto focus onto the bottom action buttons in the case there is another element to focus on first
    */
@@ -103,7 +104,6 @@ const TransitionZoom = React.forwardRef(function Transition(props: ZoomProps, re
 
 const HugoUIModalLoadingIndicator = ({ loading }: { loading?: boolean }) => {
   const intl = useIntl();
-
   const [readoutLoading, setReadoutLoading] = useState(false);
 
   useEffect(() => {
@@ -147,11 +147,12 @@ export const HugoUIModal = ({
   showLoadingIndicator,
   adColumn,
   messages,
-  headerPrefixIconName,
+  headerPrefixIcon,
   disableAutoFocus,
   ...props
 }: HugoUIModalProps) => {
   const intl = useIntl();
+  const parentTheme = useTheme();
   const dialogTitleId = useId();
 
   const fullScreen = useMediaQuery('(max-width:686px)') || isPhone();
@@ -304,15 +305,17 @@ export const HugoUIModal = ({
           type={type}
           closeable={showCloseable}
           onClose={onClose}
-          prefixIconName={headerPrefixIconName}
+          prefixIcon={headerPrefixIcon}
           titleId={dialogAriaLabel ? undefined : dialogTitleId}
         />
       </React.Fragment>
     );
   }
 
+  const dialogTheme = React.useMemo(() => createDialogTheme(parentTheme), [parentTheme]);
+
   return (
-    <ThemeProvider theme={createDialogTheme}>
+    <ThemeProvider theme={dialogTheme}>
       <Dialog
         open={open}
         onKeyUp={keyUpHandle}

@@ -5,7 +5,7 @@ import omit from 'lodash/omit';
 import has from 'lodash/has';
 import pick from 'lodash/pick';
 import { HugoUILoading } from '../Loading/Loading';
-import { StyledLink } from './linkStyles';
+import { StyledLink } from './styles/linkStyles';
 import { onEnterKeyPress } from '../utils/wcagUtils';
 
 export type HugoUILinkSize = 'small' | 'medium';

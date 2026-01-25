@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import CloseIcon from '@mui/icons-material/Close';
-import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
+import LocalFireDepartmentIcon from '@mui/icons-material/LocalFireDepartment';
 import { PlayFunction } from '@storybook/types';
 import { StoryFn, Meta, ReactRenderer } from '@storybook/react';
 import { action } from '@storybook/addon-actions';
@@ -24,7 +24,7 @@ export default {
   argTypes: {
     ...groupArgs(['id', 'type', 'title', 'onClose', 'className', 'style'], 'Basic'),
     ...groupArgs(['loading', 'showLoadingIndicator'], 'Loading'),
-    ...groupArgs(['headerComponent', 'headerPrefixIconName', 'closeButton'], 'header'),
+    ...groupArgs(['headerComponent', 'headerPrefixIcon', 'closeButton'], 'header'),
     ...groupArgs(['subTitle', 'children', 'adColumn', 'messages'], 'Content'),
     ...groupArgs(['buttonDefs', 'footerComponent'], 'footer'),
     ...hideAttributes(hiddenKeys),
@@ -135,21 +135,7 @@ CustomizeHeaderIcon.args = {
   ...basicAction,
   title: 'Destructive',
   type: 'destructive',
-  headerComponent: (
-    <div
-      style={{
-        height: 50,
-        paddingLeft: 32,
-        lineHeight: '50px',
-        display: 'flex',
-        gap: 8,
-        alignItems: 'center',
-      }}
-    >
-      <DeleteOutlineIcon fontSize="small" />
-      <span>Phasellus viverra nulla ut metus.</span>
-    </div>
-  ),
+  headerPrefixIcon: <LocalFireDepartmentIcon />,
   children: (
     <ModalContentText>
       Curabitur pretium tincidunt lacus. Nulla gravida orci a odio.
@@ -290,32 +276,6 @@ FeedbackMixed.args = {
   ],
 };
 FeedbackMixed.play = basicPlay;
-
-export const FeedbackMixedWithExtra = BasicTemplate.bind({});
-FeedbackMixedWithExtra.args = {
-  type: 'feedback',
-  messages: [
-    {
-      type: 'success',
-      message: 'Donec quis dui at dolor tempor.',
-      description: 'Sed do eiusmod tempor incididunt.',
-    },
-    {
-      type: 'error',
-      message: 'Vivamus luctus egestas leo.',
-      description: (
-        <>
-          <ModalContentText>Vivamus luctus egestas leo.</ModalContentText>
-          <ModalContentText>
-            Praesent dapibus, neque id cursus faucibus, tortor neque egestas augue.
-          </ModalContentText>
-        </>
-      ),
-      descriptonComponentType: 'div',
-    },
-  ],
-};
-FeedbackMixedWithExtra.play = basicPlay;
 
 export const PositionLargeContent: StoryFn<typeof Modal> = (args) => {
   const { children, ...otherArgs } = args;

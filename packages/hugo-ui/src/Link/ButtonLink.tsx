@@ -3,7 +3,7 @@ import classnames from 'classnames';
 import omit from 'lodash/omit';
 import pick from 'lodash/pick';
 import { HugoUILink, HugoUILinkProps, useLinkAriaLabel } from './Link';
-import { StyledLinkButton } from './linkStyles';
+import { StyledLinkButton } from './styles/linkStyles';
 import { onEnterKeyPress } from '../utils/wcagUtils';
 
 export interface HugoUIButtonLinkProps extends Omit<HugoUILinkProps, 'href' | 'hrefLang' | 'rel'> {

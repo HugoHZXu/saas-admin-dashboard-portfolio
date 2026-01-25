@@ -1,5 +1,9 @@
 import { alpha, CSSObject, Theme } from '@mui/material/styles';
-import { HugoUIButtonLevel, HugoUIButtonColorTheme, HugoUIButtonDrawingStyle } from '../buttonTypes';
+import {
+  HugoUIButtonLevel,
+  HugoUIButtonColorTheme,
+  HugoUIButtonDrawingStyle,
+} from '../buttonTypes';
 import { createFilledButtonFocusedSizes, getFilledButtonFocusVisibleStyle } from './buttonFocus';
 
 export type ButtonStatusType = 'hover' | 'active' | 'focus' | 'disabled' | 'basic';

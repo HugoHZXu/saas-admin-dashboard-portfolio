@@ -1,6 +1,7 @@
 import React from 'react';
 import classnames from 'classnames';
-import { StyledLoading, ROOT_PREFIX } from './loadingStyles';
+import { StyledLoading } from './styles/loadingStyles';
+import { ROOT_PREFIX } from './styles/loadingTokens';
 
 export type HugoUILoadingSize = 'x-small' | 'small' | 'medium' | 'large' | number;
 export interface HugoUILoadingProps {

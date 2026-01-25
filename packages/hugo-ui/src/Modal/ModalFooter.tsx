@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from 'react';
-import { ThemeProvider } from '@mui/material/styles';
+import { ThemeProvider, useTheme } from '@mui/material/styles';
 import classnames from 'classnames';
 import DialogActions, { DialogActionsProps } from '@mui/material/DialogActions';
 import {
@@ -10,7 +10,8 @@ import {
 } from '../Button/Button';
 import { Link, HugoUILinkProps } from '../Link';
 import { HugoUIBaseProps } from '../types/base';
-import { createDialogFooterTheme, FOOTER_ROOT_PREFIX } from './modalStyles';
+import { createDialogFooterTheme } from './styles/modalStyles';
+import { FOOTER_ROOT_PREFIX } from './styles/modalTokens';
 
 interface HugoUIModalButtonCommonType {
   label?: React.ReactNode;
@@ -74,6 +75,9 @@ export const HugoUIModalFooter = ({
     }
   }, []);
 
+  const parentTheme = useTheme();
+  const footerTheme = React.useMemo(() => createDialogFooterTheme(parentTheme), [parentTheme]);
+
   const handleTertiaryKeyDown = (e: React.KeyboardEvent<HTMLAnchorElement>) => {
     if (e.key === ' ' || e.key === 'Enter') {
       e.stopPropagation();
@@ -125,7 +129,7 @@ export const HugoUIModalFooter = ({
   };
 
   return (
-    <ThemeProvider theme={createDialogFooterTheme}>
+    <ThemeProvider theme={footerTheme}>
       <DialogActions
         className={classnames(`${FOOTER_ROOT_PREFIX}-root`, {
           [`${FOOTER_ROOT_PREFIX}-tertiary-wrap`]: tertiary?.label,

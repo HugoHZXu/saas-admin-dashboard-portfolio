@@ -1,7 +1,8 @@
 import React from 'react';
 import { render } from '../utils/testUtils';
 import { HugoUILoading } from './Loading';
-import { ROOT_PREFIX, generateNumberSizeCss } from './loadingStyles';
+import { generateNumberSizeCss } from './styles/loadingStyles';
+import { ROOT_PREFIX } from './styles/loadingTokens';
 
 describe('render components', () => {
   it('test size: small', () => {

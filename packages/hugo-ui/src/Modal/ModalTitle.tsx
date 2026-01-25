@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from 'react';
-import { ThemeProvider } from '@mui/material/styles';
+import { ThemeProvider, useTheme } from '@mui/material/styles';
 import classnames from 'classnames';
 import DialogTitle, { DialogTitleProps } from '@mui/material/DialogTitle';
 import IconButton from '@mui/material/IconButton';
@@ -9,16 +9,16 @@ import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
 import ErrorIcon from '@mui/icons-material/Error';
 import { HugoUIModalType } from './Modal';
 import { HugoUIBaseProps } from '../types/base';
-import { createDialogTitleTheme, StyledModalHeader, TITLE_ROOT_PREFIX } from './modalStyles';
+import { createDialogTitleTheme, StyledModalHeader } from './styles/modalStyles';
+import { TITLE_ROOT_PREFIX } from './styles/modalTokens';
 import { useIntl } from 'react-intl';
-import { ALERT, ERROR_OR_DESTRUCT, PURPLE_PLUM } from '../styles/color';
 
 export interface HugoUIModalTitleProps extends HugoUIBaseProps, Omit<DialogTitleProps, 'title'> {
   type?: HugoUIModalType;
   closeable?: boolean;
   onClose?: () => void;
   title?: React.ReactNode;
-  prefixIconName?: string;
+  prefixIcon?: React.ReactElement;
   titleId?: string;
 }
 
@@ -28,10 +28,13 @@ export const HugoUIModalTitle = ({
   className,
   closeable = true,
   onClose,
-  prefixIconName,
+  prefixIcon,
   titleId,
 }: HugoUIModalTitleProps) => {
   const intl = useIntl();
+  const parentTheme = useTheme();
+  const titleTheme = React.useMemo(() => createDialogTitleTheme(parentTheme), [parentTheme]);
+  const statusColors = parentTheme.hugoUIColorRoles.status;
 
   const focusRef = useRef<HTMLButtonElement | null>(null);
 
@@ -43,14 +46,11 @@ export const HugoUIModalTitle = ({
 
   const renderIcon = () => {
     let iconName, ariaLabel;
-    if (prefixIconName) {
-      return (
-        <span
-          role="img"
-          aria-label={ariaLabel}
-          className={classnames(`${TITLE_ROOT_PREFIX}-icon`, prefixIconName)}
-        />
-      );
+    if (prefixIcon) {
+      return React.cloneElement(prefixIcon, {
+        className: classnames(`${TITLE_ROOT_PREFIX}-icon`, prefixIcon.props.className),
+        fontSize: 'inherit',
+      });
     }
     switch (type) {
       case 'destructive':
@@ -60,7 +60,7 @@ export const HugoUIModalTitle = ({
             role="img"
             aria-label={ariaLabel}
             className={`${TITLE_ROOT_PREFIX}-icon`}
-            style={{ color: ERROR_OR_DESTRUCT }}
+            style={{ color: statusColors.error }}
             fontSize="inherit"
           />
         );
@@ -71,7 +71,7 @@ export const HugoUIModalTitle = ({
             role="img"
             aria-label={ariaLabel}
             className={`${TITLE_ROOT_PREFIX}-icon`}
-            style={{ color: PURPLE_PLUM }}
+            style={{ color: parentTheme.hugoUIColorRoles.brand.primary }}
             fontSize="inherit"
           />
         );
@@ -82,7 +82,7 @@ export const HugoUIModalTitle = ({
             role="img"
             aria-label={ariaLabel}
             className={`${TITLE_ROOT_PREFIX}-icon`}
-            style={{ color: ALERT }}
+            style={{ color: statusColors.warning }}
             fontSize="inherit"
           />
         );
@@ -118,7 +118,7 @@ export const HugoUIModalTitle = ({
   }
 
   return (
-    <ThemeProvider theme={createDialogTitleTheme}>
+    <ThemeProvider theme={titleTheme}>
       <StyledModalHeader
         className={classnames(`${TITLE_ROOT_PREFIX}-root`, `${TITLE_ROOT_PREFIX}-${type}-header`, {
           [`${TITLE_ROOT_PREFIX}-hasCloseBtn`]: closeable,
