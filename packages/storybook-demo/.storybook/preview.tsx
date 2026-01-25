@@ -1,4 +1,5 @@
 import type { Preview } from '@storybook/react';
+import { Title, Description, Primary, ArgsTable, Stories } from '@storybook/blocks';
 import { HugoUIProvider, hugoUITheme } from 'hugo-ui';
 import enMessages from '../../hugo-ui/src/lang/en.json';
 import zhMessages from '../../hugo-ui/src/lang/zh.json';
@@ -31,7 +32,17 @@ const preview: Preview = {
   ],
   parameters: {
     actions: { argTypesRegex: '^on[A-Z].*' },
-    controls: { matchers: { color: /(background|color)$/i, date: /Date$/ } }
+    controls: { matchers: { color: /(background|color)$/i, date: /Date$/ } },
+    docs: {
+      page: () => (
+        <>
+          <Title />
+          <Description />
+          <Primary />
+          <ArgsTable />
+        </>
+      ),
+    },
   },
   globalTypes: {
     locale: {

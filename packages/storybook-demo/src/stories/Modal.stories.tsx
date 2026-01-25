@@ -21,6 +21,7 @@ const hiddenKeys = ['component', 'ref', 'isRtl'];
 export default {
   title: 'HugoUI/Molecules/Modal',
   component: Modal,
+  tags: ['autodocs'],
   argTypes: {
     ...groupArgs(['id', 'type', 'title', 'onClose', 'className', 'style'], 'Basic'),
     ...groupArgs(['loading', 'showLoadingIndicator'], 'Loading'),
