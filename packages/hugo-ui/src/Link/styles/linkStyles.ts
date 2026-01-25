@@ -10,64 +10,64 @@ interface StyledLinkProps {
 const LinkBaseStyle = (theme: Theme, mode: HugoUILinkMode) => {
   const colors = createLinkTokens(theme).colors[mode];
   return {
-  '&:focus-visible': {
-    padding: '0 3px',
-    marginLeft: -3,
-    marginRight: -3,
-    outlineStyle: 'solid',
-    outlineWidth: 2,
-    outlineOffset: -3,
-    outlineColor: colors.focus,
-  },
-  '&:hover': {
-    color: colors.hover,
-  },
-  '&:visited': {
-    color: colors.visited,
+    '&:focus-visible': {
+      padding: '0 3px',
+      marginLeft: -3,
+      marginRight: -3,
+      outlineStyle: 'solid',
+      outlineWidth: 2,
+      outlineOffset: -3,
+      outlineColor: colors.focus,
+    },
     '&:hover': {
       color: colors.hover,
     },
-  },
-  '&-small': {
-    ...TYPOGRAPHY_SMALL_TEXT_LINK,
-    color: colors.normal,
-  },
-  '&-loading': {
-    textDecoration: 'none',
-    color: colors.loading,
-    cursor: 'default',
-    display: 'inline-flex',
-    lineHeight: '24px',
-    '&:focus-visible': {
-      outline: 'none',
-    },
     '&:visited': {
+      color: colors.visited,
+      '&:hover': {
+        color: colors.hover,
+      },
+    },
+    '&-small': {
+      ...TYPOGRAPHY_SMALL_TEXT_LINK,
+      color: colors.normal,
+    },
+    '&-loading': {
+      textDecoration: 'none',
       color: colors.loading,
+      cursor: 'default',
+      display: 'inline-flex',
+      lineHeight: '24px',
+      '&:focus-visible': {
+        outline: 'none',
+      },
+      '&:visited': {
+        color: colors.loading,
+      },
+      '&:hover': {
+        color: colors.loading,
+      },
+      '.HugoUILink-loading-icon': {
+        color: colors.loading,
+        marginRight: 8,
+      },
     },
-    '&:hover': {
-      color: colors.loading,
-    },
-    '.HugoUILink-loading-icon': {
-      color: colors.loading,
-      marginRight: 8,
-    },
-  },
-  '&-disabled': {
-    color: colors.disabled,
-    cursor: 'not-allowed',
-    '&:focus-visible': {
-      outline: 'none',
-    },
-    '&:visited': {
+    '&-disabled': {
       color: colors.disabled,
+      cursor: 'not-allowed',
+      '&:focus-visible': {
+        outline: 'none',
+      },
+      '&:visited': {
+        color: colors.disabled,
+      },
+      '&:hover': {
+        color: colors.disabled,
+      },
+      '.HugoUILink-loading-icon': {
+        color: colors.disabled,
+      },
     },
-    '&:hover': {
-      color: colors.disabled,
-    },
-    '.HugoUILink-loading-icon': {
-      color: colors.disabled,
-    },
-  },
   };
 };
 
@@ -101,7 +101,7 @@ export const StyledLink = styled('a')<StyledLinkProps>(({ theme, mode }) => {
   };
 });
 
-export const StyledLinkButton = styled('span')(({ theme, mode = 'white' }: StyledLinkProps) => {
+export const StyledLinkButton = styled('span')<StyledLinkProps>(({ theme, mode = 'white' }) => {
   const colors = createLinkTokens(theme as Theme).colors[mode];
   return {
     '&.HugoUIButtonLink': {

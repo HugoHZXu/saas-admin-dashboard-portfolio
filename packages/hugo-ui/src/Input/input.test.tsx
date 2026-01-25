@@ -1,6 +1,6 @@
 import React from 'react';
 import { HugoUIInput } from './Input';
-import { render, fireEvent, waitFor } from '../utils/testUtils';
+import { render, fireEvent } from '../utils/testUtils';
 import { screen } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import InputAdornment from '@mui/material/InputAdornment';

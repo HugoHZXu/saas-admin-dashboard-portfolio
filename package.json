@@ -11,11 +11,16 @@
     "format": "prettier \"**/*.{ts,tsx,js,jsx,json,md}\" --write",
     "build-hugo-ui": "npm -w packages/hugo-ui run build",
     "publish-hugo-ui": "npm -w packages/hugo-ui publish",
+    "changeset": "changeset",
+    "changeset:version": "changeset version",
+    "changeset:publish": "changeset publish",
     "test": "npm -w packages/hugo-ui run test",
     "test:watch": "npm -w packages/hugo-ui run test:watch",
     "test:coverage": "npm -w packages/hugo-ui run test:coverage"
   },
   "devDependencies": {
+    "@changesets/cli": "^2.27.9",
+    "@changesets/changelog-git": "^0.2.0",
     "@types/jest": "^30.0.0",
     "@types/node": "^20.11.30",
     "@types/react": "^18.2.66",
