@@ -87,10 +87,6 @@ describe('Input: interaction', () => {
     fireEvent.change(screen.getByRole('textbox'), { target: { value: '987654' } });
     expect(handleInputChange).toHaveBeenCalled();
   });
-  it('render dark backgrounds', () => {
-    setup({ theme: 'dark' });
-    expect(document.querySelector('.HugoUIInput-dark')).toBeInTheDocument();
-  });
 });
 
 describe('Input: aria props', () => {
@@ -103,16 +99,6 @@ describe('Input: aria props', () => {
     setup({ color: 'success', extraMessage: 'Input success message' });
     const status = document.querySelector('.HugoUIInput-status');
     expect(status).toBeInTheDocument();
-  });
-  it('dark success state', () => {
-    setup({ theme: 'dark', color: 'success', extraMessage: 'Dark success' });
-    expect(document.querySelector('.HugoUIDarkStatus-root')).toBeInTheDocument();
-    expect(document.querySelector('.HugoUIDarkStatus-icon')).toBeInTheDocument();
-  });
-  it('dark error state', () => {
-    setup({ theme: 'dark', color: 'error', extraMessage: 'Dark error' });
-    expect(document.querySelector('.HugoUIDarkStatus-root')).toBeInTheDocument();
-    expect(document.querySelector('.HugoUIDarkStatus-icon')).toBeInTheDocument();
   });
   it('custom extraMessage element', () => {
     setup({

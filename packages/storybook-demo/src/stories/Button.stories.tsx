@@ -111,6 +111,42 @@ export default {
     ...groupArgs(['children', 'labelHidden'], 'Content'),
     ...groupArgs(['fullWidth'], 'Style'),
     ...groupArgs(['loading', 'disabled'], 'Status'),
+    children: {
+      description: 'The button label content.',
+      table: {
+        category: 'Content',
+      },
+    },
+    labelHidden: {
+      description:
+        'Hide the visible label (icon-only button). When true, the label is used for aria-label.',
+      control: 'boolean',
+      table: {
+        category: 'Content',
+      },
+    },
+    loading: {
+      description:
+        'Show loading indicator and mark the button as busy; click is disabled while loading.',
+      control: 'boolean',
+      table: {
+        category: 'Status',
+      },
+    },
+    disabled: {
+      description: 'Disable the button and remove it from the tab order.',
+      control: 'boolean',
+      table: {
+        category: 'Status',
+      },
+    },
+    fullWidth: {
+      description: 'Stretch the button to fill its container width.',
+      control: 'boolean',
+      table: {
+        category: 'Style',
+      },
+    },
     className: {
       description: 'The CSS class name of the root element',
       control: 'text',
@@ -119,6 +155,7 @@ export default {
       },
     },
     level: {
+      description: 'Visual hierarchy of the button.',
       control: 'select',
       options: ['primary', 'secondary', 'tertiary'],
       table: {
@@ -126,6 +163,7 @@ export default {
       },
     },
     drawingStyle: {
+      description: 'Visual style of the button surface.',
       control: 'select',
       options: ['filled', 'outlined', 'text'],
       table: {
@@ -133,6 +171,7 @@ export default {
       },
     },
     colorTheme: {
+      description: 'Color scheme of the button.',
       control: 'select',
       options: ['purple', 'white', 'red', 'grey'],
       table: {
@@ -140,6 +179,7 @@ export default {
       },
     },
     size: {
+      description: 'Size variant of the button.',
       control: 'select',
       options: ['small', 'medium', 'large'],
       table: {
@@ -156,6 +196,7 @@ export default {
       },
     },
     startIcon: {
+      description: 'Icon displayed before the label.',
       control: {
         disable: true,
       },
@@ -164,6 +205,7 @@ export default {
       },
     },
     endIcon: {
+      description: 'Icon displayed after the label.',
       control: {
         disable: true,
       },
@@ -172,6 +214,22 @@ export default {
       },
     },
     href: {
+      description: 'When provided, renders the button as a link.',
+      control: 'text',
+      table: {
+        category: 'Link',
+      },
+    },
+    target: {
+      description: 'Specifies where to open the linked document.',
+      control: 'text',
+      table: {
+        category: 'Link',
+      },
+    },
+    rel: {
+      description:
+        'Specifies the relationship between the current document and the linked document.',
       control: 'text',
       table: {
         category: 'Link',
@@ -180,6 +238,29 @@ export default {
     onClick: {
       description: 'The click handler of the button',
       action: 'clicked',
+      table: {
+        category: 'Basic',
+      },
+    },
+    id: {
+      description: 'The id attribute of the root element.',
+      control: 'text',
+      table: {
+        category: 'Basic',
+      },
+    },
+    style: {
+      description: 'Inline styles applied to the root element.',
+      control: 'object',
+      table: {
+        category: 'Basic',
+      },
+    },
+    component: {
+      description: 'Override the root element type.',
+      control: {
+        disable: true,
+      },
       table: {
         category: 'Basic',
       },
@@ -193,6 +274,7 @@ export default {
       },
     },
     loadingPosition: {
+      description: 'Position of the loading indicator when loading is true.',
       control: 'select',
       options: ['start', 'center'],
       table: {

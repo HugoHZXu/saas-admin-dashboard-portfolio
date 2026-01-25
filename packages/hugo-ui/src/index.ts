@@ -8,7 +8,7 @@ export { HugoUIModalContentText as ModalContentText } from './Modal';
 export { HugoUIFeedback as Feedback } from './Modal';
 export { HugoUIMessage as Message } from './Message';
 export { HugoUITypography as Typography } from './Typography';
-export type { HugoUIInputProps, HugoUIInputExtraProps, HugoUIInputThemeType } from './Input/Input';
+export type { HugoUIInputProps, HugoUIInputExtraProps } from './Input/Input';
 export type {
   HugoUIButtonCommonProps,
   HugoUIButtonStyleProps,

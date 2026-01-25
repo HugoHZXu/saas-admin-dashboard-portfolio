@@ -5,15 +5,11 @@ import TextField, { TextFieldProps } from '@mui/material/TextField';
 import { createInputTheme, InputContainer } from './styles/inputStyles';
 import { ThemeProvider, useTheme } from '@mui/material/styles';
 import { HugoUILoading } from '../Loading/Loading';
-import { useIntl } from 'react-intl';
 import { useFieldFocusOnWindowBlur } from '../utils/useFieldFocusOnWindowBlur';
 import { visuallyHidden } from '@mui/utils';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import ErrorIcon from '@mui/icons-material/Error';
-import Box from '@mui/material/Box';
 import { InputStatus } from './InputStatus';
-
-export type HugoUIInputThemeType = 'light' | 'dark';
 
 export type HugoUIInputExtraProps = {
   /**
@@ -44,10 +40,6 @@ export type HugoUIInputExtraProps = {
    * If `true`, show loading status
    */
   loading?: boolean;
-  /**
-   * Used for different themes (see figma)
-   */
-  theme?: HugoUIInputThemeType;
   /**
    * Input placeholder
    */
@@ -81,7 +73,6 @@ export const HugoUIInput = (props: HugoUIInputProps) => {
     label,
     showCount = true,
     loading = false,
-    theme = 'light',
     InputLabelProps,
     fullWidth,
     required,
@@ -96,7 +87,6 @@ export const HugoUIInput = (props: HugoUIInputProps) => {
   const [value, setValue] = useState<string>(_value);
   const [hasAutofillValue, setHasAutofillValue] = useState<boolean>(false);
 
-  const intl = useIntl();
   const parentTheme = useTheme();
   const inputTheme = React.useMemo(() => createInputTheme(parentTheme), [parentTheme]);
   const successColor = parentTheme.hugoUIColorRoles.status.success;
@@ -125,59 +115,9 @@ export const HugoUIInput = (props: HugoUIInputProps) => {
     }
 
     if (color === 'success') {
-      if (theme === 'dark')
-        return (
-          <Box
-            className="HugoUIDarkStatus-root"
-            sx={{
-              display: 'flex',
-              alignItems: 'center',
-              color: successColor,
-              fontSize: 12,
-              lineHeight: '20px',
-            }}
-          >
-            <Box className="HugoUIDarkStatus-icon" sx={{ mr: '5px', display: 'flex', height: 20 }}>
-              <CheckCircleIcon
-                fontSize="small"
-                sx={{ color: successColor }}
-                titleAccess={intl.formatMessage({
-                  id: 'hugoUI.statusIcon.success',
-                  defaultMessage: 'success',
-                })}
-              />
-            </Box>
-            {extraMessage}
-          </Box>
-        );
-      else return <InputStatus status="success" message={extraMessage} />;
+      return <InputStatus status="success" message={extraMessage} />;
     } else if (color === 'error') {
-      if (theme === 'dark')
-        return (
-          <Box
-            className="HugoUIDarkStatus-root"
-            sx={{
-              display: 'flex',
-              alignItems: 'center',
-              color: errorColor,
-              fontSize: 12,
-              lineHeight: '20px',
-            }}
-          >
-            <Box className="HugoUIDarkStatus-icon" sx={{ mr: '5px', display: 'flex', height: 20 }}>
-              <ErrorIcon
-                fontSize="small"
-                sx={{ color: errorColor }}
-                titleAccess={intl.formatMessage({
-                  id: 'hugoUI.statusIcon.error',
-                  defaultMessage: 'error',
-                })}
-              />
-            </Box>
-            {extraMessage}
-          </Box>
-        );
-      else return <InputStatus status="error" message={extraMessage} />;
+      return <InputStatus status="error" message={extraMessage} />;
     } else {
       return <div>{extraMessage}</div>;
     }
@@ -188,7 +128,6 @@ export const HugoUIInput = (props: HugoUIInputProps) => {
       id={`HugoUIInput-helperText-${id}`}
       className={classnames({
         'HugoUIInput-helperText-root': true,
-        'HugoUIInput-helperText-dark': theme === 'dark',
       })}
     >
       <div className="HugoUIInput-helperText-content">
@@ -297,8 +236,8 @@ export const HugoUIInput = (props: HugoUIInputProps) => {
         )}
       >
         <TextField
-          variant={theme === 'light' ? 'outlined' : 'filled'}
-          className={classnames(`HugoUIInput-${theme}`, {
+          variant="outlined"
+          className={classnames('HugoUIInput-light', {
             'HugoUIInput-mini': mini,
             'HugoUIInput-endAdornment': !!InputProps?.endAdornment,
             'HugoUIInput-clickFocus': clickFocus,
@@ -348,29 +287,24 @@ export const HugoUIInput = (props: HugoUIInputProps) => {
             ...(inputProps?.id ? { htmlFor: inputProps?.id } : {}),
             ...InputLabelProps,
             className: classnames(InputLabelProps?.className, {
-              'HugoUIInput-label-dark': theme === 'dark',
               'HugoUIInput-label-required': !!required,
             }),
           }}
           fullWidth={fullWidth}
           {...otherProps}
         />
-        {(color === 'error' || color === 'success') &&
-          theme !== 'dark' &&
-          !mini &&
-          inputHasFocus &&
-          !clickFocus && (
-            <fieldset
-              id={`HugoUIInput-${id}`}
-              className={classnames('HugoUIInput-notchedOutline', {
-                'HugoUIInput-notchedOutline-multiline': multiline,
-              })}
-            >
-              <legend>
-                <span>{labelNode}</span>
-              </legend>
-            </fieldset>
-          )}
+        {(color === 'error' || color === 'success') && !mini && inputHasFocus && !clickFocus && (
+          <fieldset
+            id={`HugoUIInput-${id}`}
+            className={classnames('HugoUIInput-notchedOutline', {
+              'HugoUIInput-notchedOutline-multiline': multiline,
+            })}
+          >
+            <legend>
+              <span>{labelNode}</span>
+            </legend>
+          </fieldset>
+        )}
       </InputContainer>
     </ThemeProvider>
   );

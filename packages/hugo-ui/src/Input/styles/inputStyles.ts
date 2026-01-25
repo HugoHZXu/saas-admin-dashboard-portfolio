@@ -122,7 +122,6 @@ export const createInputThemeOverrides = (): ThemeOptions => ({
           '&.HugoUIInput-hasLabel': {
             marginTop: 7, // space for label
           },
-          // MuiFilledInput is not working
           '&.HugoUIInput-hasInput': {
             input: {
               color: theme.hugoUIColorRoles.text.primary,
@@ -140,88 +139,6 @@ export const createInputThemeOverrides = (): ThemeOptions => ({
             maxWidth: 'calc(133% - 24px)',
           },
         }),
-      },
-    },
-    MuiFilledInput: {
-      styleOverrides: {
-        root: ({ theme }) => {
-          const {
-            BASIC_BORDER_DARK,
-            SUCCESS_BORDER_DARK,
-            ERROR_BORDER_DARK,
-            DISABLED_BORDER_DARK,
-            FOCUS_SHADOW,
-          } = getBorderTokens(theme);
-          return {
-            minHeight: '48px',
-            backgroundColor: `${theme.hugoUIColorRoles.surface.default} !important`,
-            border: BASIC_BORDER_DARK,
-            borderRadius: 4,
-            input: {
-              ...theme.hugoUITypography.subtitle2,
-              color: theme.hugoUIColorRoles.text.primary,
-              '&.Mui-disabled': {
-                WebkitTextFillColor: theme.hugoUIColorRoles.text.disabled,
-              },
-              height: 24,
-              padding: '15px 14px 5px 14px',
-              borderRadius: 4,
-              '&:-webkit-autofill': {
-                WebkitBoxShadow: AUTOFILL_SHADOW,
-              },
-              '&:-webkit-autofill:hover': {
-                WebkitBoxShadow: AUTOFILL_SHADOW,
-              },
-              '&:-webkit-autofill:focus': {
-                WebkitBoxShadow: AUTOFILL_SHADOW,
-              },
-              '&:-webkit-autofill:active': {
-                WebkitBoxShadow: AUTOFILL_SHADOW,
-              },
-            },
-            '&.MuiInputBase-multiline': {
-              ...theme.hugoUITypography.subtitle2,
-              color: theme.hugoUIColorRoles.text.primary,
-              textarea: {
-                '&.Mui-disabled': {
-                  WebkitTextFillColor: theme.hugoUIColorRoles.text.disabled,
-                },
-              },
-              height: 128,
-            },
-            '&::before': {
-              borderBottom: 'none !important',
-            },
-            '&::after': {
-              borderBottom: 'none !important',
-            },
-            // success
-            '&.MuiInputBase-colorSuccess': {
-              border: SUCCESS_BORDER_DARK,
-            },
-            // error
-            '&.MuiInputBase-colorError': {
-              border: ERROR_BORDER_DARK,
-            },
-            // disabled
-            '&.Mui-disabled': {
-              border: DISABLED_BORDER_DARK,
-              '[class^="icon-"]': {
-                pointerEvents: 'none',
-                color: theme.hugoUIColorRoles.text.disabled,
-              },
-            },
-            '[class^="icon-visibility"]': {
-              cursor: 'pointer',
-              color: theme.hugoUIColorRoles.text.default,
-              outline: 'none',
-              borderRadius: 0,
-              '&:focus-visible': {
-                boxShadow: FOCUS_SHADOW,
-              },
-            },
-          };
-        },
       },
     },
     MuiInputLabel: {
@@ -243,14 +160,6 @@ export const createInputThemeOverrides = (): ThemeOptions => ({
           },
           '&.Mui-disabled': {
             color: theme.hugoUIColorRoles.text.disabled,
-          },
-          '&.HugoUIInput-label-dark': {
-            '&.MuiInputLabel-shrink': {
-              // the real size should zoom in with INPUT_LABEL_SHRINK_FACTOR to match design
-              fontSize: `${10 / INPUT_LABEL_SHRINK_FACTOR}px`,
-              lineHeight: `${16 / INPUT_LABEL_SHRINK_FACTOR}px`,
-              transform: `translate(15px, 3px) scale(${INPUT_LABEL_SHRINK_FACTOR})`,
-            },
           },
           '&.HugoUIInput-label-required': {
             display: 'flex',
@@ -287,9 +196,6 @@ export const createInputThemeOverrides = (): ThemeOptions => ({
             alignItems: 'center',
             columnGap: 4,
           },
-          '.HugoUIInput-helperText-dark': {
-            color: theme.hugoUIColorRoles.text.inverse,
-          },
           '&.Mui-disabled': {
             color: theme.hugoUIColorRoles.text.disabled,
           },
@@ -299,15 +205,7 @@ export const createInputThemeOverrides = (): ThemeOptions => ({
     MuiFormControl: {
       styleOverrides: {
         root: ({ theme }) => {
-          const {
-            ACTIVE_BORDER,
-            ACTIVE_BORDER_DARK,
-            ERROR_BORDER_DARK,
-            SUCCESS_BORDER_DARK,
-            FOCUS_BORDER,
-            FOCUS_BORDER_DARK,
-            FOCUS_INNER_BORDER_DARK,
-          } = getBorderTokens(theme);
+          const { ACTIVE_BORDER, FOCUS_BORDER, FOCUS_SHADOW } = getBorderTokens(theme);
           return {
             // focus by mouse
             '&.HugoUIInput-clickFocus': {
@@ -315,15 +213,6 @@ export const createInputThemeOverrides = (): ThemeOptions => ({
                 '&:not(.MuiInputBase-colorError,.MuiInputBase-colorSuccess)': {
                   '.MuiOutlinedInput-notchedOutline': {
                     border: ACTIVE_BORDER,
-                  },
-                },
-              },
-              '&:not(.HugoUIInput-dark.HugoUIInput-mini)': {
-                '.MuiFilledInput-root': {
-                  '&:not(.MuiInputBase-colorError,.MuiInputBase-colorSuccess)': {
-                    '&.Mui-focused': {
-                      border: ACTIVE_BORDER_DARK,
-                    },
                   },
                 },
               },
@@ -361,91 +250,6 @@ export const createInputThemeOverrides = (): ThemeOptions => ({
                     },
                   },
                 },
-                // theme dark
-                '&.HugoUIInput-dark': {
-                  '&.HugoUIInput-error': {
-                    '.MuiFilledInput-root': {
-                      border: ERROR_BORDER_DARK,
-                    },
-                  },
-                  '&.HugoUIInput-success': {
-                    '.MuiFilledInput-root': {
-                      border: SUCCESS_BORDER_DARK,
-                    },
-                  },
-                  // !mini
-                  '&.HugoUIInput-hasLabel': {
-                    '.MuiFilledInput-root': {
-                      minHeight: 44,
-                      margin: 2,
-                      outline: FOCUS_BORDER_DARK,
-                      '&.MuiInputBase-adornedEnd': {
-                        paddingRight: 11,
-                      },
-                      'input.MuiFilledInput-input': {
-                        paddingRight: '14px',
-                      },
-                    },
-                    '&.HugoUIInput-error,&.HugoUIInput-success': {
-                      '.MuiFilledInput-root': {
-                        'input.MuiFilledInput-input': {
-                          padding: '13px 12px 3px 12px',
-                        },
-                        '&.MuiInputBase-multiline': {
-                          padding: '23px 10px 6px 10px',
-                          height: 124,
-                        },
-                        '&.MuiInputBase-adornedEnd': {
-                          paddingRight: 10,
-                          'input.MuiFilledInput-input': {
-                            padding: '13px 14px 3px 12px',
-                          },
-                        },
-                      },
-                    },
-                    '&:not(.HugoUIInput-error,.HugoUIInput-success)': {
-                      '.MuiFilledInput-root': {
-                        border: FOCUS_INNER_BORDER_DARK,
-                        borderRadius: 1,
-                        'input.MuiFilledInput-input': {
-                          padding: '14px 13px 4px 13px',
-                        },
-                        '&.MuiInputBase-multiline': {
-                          padding: '24px 11px 7px 11px',
-                          height: 124,
-                        },
-                        '&.MuiInputBase-adornedEnd': {
-                          'input.MuiFilledInput-input': {
-                            padding: '14px 14px 4px 13px',
-                          },
-                        },
-                      },
-                    },
-                  },
-                  // mini
-                  '&.HugoUIInput-mini': {
-                    '.MuiFilledInput-root': {
-                      outline: FOCUS_BORDER_DARK,
-                      borderWidth: 1,
-                      margin: 2,
-                      input: {
-                        padding: '1px 5px',
-                      },
-                      '&.MuiInputBase-adornedEnd': {
-                        paddingRight: 7,
-                      },
-                      '&:not(.MuiInputBase-colorSuccess,.MuiInputBase-colorError)': {
-                        border: FOCUS_INNER_BORDER_DARK,
-                        borderRadius: 1,
-                      },
-                      '&.MuiInputBase-colorSuccess,&.MuiInputBase-colorError': {
-                        input: {
-                          padding: '1px 6px 1px 5px',
-                        },
-                      },
-                    },
-                  },
-                },
                 // theme light
                 '&.HugoUIInput-light': {
                   // !mini
@@ -465,14 +269,23 @@ export const createInputThemeOverrides = (): ThemeOptions => ({
                   // mini
                   '&.HugoUIInput-mini': {
                     '&.HugoUIInput-error,&.HugoUIInput-success': {
-                      border: FOCUS_BORDER,
-                      borderRadius: 4,
                       '& .Mui-focused': {
+                        '&.MuiInputBase-root': {
+                          margin: '0px !important',
+                          paddingRight: '8px !important',
+                          '.MuiOutlinedInput-notchedOutline': {
+                            margin: 0,
+                            marginTop: 5,
+                            boxShadow: FOCUS_SHADOW,
+                          },
+                        },
                         '&.MuiInputBase-colorError,&.MuiInputBase-colorSuccess': {
                           margin: 1,
                           paddingRight: 5,
+                          borderRadius: 4,
                           input: {
-                            padding: '1px 8px 1px 5px',
+                            padding: '4px 8px',
+                            margin: 0,
                           },
                         },
                       },
@@ -480,28 +293,14 @@ export const createInputThemeOverrides = (): ThemeOptions => ({
                   },
                 },
               },
-              '.MuiFilledInput-root': {
-                '&.Mui-focused': {
-                  border: FOCUS_BORDER,
-                },
-              },
             },
             '&.HugoUIInput-mini': {
-              '.MuiOutlinedInput-root,.MuiFilledInput-root': {
-                '&.MuiFilledInput-root': {
-                  minHeight: 'unset',
-                  '&:not(.MuiInputBase-colorError,.MuiInputBase-colorSuccess)': {
-                    borderColor: 'transparent',
-                  },
-                },
-                '.MuiOutlinedInput-input,.MuiFilledInput-input': {
+              '.MuiOutlinedInput-root': {
+                '.MuiOutlinedInput-input': {
                   padding: '4px 8px',
                   height: 24,
                   ...theme.hugoUITypography.subtitle4,
                   color: theme.hugoUIColorRoles.text.primary,
-                  '&.MuiFilledInput-input': {
-                    padding: '2px 6px',
-                  },
                 },
                 fieldset: {
                   marginTop: 5,
