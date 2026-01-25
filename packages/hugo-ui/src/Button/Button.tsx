@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { useIntl } from 'react-intl';
 import classnames from 'classnames';
-import { ThemeProvider } from '@mui/material/styles';
+import { ThemeProvider, useTheme } from '@mui/material/styles';
 import Button, { ButtonProps } from '@mui/material/Button';
 import { visuallyHidden } from '@mui/utils';
 import { HugoUILoading } from '../Loading/Loading';
@@ -17,7 +17,7 @@ import {
   BUTTON_ROOT_PREFIX,
   BUTTON_ICON_SMALL,
   BUTTON_ICON_NORMAL,
-} from './buttonStyles';
+} from './styles/buttonStyles';
 
 export interface HugoUIButtonCommonProps extends Omit<ButtonProps, 'color' | 'variant'> {
   /**
@@ -127,8 +127,6 @@ export type HugoUIButtonProps =
   | HugoUITertiaryButtonProps
   | HugoUIDestructButtonProps;
 
-const theme = createButtonTheme();
-
 // eslint-disable-next-line react/display-name
 export const HugoUIButton = React.forwardRef<HTMLButtonElement, HugoUIButtonProps>((props, ref) => {
   const {
@@ -151,6 +149,8 @@ export const HugoUIButton = React.forwardRef<HTMLButtonElement, HugoUIButtonProp
   } = props;
 
   const intl = useIntl();
+  const parentTheme = useTheme();
+  const theme = useMemo(() => createButtonTheme(parentTheme), [parentTheme]);
 
   const loadingIndicator = (
     <HugoUILoading aria-hidden size={size === 'small' ? BUTTON_ICON_SMALL : BUTTON_ICON_NORMAL} />

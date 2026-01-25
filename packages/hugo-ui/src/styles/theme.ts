@@ -52,6 +52,7 @@ import {
   TYPOGRAPHY_SUBTITLE_03,
   TYPOGRAPHY_SUBTITLE_04,
 } from './typography';
+import { hugoUIColorRoles, HugoUIColorRoles } from './colorRoles';
 import {
   HEAVY_SHADOW,
   HEAVY_SHADOW_UP,
@@ -62,6 +63,7 @@ import {
 } from './elevation';
 
 export * from './color';
+export * from './colorRoles';
 export * from './typography';
 export * from './elevation';
 
@@ -145,6 +147,7 @@ declare module '@mui/material/styles' {
       HEAVY_SHADOW: { boxShadow: string };
       HEAVY_SHADOW_UP: { boxShadow: string };
     };
+    hugoUIColorRoles: HugoUIColorRoles;
   }
   // allow configuration using `createTheme`
   interface ThemeOptions {
@@ -226,6 +229,7 @@ declare module '@mui/material/styles' {
       HEAVY_SHADOW?: { boxShadow: string };
       HEAVY_SHADOW_UP?: { boxShadow: string };
     };
+    hugoUIColorRoles?: HugoUIColorRoles;
   }
 }
 
@@ -325,4 +329,5 @@ export const hugoUITheme = createTheme({
     HEAVY_SHADOW,
     HEAVY_SHADOW_UP,
   },
+  hugoUIColorRoles,
 });

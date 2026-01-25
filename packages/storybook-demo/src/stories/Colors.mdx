@@ -1,11 +1,39 @@
 import { Meta, ColorPalette, ColorItem } from '@storybook/blocks';
 import * as Colors from 'hugo-ui/styles/theme';
+import { hugoUIColorRoles } from 'hugo-ui/styles/theme';
 
 <Meta title="HugoUI/Colors" />
 
 # Colors
 
-## Primary Colors
+## Semantic Roles (Recommended)
+
+> Prefer these roles in components. Each role maps to a base palette token.
+> Use the palette (`theme.hugoUIColors`) only as an escape hatch when a semantic role doesn't fit.
+> Roles should not expose palette aliases (like `neutral.grey800`).
+
+<ColorPalette>
+  <ColorItem title="brand.primary" subtitle="PURPLE_PLUM" colors={[hugoUIColorRoles.brand.primary]} />
+  <ColorItem title="brand.accent" subtitle="PURPLE_GRAPE" colors={[hugoUIColorRoles.brand.accent]} />
+  <ColorItem title="text.primary" subtitle="TEXT_HEADER" colors={[hugoUIColorRoles.text.primary]} />
+  <ColorItem title="text.default" subtitle="TEXT" colors={[hugoUIColorRoles.text.default]} />
+  <ColorItem title="text.inverse" subtitle="NEUTRAL_WHITE" colors={[hugoUIColorRoles.text.inverse]} />
+  <ColorItem title="text.subtle" subtitle="NEUTRAL_GREY_800" colors={[hugoUIColorRoles.text.subtle]} />
+  <ColorItem title="surface.default" subtitle="NEUTRAL_WHITE" colors={[hugoUIColorRoles.surface.default]} />
+  <ColorItem title="surface.subtle" subtitle="NEUTRAL_LIGHT_GREY" colors={[hugoUIColorRoles.surface.subtle]} />
+  <ColorItem title="surface.inverse" subtitle="DARK_PURPLE" colors={[hugoUIColorRoles.surface.inverse]} />
+  <ColorItem title="border.default" subtitle="NEUTRAL_DARK_GREY" colors={[hugoUIColorRoles.border.default]} />
+  <ColorItem title="border.strong" subtitle="NEUTRAL_GREY_800" colors={[hugoUIColorRoles.border.strong]} />
+  <ColorItem title="focus.ring" subtitle="BLUE" colors={[hugoUIColorRoles.focus.ring]} />
+  <ColorItem title="focus.ringOnDark" subtitle="NEUTRAL_WHITE" colors={[hugoUIColorRoles.focus.ringOnDark]} />
+  <ColorItem title="status.success" subtitle="SUCCESS_GREEN" colors={[hugoUIColorRoles.status.success]} />
+  <ColorItem title="status.warning" subtitle="ALERT" colors={[hugoUIColorRoles.status.warning]} />
+  <ColorItem title="status.error" subtitle="ERROR_OR_DESTRUCT" colors={[hugoUIColorRoles.status.error]} />
+</ColorPalette>
+
+## Palette (Base Tokens)
+
+### Primary Colors
 
 > The primary color and its variants are used most frequently for important actions such as highlighting
 > information, interacting with UI elements and adding personality to the brand.
@@ -24,7 +52,7 @@ import * as Colors from 'hugo-ui/styles/theme';
   <ColorItem title="Light Purple" subtitle="LIGHT_PURPLE" colors={[Colors.LIGHT_PURPLE]} />
 </ColorPalette>
 
-## Additional Colors
+### Additional Colors
 
 > These are used to communicate the status or interaction of particular elements (such as success, failure, error, link. etc.)
 
@@ -62,7 +90,7 @@ import * as Colors from 'hugo-ui/styles/theme';
   <ColorItem title="Alert" subtitle="ALERT" colors={[Colors.ALERT]} />
 </ColorPalette>
 
-## Neutral Colors
+### Neutral Colors
 
 > Supporting colors for backgrounds, containers, borders, icons, etc. These colors do not represent the brand.
 
@@ -118,7 +146,7 @@ import * as Colors from 'hugo-ui/styles/theme';
   <ColorItem title="Neutral White" subtitle="NEUTRAL_WHITE" colors={[Colors.NEUTRAL_WHITE]} />
 </ColorPalette>
 
-## Text Colors
+### Text Colors
 
 > Colors for text elements
 
