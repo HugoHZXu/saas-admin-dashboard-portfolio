@@ -223,6 +223,7 @@ export const HugoUIModal = ({
             label: intl.formatMessage({ id: 'hugoUI.button.destruct', defaultMessage: 'Destruct' }),
           },
           secondary: {
+            level: 'secondary',
             colorTheme: 'grey',
           },
         };

@@ -74,7 +74,7 @@ export interface HugoUISecondaryButtonStyleProps extends HugoUIButtonStyleProps 
   /**
    * The level of the button
    */
-  level?: 'secondary';
+  level: 'secondary';
   /**
    * The drawing style of the button
    */
@@ -91,7 +91,7 @@ export interface HugoUITertiaryButtonStyleProps extends HugoUIButtonStyleProps {
   /**
    * The level of the button
    */
-  level?: 'tertiary';
+  level: 'tertiary';
   /**
    * The drawing style of the button
    */
@@ -116,7 +116,7 @@ export interface HugoUIDestructButtonStyleProps extends HugoUIButtonStyleProps {
   /**
    * The color theme of the button
    */
-  colorTheme?: 'red';
+  colorTheme: 'red';
 }
 
 export type HugoUIDestructButtonProps = HugoUIDestructButtonStyleProps & HugoUIButtonCommonProps;
