@@ -6,12 +6,7 @@ import Button, { ButtonProps } from '@mui/material/Button';
 import { visuallyHidden } from '@mui/utils';
 import { HugoUILoading } from '../Loading/Loading';
 import { useId } from '../utils/useId';
-import {
-  HugoUIButtonLevel,
-  HugoUIButtonColorTheme,
-  HugoUIButtonSize,
-  HugoUIButtonDrawingStyle,
-} from './buttonTypes';
+import { HugoUIButtonLevel, HugoUIButtonColorTheme, HugoUIButtonSize } from './buttonTypes';
 import {
   createButtonTheme,
   BUTTON_ROOT_PREFIX,
@@ -44,10 +39,6 @@ export interface HugoUIButtonStyleProps {
    */
   level?: HugoUIButtonLevel;
   /**
-   * The drawing style of the button
-   */
-  drawingStyle?: HugoUIButtonDrawingStyle;
-  /**
    * The color theme of the button
    */
   colorTheme?: HugoUIButtonColorTheme;
@@ -58,10 +49,6 @@ export interface HugoUIPrimaryButtonStyleProps extends HugoUIButtonStyleProps {
    * The level of the button
    */
   level?: 'primary';
-  /**
-   * The drawing style of the button
-   */
-  drawingStyle?: 'filled';
   /**
    * The color theme of the button
    */
@@ -76,10 +63,6 @@ export interface HugoUISecondaryButtonStyleProps extends HugoUIButtonStyleProps 
    */
   level: 'secondary';
   /**
-   * The drawing style of the button
-   */
-  drawingStyle?: 'outlined';
-  /**
    * The color theme of the button
    */
   colorTheme?: 'purple' | 'grey' | 'white';
@@ -93,10 +76,6 @@ export interface HugoUITertiaryButtonStyleProps extends HugoUIButtonStyleProps {
    */
   level: 'tertiary';
   /**
-   * The drawing style of the button
-   */
-  drawingStyle?: 'text';
-  /**
    * The color theme of the button
    */
   colorTheme?: 'purple' | 'grey' | 'white';
@@ -109,10 +88,6 @@ export interface HugoUIDestructButtonStyleProps extends HugoUIButtonStyleProps {
    * The level of the button
    */
   level?: 'primary';
-  /**
-   * The drawing style of the button
-   */
-  drawingStyle?: 'filled';
   /**
    * The color theme of the button
    */
@@ -133,7 +108,6 @@ export const HugoUIButton = React.forwardRef<HTMLButtonElement, HugoUIButtonProp
     className,
     children,
     level = 'primary',
-    drawingStyle = 'filled',
     colorTheme = 'purple',
     size = 'medium',
     disabled,
@@ -165,17 +139,15 @@ export const HugoUIButton = React.forwardRef<HTMLButtonElement, HugoUIButtonProp
     buttonStartIcon = loadingIndicator;
   }
 
-  // validation
-  let validatedLevel = level;
-  if (drawingStyle === 'text') {
-    validatedLevel = 'tertiary';
-  }
+  const resolvedLevel: HugoUIButtonLevel = level ?? 'primary';
+  const resolvedDrawingStyle =
+    resolvedLevel === 'tertiary' ? 'text' : resolvedLevel === 'secondary' ? 'outlined' : 'filled';
 
   // MUI uses "variant" for a slightly different schema
   let muiVariant: ButtonProps['variant'];
-  if (drawingStyle === 'text') {
+  if (resolvedDrawingStyle === 'text') {
     muiVariant = 'text';
-  } else if (drawingStyle === 'outlined') {
+  } else if (resolvedDrawingStyle === 'outlined') {
     muiVariant = 'outlined';
   } else {
     // both "filled" and "tonal" are "contained" for mui's purposes
@@ -184,9 +156,9 @@ export const HugoUIButton = React.forwardRef<HTMLButtonElement, HugoUIButtonProp
 
   // MUI uses "color" for a slightly different schema
   let muiType: ButtonProps['color'];
-  if (level === 'tertiary') {
+  if (resolvedLevel === 'tertiary') {
     muiType = 'info';
-  } else if (level === 'secondary') {
+  } else if (resolvedLevel === 'secondary') {
     muiType = 'secondary';
   } else {
     muiType = 'primary';
@@ -245,9 +217,9 @@ export const HugoUIButton = React.forwardRef<HTMLButtonElement, HugoUIButtonProp
             [`${BUTTON_ROOT_PREFIX}-root`]: true,
             [`${BUTTON_ROOT_PREFIX}-hasStartIcon`]: buttonStartIcon,
             [`${BUTTON_ROOT_PREFIX}-hasEndIcon`]: endIcon,
-            [`${BUTTON_ROOT_PREFIX}-${validatedLevel}Level`]: true,
+            [`${BUTTON_ROOT_PREFIX}-${resolvedLevel}Level`]: true,
             [`${BUTTON_ROOT_PREFIX}-${colorTheme}Color`]: true,
-            [`${BUTTON_ROOT_PREFIX}-${drawingStyle}DrawingStyle`]: true,
+            [`${BUTTON_ROOT_PREFIX}-${resolvedDrawingStyle}DrawingStyle`]: true,
             [`${BUTTON_ROOT_PREFIX}-icon-only`]: labelHidden || !children,
             [`${BUTTON_ROOT_PREFIX}-loading`]: loading,
             [`${BUTTON_ROOT_PREFIX}-loading-start`]: showStartLoadingIndicator,

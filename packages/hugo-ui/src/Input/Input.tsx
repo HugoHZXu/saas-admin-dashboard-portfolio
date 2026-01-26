@@ -13,7 +13,7 @@ import { InputStatus } from './InputStatus';
 
 export type HugoUIInputExtraProps = {
   /**
-   * Used for the success/error message (see figma)
+   * Used for the success/error message
    *
    * Should only be used with `color="success"` or `color="error"`
    *
@@ -85,7 +85,6 @@ export const HugoUIInput = (props: HugoUIInputProps) => {
   const [clickFocus, setClickFocus] = useState<boolean>(false);
   const [inputHasFocus, setInputHasFocus] = useState<boolean>(false);
   const [value, setValue] = useState<string>(_value);
-  const [hasAutofillValue, setHasAutofillValue] = useState<boolean>(false);
 
   const parentTheme = useTheme();
   const inputTheme = React.useMemo(() => createInputTheme(parentTheme), [parentTheme]);
@@ -204,22 +203,6 @@ export const HugoUIInput = (props: HugoUIInputProps) => {
     labelNode = mini ? <span style={visuallyHidden}>{label}</span> : label;
   }
 
-  // hacky way to fix Chrome autofill will overlap with Input label
-  // Mui bug: https://github.com/mui/material-ui/issues/36448, probably introduced in 5.12.x+
-  const makeAnimationStartHandler =
-    (stateSetter: React.Dispatch<React.SetStateAction<boolean>>) =>
-    (e: React.AnimationEvent<HTMLInputElement>) => {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const autoFilled = !!(e.target as any)?.matches('*:-webkit-autofill');
-      if (e.animationName === 'mui-auto-fill') {
-        stateSetter(autoFilled);
-      }
-
-      if (e.animationName === 'mui-auto-fill-cancel') {
-        stateSetter(autoFilled);
-      }
-    };
-
   const helperTextId = `HugoUIInput-helperText-${id}`;
   const labelId = `HugoUIInputText-${id}`;
   const describedByIds = [(helperText || extraMessage || (multiline && showCount)) && helperTextId]
@@ -269,7 +252,6 @@ export const HugoUIInput = (props: HugoUIInputProps) => {
             'aria-describedby': describedByIds || undefined,
             'aria-invalid': color === 'error',
             required: !!required,
-            onAnimationStart: makeAnimationStartHandler(setHasAutofillValue),
             onKeyDown: (e) => {
               if (!multiline && e.key === 'Enter') {
                 onBlur?.(e as unknown as React.FocusEvent<HTMLInputElement>);
@@ -283,7 +265,7 @@ export const HugoUIInput = (props: HugoUIInputProps) => {
           onBlur={handleBlur}
           InputLabelProps={{
             id: labelId,
-            shrink: inputHasFocus || hasAutofillValue || !!value,
+            shrink: inputHasFocus || !!value,
             ...(inputProps?.id ? { htmlFor: inputProps?.id } : {}),
             ...InputLabelProps,
             className: classnames(InputLabelProps?.className, {

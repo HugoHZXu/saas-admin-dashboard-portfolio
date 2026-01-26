@@ -183,17 +183,4 @@ describe('Input: keyboard event', () => {
     fireEvent.keyDown(textarea, { key: 'Enter' });
     expect(onBlurEvt).not.toHaveBeenCalled();
   });
-
-  it('makeAnimationStartHandler runs for autofill animations', () => {
-    setup({ label: testLabel });
-    const input = document.querySelector('input') as HTMLInputElement;
-    const matches = jest.fn(() => true);
-    Object.defineProperty(input, 'matches', {
-      value: matches,
-      configurable: true,
-    });
-    fireEvent.animationStart(input, { animationName: 'mui-auto-fill' });
-    fireEvent.animationStart(input, { animationName: 'mui-auto-fill-cancel' });
-    expect(matches).toHaveBeenCalledTimes(2);
-  });
 });

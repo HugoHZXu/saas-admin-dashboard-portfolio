@@ -47,7 +47,7 @@ const LinkBaseStyle = (theme: Theme, mode: HugoUILinkMode) => {
       '&:hover': {
         color: colors.loading,
       },
-      '.HugoUILink-loading-icon': {
+      '.HugoUILink-HugoUILoading-loadingIcon': {
         color: colors.loading,
         marginRight: 8,
       },
@@ -64,7 +64,7 @@ const LinkBaseStyle = (theme: Theme, mode: HugoUILinkMode) => {
       '&:hover': {
         color: colors.disabled,
       },
-      '.HugoUILink-loading-icon': {
+      '.HugoUILink-HugoUILoading-loadingIcon': {
         color: colors.disabled,
       },
     },
@@ -113,8 +113,14 @@ export const StyledLinkButton = styled('span')<StyledLinkProps>(({ theme, mode =
       alignItems: 'center',
       ...LinkBaseStyle(theme as Theme, mode),
       '.HugoUIButtonLink-icon': {
+        display: 'inline-flex',
+        alignItems: 'center',
         fontSize: 24,
         marginRight: 4,
+        lineHeight: 0,
+        svg: {
+          fontSize: '24px',
+        },
       },
       '&:hover': {
         color: colors.hover,

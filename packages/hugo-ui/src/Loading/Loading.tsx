@@ -21,13 +21,13 @@ export const HugoUILoading = ({ size = 'medium', className }: HugoUILoadingProps
   const rootCls = className
     ? classnames({
         [ROOT_PREFIX]: true,
-        'icon-loading': true,
+        'HugoUILoading-loadingIcon': true,
         [`${ROOT_PREFIX}-${size}`]: size,
         [className]: className,
       })
     : classnames({
         [ROOT_PREFIX]: true,
-        'icon-loading': true,
+        'HugoUILoading-loadingIcon': true,
         [`${ROOT_PREFIX}-${size}`]: size,
       });
 

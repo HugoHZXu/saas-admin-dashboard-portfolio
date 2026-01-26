@@ -45,7 +45,7 @@ export const HugoUIModalTitle = ({
   }, []);
 
   const renderIcon = () => {
-    let iconName, ariaLabel;
+    let ariaLabel;
     if (prefixIcon) {
       return React.cloneElement(prefixIcon, {
         className: classnames(`${TITLE_ROOT_PREFIX}-icon`, prefixIcon.props.className),
@@ -87,16 +87,8 @@ export const HugoUIModalTitle = ({
           />
         );
       default:
-        break;
+        return null;
     }
-    return iconName ? (
-      // Not using status icons here because size and colors do not quite align with that of the status icons
-      <span
-        role="img"
-        aria-label={ariaLabel}
-        className={classnames(`${TITLE_ROOT_PREFIX}-icon`, iconName)}
-      />
-    ) : null;
   };
 
   const renderCloseBtn = () => {

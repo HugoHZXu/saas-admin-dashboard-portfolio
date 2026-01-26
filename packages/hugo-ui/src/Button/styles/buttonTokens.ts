@@ -42,7 +42,7 @@ export const createButtonTokens = (theme: Theme): Record<ButtonSurfaceContext, B
             basic: {
               color: hugoUIColorRoles.text.inverse,
               backgroundColor: hugoUIColorRoles.brand.primary,
-              '.icon-loading': {
+              '.HugoUILoading-loadingIcon': {
                 color: hugoUIColorRoles.text.inverse,
               },
             },
@@ -68,7 +68,7 @@ export const createButtonTokens = (theme: Theme): Record<ButtonSurfaceContext, B
             basic: {
               color: hugoUIColorRoles.brand.accent,
               backgroundColor: hugoUIColorRoles.surface.default,
-              '.icon-loading': {
+              '.HugoUILoading-loadingIcon': {
                 color: hugoUIColorRoles.brand.accent,
               },
             },
@@ -78,7 +78,7 @@ export const createButtonTokens = (theme: Theme): Record<ButtonSurfaceContext, B
             active: {
               backgroundColor: alpha(hugoUIColorRoles.surface.default, 0.6),
               color: hugoUIColorRoles.brand.deep,
-              '.icon-loading': {
+              '.HugoUILoading-loadingIcon': {
                 color: hugoUIColorRoles.brand.deep,
               },
             },
@@ -91,7 +91,7 @@ export const createButtonTokens = (theme: Theme): Record<ButtonSurfaceContext, B
               opacity: 0.5,
               backgroundColor: BUTTON_BORDER_MID,
               color: hugoUIColorRoles.text.inverse,
-              '.icon-loading': {
+              '.HugoUILoading-loadingIcon': {
                 color: hugoUIColorRoles.text.inverse,
               },
             },
@@ -102,7 +102,7 @@ export const createButtonTokens = (theme: Theme): Record<ButtonSurfaceContext, B
             basic: {
               color: hugoUIColorRoles.text.inverse,
               backgroundColor: hugoUIColorRoles.status.error,
-              '.icon-loading': {
+              '.HugoUILoading-loadingIcon': {
                 color: hugoUIColorRoles.text.inverse,
               },
             },
@@ -130,7 +130,7 @@ export const createButtonTokens = (theme: Theme): Record<ButtonSurfaceContext, B
               boxShadow: `inset 0px 0px 0px 1px ${BUTTON_BORDER_MID}`,
               color: hugoUIColorRoles.brand.accent,
               backgroundColor: 'transparent',
-              '.icon-loading': {
+              '.HugoUILoading-loadingIcon': {
                 color: hugoUIColorRoles.brand.accent,
               },
             },
@@ -142,7 +142,7 @@ export const createButtonTokens = (theme: Theme): Record<ButtonSurfaceContext, B
               backgroundColor: alpha(hugoUIColorRoles.brand.deep, 0.2),
               boxShadow: `inset 0px 0px 0px 1px ${hugoUIColorRoles.brand.deep}`,
               color: hugoUIColorRoles.brand.deep,
-              '.icon-loading': {
+              '.HugoUILoading-loadingIcon': {
                 color: hugoUIColorRoles.brand.deep,
               },
             },
@@ -154,7 +154,7 @@ export const createButtonTokens = (theme: Theme): Record<ButtonSurfaceContext, B
               boxShadow: `inset 0px 0px 0px 1px ${hugoUIColors.NEUTRAL_DARK_GREY}`,
               backgroundColor: 'transparent',
               color: hugoUIColorRoles.text.disabled,
-              '.icon-loading': {
+              '.HugoUILoading-loadingIcon': {
                 color: hugoUIColorRoles.text.disabled,
               },
             },
@@ -166,7 +166,7 @@ export const createButtonTokens = (theme: Theme): Record<ButtonSurfaceContext, B
               boxShadow: `inset 0px 0px 0px 1px ${BUTTON_BORDER_MID}`,
               color: hugoUIColors.NEUTRAL_GREY_1200,
               backgroundColor: 'transparent',
-              '.icon-loading': {
+              '.HugoUILoading-loadingIcon': {
                 color: hugoUIColors.NEUTRAL_GREY_1200,
               },
             },
@@ -186,7 +186,7 @@ export const createButtonTokens = (theme: Theme): Record<ButtonSurfaceContext, B
               boxShadow: `inset 0px 0px 0px 1px ${hugoUIColors.NEUTRAL_DARK_GREY}`,
               backgroundColor: hugoUIColorRoles.surface.default,
               color: hugoUIColorRoles.text.disabled,
-              '.icon-loading': {
+              '.HugoUILoading-loadingIcon': {
                 color: hugoUIColorRoles.text.disabled,
               },
             },
@@ -199,7 +199,7 @@ export const createButtonTokens = (theme: Theme): Record<ButtonSurfaceContext, B
             basic: {
               color: hugoUIColorRoles.brand.accent,
               backgroundColor: 'transparent',
-              '.icon-loading': {
+              '.HugoUILoading-loadingIcon': {
                 color: hugoUIColorRoles.brand.accent,
               },
             },
@@ -215,7 +215,7 @@ export const createButtonTokens = (theme: Theme): Record<ButtonSurfaceContext, B
               boxShadow: `inset 0px 0px 0px 1px ${hugoUIColorRoles.brand.deep}`,
               backgroundColor: alpha(hugoUIColorRoles.brand.deep, 0.4),
               color: hugoUIColorRoles.brand.deep,
-              '.icon-loading': {
+              '.HugoUILoading-loadingIcon': {
                 color: hugoUIColorRoles.brand.deep,
               },
             },
@@ -223,7 +223,7 @@ export const createButtonTokens = (theme: Theme): Record<ButtonSurfaceContext, B
               boxShadow: 'none',
               backgroundColor: 'transparent',
               color: hugoUIColorRoles.text.disabled,
-              '.icon-loading': {
+              '.HugoUILoading-loadingIcon': {
                 color: hugoUIColorRoles.text.disabled,
               },
             },
@@ -234,7 +234,7 @@ export const createButtonTokens = (theme: Theme): Record<ButtonSurfaceContext, B
             basic: {
               color: hugoUIColors.NEUTRAL_GREY_1200,
               backgroundColor: 'transparent',
-              '.icon-loading': {
+              '.HugoUILoading-loadingIcon': {
                 color: hugoUIColors.NEUTRAL_GREY_1200,
               },
             },
@@ -256,7 +256,7 @@ export const createButtonTokens = (theme: Theme): Record<ButtonSurfaceContext, B
               boxShadow: 'none',
               backgroundColor: 'transparent',
               color: hugoUIColorRoles.text.disabled,
-              '.icon-loading': {
+              '.HugoUILoading-loadingIcon': {
                 color: hugoUIColorRoles.text.disabled,
               },
             },
@@ -271,7 +271,7 @@ export const createButtonTokens = (theme: Theme): Record<ButtonSurfaceContext, B
             basic: {
               color: hugoUIColorRoles.brand.accent,
               backgroundColor: hugoUIColorRoles.surface.default,
-              '.icon-loading': {
+              '.HugoUILoading-loadingIcon': {
                 color: hugoUIColorRoles.brand.accent,
               },
             },
@@ -281,7 +281,7 @@ export const createButtonTokens = (theme: Theme): Record<ButtonSurfaceContext, B
             active: {
               backgroundColor: alpha(hugoUIColorRoles.surface.default, 0.6),
               color: hugoUIColorRoles.brand.deep,
-              '.icon-loading': {
+              '.HugoUILoading-loadingIcon': {
                 color: hugoUIColorRoles.brand.deep,
               },
             },
@@ -294,7 +294,7 @@ export const createButtonTokens = (theme: Theme): Record<ButtonSurfaceContext, B
               opacity: 0.5,
               backgroundColor: BUTTON_BORDER_MID,
               color: hugoUIColorRoles.text.inverse,
-              '.icon-loading': {
+              '.HugoUILoading-loadingIcon': {
                 color: hugoUIColorRoles.text.inverse,
               },
             },
@@ -308,7 +308,7 @@ export const createButtonTokens = (theme: Theme): Record<ButtonSurfaceContext, B
               boxShadow: `inset 0px 0px 0px 1px ${BUTTON_BORDER_LIGHT}`,
               color: hugoUIColorRoles.text.inverse,
               backgroundColor: 'transparent',
-              '.icon-loading': {
+              '.HugoUILoading-loadingIcon': {
                 color: hugoUIColorRoles.text.inverse,
               },
             },
@@ -336,7 +336,7 @@ export const createButtonTokens = (theme: Theme): Record<ButtonSurfaceContext, B
             basic: {
               color: hugoUIColorRoles.text.inverse,
               backgroundColor: 'transparent',
-              '.icon-loading': {
+              '.HugoUILoading-loadingIcon': {
                 color: hugoUIColorRoles.text.inverse,
               },
             },
@@ -357,7 +357,7 @@ export const createButtonTokens = (theme: Theme): Record<ButtonSurfaceContext, B
               opacity: 0.5,
               backgroundColor: 'transparent',
               color: hugoUIColorRoles.text.disabled,
-              '.icon-loading': {
+              '.HugoUILoading-loadingIcon': {
                 color: hugoUIColorRoles.text.disabled,
               },
             },

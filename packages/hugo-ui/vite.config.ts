@@ -36,8 +36,6 @@ export default defineConfig({
     lib: {
       entry: {
         index: 'src/index.ts',
-        'utils/wcagUtils': 'src/utils/wcagUtils.ts',
-        'styles/theme': 'src/styles/theme.ts',
       },
       formats: ['es'],
     },

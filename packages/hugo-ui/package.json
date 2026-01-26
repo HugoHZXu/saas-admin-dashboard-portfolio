@@ -1,15 +1,10 @@
 {
   "name": "hugo-ui",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "private": true,
   "type": "module",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
-  "exports": {
-    ".": "./dist/index.js",
-    "./utils/wcagUtils": "./dist/utils/wcagUtils.js",
-    "./styles/theme": "./dist/styles/theme.js"
-  },
   "files": [
     "dist",
     "README.md",

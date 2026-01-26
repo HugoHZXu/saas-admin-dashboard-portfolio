@@ -10,35 +10,26 @@ describe('Color Theme', () => {
   });
   it('render secondary filled', () => {
     render(<HugoUIButton level="secondary" />);
-    expect(document.querySelector('.MuiButton-containedSecondary')).not.toBe(null);
-  });
-  it('render secondary outlined', () => {
-    render(<HugoUIButton level="secondary" drawingStyle="outlined" />);
     expect(document.querySelector('.MuiButton-outlinedSecondary')).not.toBe(null);
   });
   it('render tertiary text', () => {
-    render(<HugoUIButton level="tertiary" drawingStyle="text" />);
+    render(<HugoUIButton level="tertiary" />);
     expect(document.querySelector('.HugoUIButton-textDrawingStyle')).not.toBe(null);
   });
   it('render tertiary text grey', () => {
-    render(<HugoUIButton level="tertiary" colorTheme="grey" drawingStyle="text" />);
+    render(<HugoUIButton level="tertiary" colorTheme="grey" />);
     expect(document.querySelector('.HugoUIButton-textDrawingStyle')).not.toBe(null);
     expect(document.querySelector('.HugoUIButton-greyColor')).not.toBe(null);
   });
   it('render tertiary text white', () => {
-    render(<HugoUIButton level="tertiary" colorTheme="white" drawingStyle="text" />);
+    render(<HugoUIButton level="tertiary" colorTheme="white" />);
     expect(document.querySelector('.HugoUIButton-textDrawingStyle')).not.toBe(null);
     expect(document.querySelector('.HugoUIButton-whiteColor')).not.toBe(null);
   });
   it('render tertiary text light purple', () => {
-    render(<HugoUIButton level="tertiary" colorTheme="purple" drawingStyle="text" />);
+    render(<HugoUIButton level="tertiary" colorTheme="purple" />);
     expect(document.querySelector('.HugoUIButton-textDrawingStyle')).not.toBe(null);
     expect(document.querySelector('.HugoUIButton-purpleColor')).not.toBe(null);
-  });
-  it('render tertiary filled', () => {
-    render(<HugoUIButton level="tertiary" colorTheme="grey" />);
-    expect(document.querySelector('.HugoUIButton-tertiaryLevel')).not.toBe(null);
-    expect(document.querySelector('.HugoUIButton-filledDrawingStyle')).not.toBe(null);
   });
   it('render destruct', () => {
     render(<HugoUIButton colorTheme="red" />);

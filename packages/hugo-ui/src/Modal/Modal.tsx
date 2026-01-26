@@ -28,7 +28,6 @@ export type HugoUIModalType =
   | 'warning'
   | 'informational'
   | 'error'
-  | 'announcement'
   | 'feedback';
 
 export interface HugoUIModalProps extends HugoUIBaseProps, Omit<DialogProps, 'title'> {
@@ -76,10 +75,6 @@ export interface HugoUIModalProps extends HugoUIBaseProps, Omit<DialogProps, 'ti
    * show loading indicator on Modal
    */
   showLoadingIndicator?: boolean;
-  /**
-   * only for announcement
-   */
-  adColumn?: React.ReactNode;
   /**
    * only for feedback
    */
@@ -145,7 +140,6 @@ export const HugoUIModal = ({
   headerComponent,
   loading,
   showLoadingIndicator,
-  adColumn,
   messages,
   headerPrefixIcon,
   disableAutoFocus,
@@ -162,8 +156,8 @@ export const HugoUIModal = ({
     : type === 'error' || type === 'informational' || type === 'feedback';
   const showActions = type !== 'error' && type !== 'informational' && type !== 'feedback';
 
-  const _subTitle = type === 'announcement' ? title || subTitle : subTitle;
-  const _headerComponent = type === 'announcement' ? adColumn : headerComponent;
+  const _subTitle = subTitle;
+  const _headerComponent = headerComponent;
   const dialogAriaLabel = typeof title === 'string' ? title : undefined;
 
   const _showLoadingIndicator =
@@ -181,7 +175,6 @@ export const HugoUIModal = ({
     const defaultSecondary: HugoUIModalSecondaryButtonProps = {
       level: 'secondary',
       colorTheme: 'purple',
-      drawingStyle: 'outlined',
       label: intl.formatMessage({ id: 'hugoUI.button.cancel', defaultMessage: 'Cancel' }),
       size: (fullScreen ? 'large' : 'medium') as HugoUIButtonSize,
       onClick: onClose,
@@ -233,20 +226,9 @@ export const HugoUIModal = ({
           secondary: {
             level: 'secondary',
             colorTheme: 'purple',
-            drawingStyle: 'outlined',
             label: intl.formatMessage({
               id: 'hugoUI.button.leave',
               defaultMessage: 'Leave without saving',
-            }),
-          },
-        };
-        break;
-      case 'announcement':
-        buttonSettings = {
-          tertiary: {
-            label: intl.formatMessage({
-              id: 'hugoUI.button.neverShow',
-              defaultMessage: 'Never show again',
             }),
           },
         };

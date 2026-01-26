@@ -120,7 +120,7 @@ export const HugoUILink = React.forwardRef<HTMLAnchorElement, HugoUILinkProps>((
       aria-label={disabled || loading ? undefined : ariaLabel}
       {...omit(otherProps, ['aria-label', 'onKeyUp'])}
     >
-      {loading && <HugoUILoading size="small" className="HugoUILink-loading-icon" />}
+      {loading && <HugoUILoading size="small" className="HugoUILink-loadingIcon" />}
       {children}
     </StyledLink>
   );

@@ -65,27 +65,6 @@ export const createDialogThemeOverrides = (): ThemeOptions => ({
                 },
               },
             },
-            [`&.${ROOT_PREFIX}-announcement`]: {
-              '&> img': {
-                width: '100%',
-              },
-              [`.${CONTENT_ROOT_PREFIX}-root`]: {
-                paddingTop: 20,
-              },
-              '.MuiDialog-paperFullScreen': {
-                [`.${CONTENT_ROOT_PREFIX}-root`]: {
-                  paddingTop: 0,
-                },
-                '.HugoUIModal-subtitle': {
-                  ...theme.hugoUITypography.h4,
-                  marginBottom: 0,
-                  minHeight: 32,
-                  display: 'flex',
-                  alignItems: 'center',
-                  padding: '29px 0 21px',
-                },
-              },
-            },
           };
         },
         paper: ({ theme }) => ({

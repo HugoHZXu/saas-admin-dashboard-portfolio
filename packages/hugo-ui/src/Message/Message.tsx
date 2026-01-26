@@ -196,7 +196,6 @@ export const HugoUIMessage = ({
           style={visuallyHidden}
           role="alert"
           aria-atomic="true"
-          aria-live="polite"
         >
           {`${iconLabel} ${textContent(children as React.ReactElement)} ${
             extraMessage ? textContent(extraMessage) : ''

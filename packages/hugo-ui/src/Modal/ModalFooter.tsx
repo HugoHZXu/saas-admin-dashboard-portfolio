@@ -103,11 +103,7 @@ export const HugoUIModalFooter = ({
         {renderTertiaryButton()}
         <div className={`${FOOTER_ROOT_PREFIX}-buttons`}>
           {!!secondary && !secondary.hidden && (
-            <HugoUIButton
-              ref={!tertiary || tertiary.hidden ? focusButtonRef : null}
-              drawingStyle="outlined"
-              {...secondary}
-            >
+            <HugoUIButton ref={!tertiary || tertiary.hidden ? focusButtonRef : null} {...secondary}>
               {secondary.label}
             </HugoUIButton>
           )}

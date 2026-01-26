@@ -125,7 +125,7 @@ export default {
     },
     color: {
       description:
-        'Only used for the color of success/error (see figma). If neither success status nor error status, can just leave it `undefined` or assign `"primary"` to it.',
+        'Only used for the color of success/error. If neither success status nor error status, can just leave it `undefined` or assign `"primary"` to it.',
       control: 'radio',
       options: ['primary', 'success', 'error'],
       table: {
@@ -447,7 +447,6 @@ const EnterToSubmitTemplate: StoryFn<typeof Input> = (args) => {
             <Button
               id="button-40"
               level="tertiary"
-              drawingStyle="text"
               tabIndex={0}
               onClick={() => {
                 isKeyboardRef.current = false;
@@ -516,7 +515,6 @@ UseCaseEnterToSubmit.parameters = {
                   <Button
                     id="button-40"
                     level="tertiary"
-                    drawingStyle="text"
                     tabIndex={0}
                     onClick={(e) => {
                       isKeyboardRef.current = false

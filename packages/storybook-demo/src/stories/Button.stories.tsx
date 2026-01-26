@@ -34,9 +34,9 @@ type StoryArgsUpdate = {
 
 // dynamically set the background according to button args
 const storyArgsListener = (args: StoryArgsUpdate) => {
-  if (args.args.level && (args.storyId.includes('default') || args.storyId.includes('sizes'))) {
-    const level = args.args.level;
-    const style = args.args.drawingStyle;
+  if (args.storyId.includes('default') || args.storyId.includes('sizes')) {
+    const level = args.args.level ?? 'primary';
+    const style = level === 'tertiary' ? 'text' : level === 'secondary' ? 'outlined' : 'filled';
     const color = args.args.colorTheme;
     let backgrounds = backgroundColors.light;
     if (
@@ -158,14 +158,6 @@ export default {
       description: 'Visual hierarchy of the button.',
       control: 'select',
       options: ['primary', 'secondary', 'tertiary'],
-      table: {
-        category: 'Style',
-      },
-    },
-    drawingStyle: {
-      description: 'Visual style of the button surface.',
-      control: 'select',
-      options: ['filled', 'outlined', 'text'],
       table: {
         category: 'Style',
       },
@@ -457,10 +449,6 @@ const primaryArgTypes = {
       disable: true,
     },
   },
-  drawingStyle: {
-    control: 'select',
-    options: ['filled'],
-  },
   colorTheme: {
     control: 'select',
     options: ['purple', 'white'],
@@ -469,7 +457,6 @@ const primaryArgTypes = {
 
 const primaryDefaultArgs: HugoUIPrimaryButtonProps = {
   level: 'primary',
-  drawingStyle: 'filled',
   colorTheme: 'purple',
   ...defaultCommonArgs,
 };
@@ -498,10 +485,6 @@ PrimaryLight.argTypes = {
     control: 'select',
     options: ['primary'],
   },
-  drawingStyle: {
-    control: 'select',
-    options: ['filled'],
-  },
   colorTheme: {
     control: 'select',
     options: ['purple'],
@@ -526,10 +509,6 @@ PrimaryDark.argTypes = {
     control: 'select',
     options: ['primary'],
   },
-  drawingStyle: {
-    control: 'select',
-    options: ['filled'],
-  },
   colorTheme: {
     control: 'select',
     options: ['white'],
@@ -552,10 +531,6 @@ const secondaryArgTypes = {
       disable: true,
     },
   },
-  drawingStyle: {
-    control: 'select',
-    options: ['outlined'],
-  },
   colorTheme: {
     control: 'select',
     options: ['purple', 'grey', 'white'],
@@ -564,7 +539,6 @@ const secondaryArgTypes = {
 
 const secondaryDefaultArgs: HugoUISecondaryButtonProps = {
   level: 'secondary',
-  drawingStyle: 'outlined',
   colorTheme: 'purple',
   ...defaultCommonArgs,
 };
@@ -597,10 +571,6 @@ SecondaryPurpleOutlined.argTypes = {
     control: 'select',
     options: ['secondary'],
   },
-  drawingStyle: {
-    control: 'select',
-    options: ['outlined'],
-  },
   colorTheme: {
     control: 'select',
     options: ['purple'],
@@ -621,10 +591,6 @@ SecondaryGreyOutlined.argTypes = {
   level: {
     control: 'select',
     options: ['secondary'],
-  },
-  drawingStyle: {
-    control: 'select',
-    options: ['outlined'],
   },
   colorTheme: {
     control: 'select',
@@ -651,10 +617,6 @@ SecondaryWhiteOutlined.argTypes = {
     control: 'select',
     options: ['secondary'],
   },
-  drawingStyle: {
-    control: 'select',
-    options: ['outlined'],
-  },
   colorTheme: {
     control: 'select',
     options: ['white'],
@@ -677,10 +639,6 @@ const tertiaryArgTypes = {
       disable: true,
     },
   },
-  drawingStyle: {
-    control: 'select',
-    options: ['text'],
-  },
   colorTheme: {
     control: 'select',
     options: ['purple', 'grey', 'white'],
@@ -689,7 +647,6 @@ const tertiaryArgTypes = {
 
 const tertiaryDefaultArgs: HugoUITertiaryButtonProps = {
   level: 'tertiary',
-  drawingStyle: 'text',
   colorTheme: 'purple',
   ...defaultCommonArgs,
 };
@@ -722,10 +679,6 @@ TertiaryPurple.argTypes = {
     control: 'select',
     options: ['tertiary'],
   },
-  drawingStyle: {
-    control: 'select',
-    options: ['text'],
-  },
   colorTheme: {
     control: 'select',
     options: ['purple'],
@@ -746,10 +699,6 @@ TertiaryGrey.argTypes = {
   level: {
     control: 'select',
     options: ['tertiary'],
-  },
-  drawingStyle: {
-    control: 'select',
-    options: ['text'],
   },
   colorTheme: {
     control: 'select',
@@ -776,10 +725,6 @@ TertiaryWhite.argTypes = {
     control: 'select',
     options: ['tertiary'],
   },
-  drawingStyle: {
-    control: 'select',
-    options: ['text'],
-  },
   colorTheme: {
     control: 'select',
     options: ['white'],
@@ -801,10 +746,6 @@ const destructArgTypes = {
     control: 'select',
     options: ['primary'],
   },
-  drawingStyle: {
-    control: 'select',
-    options: ['filled'],
-  },
   colorTheme: {
     control: 'select',
     options: ['red'],
@@ -813,7 +754,6 @@ const destructArgTypes = {
 
 const destructDefaultArgs: HugoUIDestructButtonProps = {
   level: 'primary',
-  drawingStyle: 'filled',
   colorTheme: 'red',
   ...defaultCommonArgs,
 };
@@ -821,12 +761,7 @@ const destructDefaultArgs: HugoUIDestructButtonProps = {
 export const DestructDefault: StoryFn<HugoUIDestructButtonProps> = (args) => (
   <ButtonTemplate {...args} />
 );
-DestructDefault.parameters = {
-  design: {
-    type: 'figspec',
-    url: 'https://www.figma.com/file/pAIJ6tkYEtUPRkxjiiwjd9/DS---Buttons?type=design&node-id=1433%3A4517&mode=design&t=MCz8QEgBM64U1IbX-1',
-  },
-};
+
 DestructDefault.argTypes = destructArgTypes;
 DestructDefault.args = {
   ...destructDefaultArgs,
@@ -836,12 +771,7 @@ DestructDefault.parameters = {
 };
 
 export const DestructAllSizes = SizeTemplate.bind({});
-DestructAllSizes.parameters = {
-  design: {
-    type: 'figspec',
-    url: 'https://www.figma.com/file/pAIJ6tkYEtUPRkxjiiwjd9/DS---Buttons?type=design&node-id=1433%3A4517&mode=design&t=MCz8QEgBM64U1IbX-1',
-  },
-};
+
 DestructAllSizes.argTypes = {
   ...destructArgTypes,
   ...disabledArgTypes,
@@ -852,12 +782,7 @@ DestructAllSizes.args = {
 };
 
 export const DestructStates = StateTemplate.bind({});
-DestructStates.parameters = {
-  design: {
-    type: 'figspec',
-    url: 'https://www.figma.com/file/pAIJ6tkYEtUPRkxjiiwjd9/DS---Buttons?type=design&node-id=1433%3A4517&mode=design&t=MCz8QEgBM64U1IbX-1',
-  },
-};
+
 DestructStates.argTypes = { ...destructArgTypes, ...disabledArgTypes };
 DestructStates.args = {
   ...destructDefaultArgs,

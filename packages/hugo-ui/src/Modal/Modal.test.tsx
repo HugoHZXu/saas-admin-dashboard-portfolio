@@ -60,28 +60,6 @@ describe('render HugoUIModal', () => {
     expect(screen.queryByText('test subtitle')).toBe(null);
   });
 
-  it('should show title to subtitle position by default if the type is announcement', () => {
-    render(
-      <HugoUIModal open={true} title="test title" subTitle="test subtitle" type="announcement">
-        This is test content
-      </HugoUIModal>
-    );
-    const subtitle = document.querySelector('.HugoUIModal-subtitle');
-    expect(subtitle).toBeTruthy();
-    expect(subtitle?.innerHTML).toBe('test title');
-  });
-
-  it('should show subtitle if the title is empty and the type is announcement', () => {
-    render(
-      <HugoUIModal open={true} subTitle="test subtitle" type="announcement">
-        This is test content
-      </HugoUIModal>
-    );
-    const subtitle = document.querySelector('.HugoUIModal-subtitle');
-    expect(subtitle).toBeTruthy();
-    expect(subtitle?.innerHTML).toBe('test subtitle');
-  });
-
   it('should show closeButton in title if user passes the prop, otherwise only error and information will show closeButton', () => {
     const { rerender } = render(
       <HugoUIModal open={true} title="title" closeButton type="transactional">
@@ -187,6 +165,7 @@ describe('render HugoUIModal', () => {
         type="destructive"
         buttonDefs={{
           secondary: {
+            level: 'secondary',
             hidden: true,
           },
           tertiary: {
@@ -384,7 +363,7 @@ describe('loading constraints', () => {
         open={true}
         loading={true}
         showLoadingIndicator={false}
-        buttonDefs={{ secondary: { loading: true } }}
+        buttonDefs={{ secondary: { level: 'secondary', loading: true } }}
       >
         This is test content
       </HugoUIModal>

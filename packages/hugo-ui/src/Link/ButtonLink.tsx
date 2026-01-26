@@ -7,11 +7,11 @@ import { StyledLinkButton } from './styles/linkStyles';
 import { onEnterKeyPress } from '../utils/wcagUtils';
 
 export interface HugoUIButtonLinkProps extends Omit<HugoUILinkProps, 'href' | 'hrefLang' | 'rel'> {
-  iconName?: string;
+  icon?: React.ReactNode;
 }
 
 export const HugoUIButtonLink = ({
-  iconName,
+  icon,
   onClick,
   children,
   ...otherProps
@@ -20,7 +20,7 @@ export const HugoUIButtonLink = ({
 
   const ariaLabel = useLinkAriaLabel({ ...pick(otherProps, ['target', 'aria-label']), children });
 
-  return iconName ? (
+  return icon ? (
     <StyledLinkButton
       role="button"
       mode={mode}
@@ -39,7 +39,7 @@ export const HugoUIButtonLink = ({
       aria-label={ariaLabel}
       {...omit(otherProps, ['aria-label'])}
     >
-      {!loading && <span className={classnames('HugoUIButtonLink-icon', iconName)} />}
+      {!loading && <span className="HugoUIButtonLink-icon">{icon}</span>}
       <HugoUILink tabIndex={-1} role="none" aria-label={undefined} {...otherProps} onClick={void 0}>
         {children}
       </HugoUILink>

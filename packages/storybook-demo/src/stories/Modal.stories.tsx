@@ -134,7 +134,7 @@ SystemError.play = basicPlay;
 export const CustomizeHeaderIcon = BasicTemplate.bind({});
 CustomizeHeaderIcon.args = {
   ...basicAction,
-  title: 'Destructive',
+  title: 'Custom Header Icon',
   type: 'destructive',
   headerPrefixIcon: <LocalFireDepartmentIcon />,
   children: (
@@ -291,6 +291,7 @@ export const PositionLargeContent: StoryFn<typeof Modal> = (args) => {
   const buttonDefs: ModalButtonsType = {
     ...args.buttonDefs,
     secondary: {
+      level: 'secondary',
       ...args.buttonDefs?.secondary,
       onClick: (e: React.MouseEvent<HTMLButtonElement>) => {
         args.buttonDefs?.secondary?.onClick?.(e);
@@ -327,6 +328,7 @@ PositionLargeContent.args = {
       onClick: action('onClick'),
     },
     secondary: {
+      level: 'secondary',
       label: 'Dolor sit',
       onClick: action('onClick'),
     },
@@ -487,6 +489,7 @@ export const MultipleModals2: StoryFn<typeof Modal> = () => {
                         },
                       },
                       secondary: {
+                        level: 'secondary',
                         label: 'Previous',
                         onClick: (e) => {
                           action('onClick')(e);
@@ -641,6 +644,7 @@ const LoadingWithTertiaryTemplate: StoryFn<typeof Modal> = (args) => {
       },
     },
     secondary: {
+      level: 'secondary',
       loading: loading && loadingButton === 'secondary',
       onClick: (e) => {
         action('onClick')(e);
@@ -847,6 +851,7 @@ export const HideACertainButton: StoryFn<typeof Modal> = (args) => {
       },
     },
     secondary: {
+      level: 'secondary',
       hidden: true,
     },
     tertiary: {
