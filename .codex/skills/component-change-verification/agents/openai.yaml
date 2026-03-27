@@ -1,0 +1,4 @@
+interface:
+  display_name: "Component Change Verification"
+  short_description: "Validate local component changes safely."
+  default_prompt: "Use $component-change-verification to choose the smallest sufficient local verification path for this component change."
