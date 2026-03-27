@@ -1,5 +1,7 @@
 import type { StorybookConfig } from '@storybook/react-vite';
 import path from 'path';
+import tailwindcss from '@tailwindcss/postcss';
+import autoprefixer from 'autoprefixer';
 
 const config: StorybookConfig = {
   framework: '@storybook/react-vite',
@@ -34,8 +36,31 @@ const config: StorybookConfig = {
         replacement: path.resolve(__dirname, '../../hugo-ui/src/index.ts')
       }
     ];
+    const myshadcnAliases = [
+      {
+        find: '@/',
+        replacement: `${path.resolve(__dirname, '../../myshadcn/src')}/`
+      },
+      {
+        find: 'myshadcn/styles.css',
+        replacement: path.resolve(__dirname, '../../myshadcn/src/styles/globals.css')
+      },
+      {
+        find: /^myshadcn$/,
+        replacement: path.resolve(__dirname, '../../myshadcn/src/index.ts')
+      }
+    ];
     // Put our specific subpath aliases before any existing aliases.
-    config.resolve.alias = Array.isArray(alias) ? [...hugoUIAliases, ...alias] : hugoUIAliases;
+    config.resolve.alias = Array.isArray(alias)
+      ? [...myshadcnAliases, ...hugoUIAliases, ...alias]
+      : [...myshadcnAliases, ...hugoUIAliases];
+    config.css = config.css || {};
+    config.css.postcss = {
+      plugins: [
+        tailwindcss(),
+        autoprefixer()
+      ]
+    };
     return config;
   }
 };

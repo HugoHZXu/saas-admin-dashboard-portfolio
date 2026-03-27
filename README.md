@@ -1,6 +1,6 @@
 # UI Demo Monorepo
 
-Vite + React + TypeScript monorepo powered by npm workspaces. Includes a small component library (`hugo-ui`) and a Storybook demo.
+Vite + React + TypeScript monorepo powered by npm workspaces. Includes a primary component library (`hugo-ui`), a shadcn-style component package (`myshadcn`), and a Storybook demo app.
 
 ## Quick start
 
@@ -14,7 +14,8 @@ Open http://localhost:6006 to view the stories.
 ## Packages
 
 - `packages/hugo-ui`: React component library
-- `packages/storybook-demo`: Storybook app showcasing `hugo-ui`
+- `packages/myshadcn`: Tailwind + shadcn-style React component library
+- `packages/storybook-demo`: Storybook app showcasing `hugo-ui` and `myshadcn`
 
 ## Theme provider usage
 
@@ -49,6 +50,15 @@ function App() {
     </HugoUIProvider>
   );
 }
+```
+
+## Validation
+
+```bash
+npm run typecheck
+npm run test:all
+npm run build:all
+npm run verify
 ```
 
 ## Lint and format

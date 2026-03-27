@@ -1,5 +1,6 @@
 import type { Preview } from '@storybook/react';
 import { Title, Description, Primary, ArgsTable, Stories } from '@storybook/blocks';
+import 'myshadcn/styles.css';
 import { HugoUIProvider, hugoUITheme } from 'hugo-ui';
 import enMessages from '../../hugo-ui/src/lang/en.json';
 import zhMessages from '../../hugo-ui/src/lang/zh.json';

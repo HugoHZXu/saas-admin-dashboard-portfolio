@@ -6,7 +6,11 @@
       "hugo-ui": ["../hugo-ui/src/index.ts"],
       "hugo-ui/styles/theme": ["../hugo-ui/src/styles/theme.ts"],
       "hugo-ui/utils/wcagUtils": ["../hugo-ui/src/utils/wcagUtils.ts"],
-      "hugo-ui/*": ["../hugo-ui/src/*"]
+      "hugo-ui/*": ["../hugo-ui/src/*"],
+      "myshadcn": ["../myshadcn/src/index.ts"],
+      "myshadcn/styles.css": ["../myshadcn/src/styles/globals.css"],
+      "myshadcn/*": ["../myshadcn/src/*"],
+      "@/*": ["../myshadcn/src/*"]
     }
   },
   "include": ["src", ".storybook"]

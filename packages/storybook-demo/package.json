@@ -4,6 +4,7 @@
   "private": true,
   "dependencies": {
     "hugo-ui": "1.0.2",
+    "myshadcn": "0.1.0",
     "@mui/icons-material": "5.15.14",
     "react": "^18.2.0",
     "react-dom": "^18.2.0"
@@ -26,6 +27,7 @@
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build",
     "chromatic": "chromatic --project-token=$CHROMATIC_PROJECT_TOKEN --build-script-name=build-storybook",
-    "lint": "eslint \"src/**/*.{ts,tsx}\""
+    "lint": "eslint \"src/**/*.{ts,tsx}\"",
+    "typecheck": "tsc -p tsconfig.json --noEmit"
   }
 }
