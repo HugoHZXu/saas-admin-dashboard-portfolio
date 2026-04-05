@@ -75,6 +75,15 @@ export const createButtonThemeOverrides = (): ThemeOptions => ({
               marginRight: 8,
               marginLeft: -4,
             },
+            '&.MuiButton-sizeLarge .MuiButton-startIcon, &.MuiButton-sizeMedium .MuiButton-startIcon': {
+              marginLeft: -4,
+            },
+            '&.MuiButton-sizeLarge .MuiButton-startIcon [class^="icon-"], &.MuiButton-sizeLarge .MuiButton-endIcon [class^="icon-"], &.MuiButton-sizeMedium .MuiButton-startIcon [class^="icon-"], &.MuiButton-sizeMedium .MuiButton-endIcon [class^="icon-"]': {
+              fontSize: BUTTON_ICON_NORMAL,
+            },
+            '&.MuiButton-sizeSmall .MuiButton-startIcon [class^="icon-"], &.MuiButton-sizeSmall .MuiButton-endIcon [class^="icon-"]': {
+              fontSize: BUTTON_ICON_SMALL,
+            },
             '@media (hover: hover)': {
               '&:hover': {
                 border: 'none',
@@ -176,27 +185,6 @@ export const createButtonThemeOverrides = (): ThemeOptions => ({
           position: 'absolute',
           marginRight: -4,
           marginLeft: 8,
-        },
-        iconSizeLarge: {
-          '&.MuiButton-startIcon': {
-            marginLeft: -4,
-          },
-          '[class^="icon-"]': {
-            fontSize: BUTTON_ICON_NORMAL,
-          },
-        },
-        iconSizeMedium: {
-          '&.MuiButton-startIcon': {
-            marginLeft: -4,
-          },
-          '[class^="icon-"]': {
-            fontSize: BUTTON_ICON_NORMAL,
-          },
-        },
-        iconSizeSmall: {
-          '[class^="icon-"]': {
-            fontSize: BUTTON_ICON_SMALL,
-          },
         },
       },
     },

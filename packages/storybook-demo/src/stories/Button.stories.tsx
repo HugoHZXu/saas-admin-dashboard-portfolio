@@ -2,9 +2,7 @@ import React, { useState } from 'react';
 import CloseIcon from '@mui/icons-material/Close';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import { StoryFn, Meta } from '@storybook/react';
-import { addons } from '@storybook/addons';
-import { waitFor } from '@storybook/test';
-import { UPDATE_GLOBALS, STORY_ARGS_UPDATED } from '@storybook/core-events';
+import { waitFor } from 'storybook/test';
 import {
   Button,
   HugoUIButtonCommonProps,
@@ -17,8 +15,6 @@ import {
 import { hideAttributes, groupArgs } from './utils';
 import { StyledColumn, StyledRow } from './assets/styles';
 
-const channel = addons.getChannel();
-
 const backgroundColors = {
   light: { name: 'light', value: '#FFF' },
   dark: { name: 'dark', value: '#444' },
@@ -26,41 +22,6 @@ const backgroundColors = {
 
 // const lightBG = { default: 'light', values: [backgroundColors.light] }
 const darkBG = { default: 'dark', values: [backgroundColors.dark] };
-
-type StoryArgsUpdate = {
-  storyId: string;
-  args: Partial<HugoUIButtonProps>;
-};
-
-// dynamically set the background according to button args
-const storyArgsListener = (args: StoryArgsUpdate) => {
-  if (args.storyId.includes('default') || args.storyId.includes('sizes')) {
-    const level = args.args.level ?? 'primary';
-    const style = level === 'tertiary' ? 'text' : level === 'secondary' ? 'outlined' : 'filled';
-    const color = args.args.colorTheme;
-    let backgrounds = backgroundColors.light;
-    if (
-      (level === 'primary' && style === 'filled' && color === 'white') ||
-      (level === 'secondary' && style === 'outlined' && color === 'white') ||
-      (level === 'tertiary' && style === 'text' && color === 'white')
-    ) {
-      backgrounds = backgroundColors.dark;
-    }
-
-    channel.emit(UPDATE_GLOBALS, {
-      globals: {
-        backgrounds,
-      },
-    });
-  }
-};
-
-const setupBackgroundListener = () => {
-  channel.removeListener(STORY_ARGS_UPDATED, storyArgsListener);
-  channel.addListener(STORY_ARGS_UPDATED, storyArgsListener);
-};
-
-setupBackgroundListener();
 
 const hiddenKeys = [
   'classes',
@@ -120,7 +81,7 @@ export default {
     labelHidden: {
       description:
         'Hide the visible label (icon-only button). When true, the label is used for aria-label.',
-      control: 'boolean',
+      control: { type: 'boolean' as const },
       table: {
         category: 'Content',
       },
@@ -128,35 +89,35 @@ export default {
     loading: {
       description:
         'Show loading indicator and mark the button as busy; click is disabled while loading.',
-      control: 'boolean',
+      control: { type: 'boolean' as const },
       table: {
         category: 'Status',
       },
     },
     disabled: {
       description: 'Disable the button and remove it from the tab order.',
-      control: 'boolean',
+      control: { type: 'boolean' as const },
       table: {
         category: 'Status',
       },
     },
     fullWidth: {
       description: 'Stretch the button to fill its container width.',
-      control: 'boolean',
+      control: { type: 'boolean' as const },
       table: {
         category: 'Style',
       },
     },
     className: {
       description: 'The CSS class name of the root element',
-      control: 'text',
+      control: { type: 'text' as const },
       table: {
         category: 'Basic',
       },
     },
     level: {
       description: 'Visual hierarchy of the button.',
-      control: 'select',
+      control: { type: 'select' as const },
       options: ['primary', 'secondary', 'tertiary'],
       table: {
         category: 'Style',
@@ -164,7 +125,7 @@ export default {
     },
     colorTheme: {
       description: 'Color scheme of the button.',
-      control: 'select',
+      control: { type: 'select' as const },
       options: ['purple', 'white', 'red', 'grey'],
       table: {
         category: 'Style',
@@ -172,7 +133,7 @@ export default {
     },
     size: {
       description: 'Size variant of the button.',
-      control: 'select',
+      control: { type: 'select' as const },
       options: ['small', 'medium', 'large'],
       table: {
         category: 'Style',
@@ -181,7 +142,7 @@ export default {
     type: {
       description:
         'The type of the button; the default button type is for a basic clickable button that does an interaction, a submit type submits form data, a reset type resets form data',
-      control: 'select',
+      control: { type: 'select' as const },
       options: ['button', 'submit', 'reset'],
       table: {
         category: 'Basic',
@@ -207,14 +168,14 @@ export default {
     },
     href: {
       description: 'When provided, renders the button as a link.',
-      control: 'text',
+      control: { type: 'text' as const },
       table: {
         category: 'Link',
       },
     },
     target: {
       description: 'Specifies where to open the linked document.',
-      control: 'text',
+      control: { type: 'text' as const },
       table: {
         category: 'Link',
       },
@@ -222,7 +183,7 @@ export default {
     rel: {
       description:
         'Specifies the relationship between the current document and the linked document.',
-      control: 'text',
+      control: { type: 'text' as const },
       table: {
         category: 'Link',
       },
@@ -236,14 +197,14 @@ export default {
     },
     id: {
       description: 'The id attribute of the root element.',
-      control: 'text',
+      control: { type: 'text' as const },
       table: {
         category: 'Basic',
       },
     },
     style: {
       description: 'Inline styles applied to the root element.',
-      control: 'object',
+      control: { type: 'object' as const },
       table: {
         category: 'Basic',
       },
@@ -267,7 +228,7 @@ export default {
     },
     loadingPosition: {
       description: 'Position of the loading indicator when loading is true.',
-      control: 'select',
+      control: { type: 'select' as const },
       options: ['start', 'center'],
       table: {
         category: 'Content',
@@ -450,7 +411,7 @@ const primaryArgTypes = {
     },
   },
   colorTheme: {
-    control: 'select',
+    control: { type: 'select' as const },
     options: ['purple', 'white'],
   },
 };
@@ -482,11 +443,11 @@ export const PrimaryLight = StateTemplate.bind({});
 PrimaryLight.argTypes = {
   ...disabledArgTypes,
   level: {
-    control: 'select',
+    control: { type: 'select' as const },
     options: ['primary'],
   },
   colorTheme: {
-    control: 'select',
+    control: { type: 'select' as const },
     options: ['purple'],
   },
 };
@@ -506,11 +467,11 @@ PrimaryDark.parameters = {
 PrimaryDark.argTypes = {
   ...disabledArgTypes,
   level: {
-    control: 'select',
+    control: { type: 'select' as const },
     options: ['primary'],
   },
   colorTheme: {
-    control: 'select',
+    control: { type: 'select' as const },
     options: ['white'],
   },
 };
@@ -532,7 +493,7 @@ const secondaryArgTypes = {
     },
   },
   colorTheme: {
-    control: 'select',
+    control: { type: 'select' as const },
     options: ['purple', 'grey', 'white'],
   },
 };
@@ -568,11 +529,11 @@ export const SecondaryPurpleOutlined = StateTemplate.bind({});
 SecondaryPurpleOutlined.argTypes = {
   ...disabledArgTypes,
   level: {
-    control: 'select',
+    control: { type: 'select' as const },
     options: ['secondary'],
   },
   colorTheme: {
-    control: 'select',
+    control: { type: 'select' as const },
     options: ['purple'],
   },
 };
@@ -589,11 +550,11 @@ export const SecondaryGreyOutlined = StateTemplate.bind({});
 SecondaryGreyOutlined.argTypes = {
   ...disabledArgTypes,
   level: {
-    control: 'select',
+    control: { type: 'select' as const },
     options: ['secondary'],
   },
   colorTheme: {
-    control: 'select',
+    control: { type: 'select' as const },
     options: ['grey'],
   },
 };
@@ -614,11 +575,11 @@ SecondaryWhiteOutlined.parameters = {
 SecondaryWhiteOutlined.argTypes = {
   ...disabledArgTypes,
   level: {
-    control: 'select',
+    control: { type: 'select' as const },
     options: ['secondary'],
   },
   colorTheme: {
-    control: 'select',
+    control: { type: 'select' as const },
     options: ['white'],
   },
 };
@@ -640,7 +601,7 @@ const tertiaryArgTypes = {
     },
   },
   colorTheme: {
-    control: 'select',
+    control: { type: 'select' as const },
     options: ['purple', 'grey', 'white'],
   },
 };
@@ -676,11 +637,11 @@ export const TertiaryPurple = StateTemplate.bind({});
 TertiaryPurple.argTypes = {
   ...disabledArgTypes,
   level: {
-    control: 'select',
+    control: { type: 'select' as const },
     options: ['tertiary'],
   },
   colorTheme: {
-    control: 'select',
+    control: { type: 'select' as const },
     options: ['purple'],
   },
 };
@@ -697,11 +658,11 @@ export const TertiaryGrey = StateTemplate.bind({});
 TertiaryGrey.argTypes = {
   ...disabledArgTypes,
   level: {
-    control: 'select',
+    control: { type: 'select' as const },
     options: ['tertiary'],
   },
   colorTheme: {
-    control: 'select',
+    control: { type: 'select' as const },
     options: ['grey'],
   },
 };
@@ -722,11 +683,11 @@ TertiaryWhite.parameters = {
 TertiaryWhite.argTypes = {
   ...disabledArgTypes,
   level: {
-    control: 'select',
+    control: { type: 'select' as const },
     options: ['tertiary'],
   },
   colorTheme: {
-    control: 'select',
+    control: { type: 'select' as const },
     options: ['white'],
   },
 };
@@ -743,11 +704,11 @@ TertiaryWhite.play = async () => {
 /** Destruct Button */
 const destructArgTypes = {
   level: {
-    control: 'select',
+    control: { type: 'select' as const },
     options: ['primary'],
   },
   colorTheme: {
-    control: 'select',
+    control: { type: 'select' as const },
     options: ['red'],
   },
 };

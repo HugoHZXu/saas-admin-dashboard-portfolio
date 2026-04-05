@@ -47,7 +47,6 @@ describe('useFont utilities', () => {
         jest.doMock('@fontsource/noto-sans/400.css', () => {
           throw new Error('load failed');
         });
-        // eslint-disable-next-line @typescript-eslint/no-var-requires
         const { __test__ } = require('./useFont') as typeof import('./useFont');
         __test__
           .loadLocalFonts('en')

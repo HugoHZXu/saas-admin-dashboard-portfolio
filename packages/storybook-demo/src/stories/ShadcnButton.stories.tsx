@@ -8,15 +8,15 @@ const meta = {
   args: {},
   argTypes: {
     variant: {
-      control: 'select',
+      control: { type: 'select' as const },
       options: ['default', 'secondary', 'outline', 'ghost', 'destructive'],
     },
     size: {
-      control: 'select',
+      control: { type: 'select' as const },
       options: ['default', 'sm', 'lg', 'icon'],
     },
     className: {
-      control: 'text',
+      control: { type: 'text' as const },
     },
     onClick: {
       action: 'clicked',

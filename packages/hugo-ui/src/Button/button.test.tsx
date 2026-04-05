@@ -4,13 +4,15 @@ import { render, screen } from '../utils/testUtils';
 describe('Color Theme', () => {
   it('render primary', () => {
     render(<HugoUIButton />);
-    expect(document.querySelector('.MuiButton-containedPrimary')).not.toBe(null);
+    expect(document.querySelector('.MuiButton-contained')).not.toBe(null);
+    expect(document.querySelector('.MuiButton-colorPrimary')).not.toBe(null);
     expect(document.querySelector('.MuiButton-sizeMedium')).not.toBe(null);
     expect(document.querySelector('.HugoUIButton-purpleColor')).not.toBe(null);
   });
   it('render secondary filled', () => {
     render(<HugoUIButton level="secondary" />);
-    expect(document.querySelector('.MuiButton-outlinedSecondary')).not.toBe(null);
+    expect(document.querySelector('.MuiButton-outlined')).not.toBe(null);
+    expect(document.querySelector('.MuiButton-colorSecondary')).not.toBe(null);
   });
   it('render tertiary text', () => {
     render(<HugoUIButton level="tertiary" />);

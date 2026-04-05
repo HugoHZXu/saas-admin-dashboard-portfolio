@@ -1,15 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import CloseIcon from '@mui/icons-material/Close';
 import LocalFireDepartmentIcon from '@mui/icons-material/LocalFireDepartment';
-import { PlayFunction } from '@storybook/types';
-import { StoryFn, Meta, ReactRenderer } from '@storybook/react';
-import { action } from '@storybook/addon-actions';
-import { fireEvent, within, waitFor } from '@storybook/test';
+import { StoryFn, Meta } from '@storybook/react';
+import { action } from 'storybook/actions';
+import { fireEvent, within, waitFor } from 'storybook/test';
 import {
   Button,
   Modal,
   ModalContentText,
-  ModalProps,
   ModalButtonsType,
   Typography,
   ModalType,
@@ -17,6 +15,10 @@ import {
 import { groupArgs, hideAttributes } from './utils';
 
 const hiddenKeys = ['component', 'ref', 'isRtl'];
+
+type ModalPlayContext = {
+  canvasElement: HTMLElement;
+};
 
 export default {
   title: 'HugoUI/Molecules/Modal',
@@ -60,7 +62,7 @@ const basicAction = {
   },
 };
 
-const basicPlay: PlayFunction<ReactRenderer, ModalProps> = async ({ canvasElement }) => {
+const basicPlay = async ({ canvasElement }: ModalPlayContext) => {
   setTimeout(() => {
     const canvas = within(canvasElement);
     const button = canvas.getByRole('button', { name: 'Demo' });
@@ -590,7 +592,7 @@ const loadingTemplateArgTypes = {
   ...hideAttributes(['open', 'onClose', 'loading', 'buttonDefs', 'type', 'title', 'children']),
 };
 
-const loadingTemplatePlay: PlayFunction<ReactRenderer, ModalProps> = async ({ canvasElement }) => {
+const loadingTemplatePlay = async ({ canvasElement }: ModalPlayContext) => {
   setTimeout(() => {
     const canvas = within(canvasElement);
 
@@ -699,9 +701,9 @@ const loadingWithTertiaryTemplateArgTypes = {
   ...hideAttributes(['open', 'onClose', 'loading', 'buttonDefs', 'type', 'title', 'children']),
 };
 
-const loadingWithTertiaryTemplatePlay: PlayFunction<ReactRenderer, ModalProps> = async ({
+const loadingWithTertiaryTemplatePlay = async ({
   canvasElement,
-}) => {
+}: ModalPlayContext) => {
   setTimeout(() => {
     const canvas = within(canvasElement);
     const button = canvas.getByRole('button', { name: 'Demo' });

@@ -1,7 +1,7 @@
 import React, { useState, useRef, ChangeEvent } from 'react';
 import StarIcon from '@mui/icons-material/Star';
 import { StoryFn, Meta } from '@storybook/react';
-import { fireEvent, userEvent, within, expect } from '@storybook/test';
+import { fireEvent, userEvent, within, expect } from 'storybook/test';
 import { Input, Button } from 'hugo-ui';
 import { StyledColumn, StyledRow } from './assets/styles';
 import { withHugoUIBackgroundTheme, backgrounds } from './decorators/withHugoUIBackgroundTheme';
@@ -18,21 +18,21 @@ export default {
   argTypes: {
     disabled: {
       description: 'If `true`, the component is disabled.',
-      control: 'boolean',
+      control: { type: 'boolean' as const },
       table: {
         category: 'Basic',
       },
     },
     fullWidth: {
       description: 'If true, the input will take up the full width of its container.',
-      control: 'boolean',
+      control: { type: 'boolean' as const },
       table: {
         category: 'Others',
       },
     },
     helperText: {
       description: 'The helper text content. \n\nType: `node` (supports `React.ReactNode`)',
-      control: 'text',
+      control: { type: 'text' as const },
       table: {
         category: 'Basic',
       },
@@ -40,7 +40,7 @@ export default {
     InputLabelProps: {
       description:
         'Props applied to the `InputLabel` element. Pointer events like `onClick` are enabled if and only if `shrink` is `true`. Details see <a href="https://mui.com/material-ui/api/input-label/">MUI\'s docs</a>.',
-      control: 'object',
+      control: { type: 'object' as const },
       table: {
         category: 'Others',
       },
@@ -48,14 +48,14 @@ export default {
     inputProps: {
       description:
         '<a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input#Attributes">Attributes</a> applied to the <code>input</code> element.',
-      control: 'object',
+      control: { type: 'object' as const },
       table: {
         category: 'Others',
       },
     },
     InputProps: {
       description: 'Props applied to the Input element.',
-      control: 'object',
+      control: { type: 'object' as const },
       table: {
         category: 'Others',
       },
@@ -68,14 +68,14 @@ export default {
     },
     label: {
       description: 'The label content. \n\nType: `node` (supports `React.ReactNode`)',
-      control: 'text',
+      control: { type: 'text' as const },
       table: {
         category: 'Basic',
       },
     },
     multiline: {
       description: 'If `true`, a `textarea` element is rendered instead of an input.',
-      control: 'boolean',
+      control: { type: 'boolean' as const },
       table: {
         category: 'Multiline',
       },
@@ -83,7 +83,7 @@ export default {
     name: {
       description:
         '<a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/Input#name">Name</a> attribute of the `input` element.',
-      control: 'text',
+      control: { type: 'text' as const },
       table: {
         category: 'Basic',
       },
@@ -98,7 +98,7 @@ export default {
     required: {
       description:
         'If `true`, the label is displayed as required and the `input` element is required.',
-      control: 'boolean',
+      control: { type: 'boolean' as const },
       table: {
         category: 'Basic',
       },
@@ -106,7 +106,7 @@ export default {
     type: {
       description:
         'Type of the <code>input</code> element. It should be <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input#Form_%3Cinput%3E_types">a valid HTML5 input type</a>.',
-      control: 'text',
+      control: { type: 'text' as const },
       table: {
         category: 'Others',
       },
@@ -117,7 +117,7 @@ export default {
       },
     },
     extraMessage: {
-      control: 'text',
+      control: { type: 'text' as const },
       table: {
         category: 'Status',
       },
@@ -126,7 +126,7 @@ export default {
     color: {
       description:
         'Only used for the color of success/error. If neither success status nor error status, can just leave it `undefined` or assign `"primary"` to it.',
-      control: 'radio',
+      control: { type: 'radio' as const },
       options: ['primary', 'success', 'error'],
       table: {
         category: 'Status',
@@ -154,14 +154,14 @@ export default {
       },
     },
     icon: {
-      control: 'none',
+      control: false,
       table: {
         category: 'Status',
       },
     },
     id: {
       description: 'The unique id (HTML attribute)',
-      control: 'text',
+      control: { type: 'text' as const },
       table: {
         category: 'Basic',
       },

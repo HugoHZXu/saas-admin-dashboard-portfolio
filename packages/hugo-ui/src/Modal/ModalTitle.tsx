@@ -5,13 +5,18 @@ import DialogTitle, { DialogTitleProps } from '@mui/material/DialogTitle';
 import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
 import WarningAmberIcon from '@mui/icons-material/WarningAmber';
-import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
+import ErrorOutlineOutlinedIcon from '@mui/icons-material/ErrorOutlineOutlined';
 import ErrorIcon from '@mui/icons-material/Error';
 import { HugoUIModalType } from './Modal';
 import { HugoUIBaseProps } from '../types/base';
 import { createDialogTitleTheme, StyledModalHeader } from './styles/modalStyles';
 import { TITLE_ROOT_PREFIX } from './styles/modalTokens';
 import { useIntl } from 'react-intl';
+
+type HugoUIModalTitleIconProps = {
+  className?: string;
+  fontSize?: 'inherit' | 'small' | 'medium' | 'large';
+};
 
 export interface HugoUIModalTitleProps extends HugoUIBaseProps, Omit<DialogTitleProps, 'title'> {
   type?: HugoUIModalType;
@@ -47,8 +52,9 @@ export const HugoUIModalTitle = ({
   const renderIcon = () => {
     let ariaLabel;
     if (prefixIcon) {
-      return React.cloneElement(prefixIcon, {
-        className: classnames(`${TITLE_ROOT_PREFIX}-icon`, prefixIcon.props.className),
+      const iconProps = prefixIcon.props as HugoUIModalTitleIconProps;
+      return React.cloneElement(prefixIcon as React.ReactElement<HugoUIModalTitleIconProps>, {
+        className: classnames(`${TITLE_ROOT_PREFIX}-icon`, iconProps.className),
         fontSize: 'inherit',
       });
     }
@@ -78,7 +84,7 @@ export const HugoUIModalTitle = ({
       case 'error':
         ariaLabel = intl.formatMessage({ id: 'hugoUI.statusIcon.alert', defaultMessage: 'alert' });
         return (
-          <ErrorOutlineIcon
+          <ErrorOutlineOutlinedIcon
             role="img"
             aria-label={ariaLabel}
             className={`${TITLE_ROOT_PREFIX}-icon`}

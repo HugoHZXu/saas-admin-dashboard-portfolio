@@ -2,6 +2,8 @@ import React, { ChangeEvent, useState, useEffect } from 'react';
 import classnames from 'classnames';
 import { useId } from '../utils/useId';
 import TextField, { TextFieldProps } from '@mui/material/TextField';
+import type { InputLabelProps as MuiInputLabelProps } from '@mui/material/InputLabel';
+import type { OutlinedInputProps } from '@mui/material/OutlinedInput';
 import { createInputTheme, InputContainer } from './styles/inputStyles';
 import { ThemeProvider, useTheme } from '@mui/material/styles';
 import { HugoUILoading } from '../Loading/Loading';
@@ -50,8 +52,24 @@ export type HugoUIInputExtraProps = {
   autoFocusByKeyboard?: boolean;
 };
 
+export type HugoUIInputLegacyProps = {
+  /**
+   * Legacy MUI v5 prop. Prefer `slotProps.input` for new code.
+   */
+  InputProps?: Partial<OutlinedInputProps>;
+  /**
+   * Legacy MUI v5 prop. Prefer `slotProps.htmlInput` for new code.
+   */
+  inputProps?: React.InputHTMLAttributes<HTMLInputElement>;
+  /**
+   * Legacy MUI v5 prop. Prefer `slotProps.inputLabel` for new code.
+   */
+  InputLabelProps?: Partial<MuiInputLabelProps>;
+};
+
 export type HugoUIInputProps = Omit<TextFieldProps, 'value' | 'placeholder'> &
-  HugoUIInputExtraProps;
+  HugoUIInputExtraProps &
+  HugoUIInputLegacyProps;
 
 const DEFAULT_MAX_LENGTH = 500;
 
@@ -74,6 +92,7 @@ export const HugoUIInput = (props: HugoUIInputProps) => {
     showCount = true,
     loading = false,
     InputLabelProps,
+    slotProps,
     fullWidth,
     required,
     placeholder = '',
@@ -208,6 +227,11 @@ export const HugoUIInput = (props: HugoUIInputProps) => {
   const describedByIds = [(helperText || extraMessage || (multiline && showCount)) && helperTextId]
     .filter(Boolean)
     .join(' ');
+  const inputSlotProps = typeof slotProps?.input === 'function' ? undefined : slotProps?.input;
+  const htmlInputSlotProps =
+    typeof slotProps?.htmlInput === 'function' ? undefined : slotProps?.htmlInput;
+  const inputLabelSlotProps =
+    typeof slotProps?.inputLabel === 'function' ? undefined : slotProps?.inputLabel;
 
   return (
     <ThemeProvider theme={inputTheme}>
@@ -238,40 +262,46 @@ export const HugoUIInput = (props: HugoUIInputProps) => {
           helperText={
             (helperText || extraMessage || (multiline && showCount)) && renderHelperText()
           }
-          InputProps={{
-            ...InputProps,
-            endAdornment: adornmentIcon || InputProps?.endAdornment,
-          }}
-          inputProps={{
-            maxLength: DEFAULT_MAX_LENGTH,
-            readOnly: void 0,
-            onFocus: handleInputFocused,
-            'aria-required': !!required,
-            'aria-busy': loading,
-            'aria-labelledby': labelId,
-            'aria-describedby': describedByIds || undefined,
-            'aria-invalid': color === 'error',
-            required: !!required,
-            onKeyDown: (e) => {
-              if (!multiline && e.key === 'Enter') {
-                onBlur?.(e as unknown as React.FocusEvent<HTMLInputElement>);
-              }
+          slotProps={{
+            ...slotProps,
+            input: {
+              ...inputSlotProps,
+              ...InputProps,
+              endAdornment: adornmentIcon || InputProps?.endAdornment,
             },
-            ...inputProps,
-          }}
+            htmlInput: {
+              maxLength: DEFAULT_MAX_LENGTH,
+              readOnly: void 0,
+              onFocus: handleInputFocused,
+              'aria-required': !!required,
+              'aria-busy': loading,
+              'aria-labelledby': labelId,
+              'aria-describedby': describedByIds || undefined,
+              'aria-invalid': color === 'error',
+              required: !!required,
+              onKeyDown: (e: React.KeyboardEvent<HTMLInputElement>) => {
+                if (!multiline && e.key === 'Enter') {
+                  onBlur?.(e as unknown as React.FocusEvent<HTMLInputElement>);
+                }
+              },
+              ...htmlInputSlotProps,
+              ...inputProps,
+            },
+            inputLabel: {
+              id: labelId,
+              shrink: inputHasFocus || !!value,
+              ...(inputProps?.id ? { htmlFor: inputProps?.id } : {}),
+              ...inputLabelSlotProps,
+              ...InputLabelProps,
+              className: classnames(InputLabelProps?.className, {
+                'HugoUIInput-label-required': !!required,
+              }),
+            },
+          } as TextFieldProps['slotProps']}
           label={labelNode}
           placeholder={placeholderText}
           onMouseDown={handleClick}
           onBlur={handleBlur}
-          InputLabelProps={{
-            id: labelId,
-            shrink: inputHasFocus || !!value,
-            ...(inputProps?.id ? { htmlFor: inputProps?.id } : {}),
-            ...InputLabelProps,
-            className: classnames(InputLabelProps?.className, {
-              'HugoUIInput-label-required': !!required,
-            }),
-          }}
           fullWidth={fullWidth}
           {...otherProps}
         />

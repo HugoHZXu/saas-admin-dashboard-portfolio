@@ -102,7 +102,6 @@ export type HugoUIButtonProps =
   | HugoUITertiaryButtonProps
   | HugoUIDestructButtonProps;
 
-// eslint-disable-next-line react/display-name
 export const HugoUIButton = React.forwardRef<HTMLButtonElement, HugoUIButtonProps>((props, ref) => {
   const {
     className,

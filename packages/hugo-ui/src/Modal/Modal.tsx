@@ -143,6 +143,7 @@ export const HugoUIModal = ({
   messages,
   headerPrefixIcon,
   disableAutoFocus,
+  slots,
   ...props
 }: HugoUIModalProps) => {
   const intl = useIntl();
@@ -318,7 +319,10 @@ export const HugoUIModal = ({
             onClose?.();
           }
         }}
-        TransitionComponent={TransitionZoom}
+        slots={{
+          transition: TransitionZoom,
+          ...slots,
+        }}
         transitionDuration={{
           appear: 300,
           enter: 300,

@@ -9,6 +9,9 @@ module.exports = {
       },
     ],
   },
+  transformIgnorePatterns: [
+    '/node_modules/(?!(@formatjs|intl-messageformat|react-intl)/)',
+  ],
   moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx', 'json'],
   setupFilesAfterEnv: ['<rootDir>/setupTests.ts'],
   moduleNameMapper: {

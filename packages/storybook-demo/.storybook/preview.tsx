@@ -1,11 +1,11 @@
 import type { Preview } from '@storybook/react';
-import { Title, Description, Primary, ArgsTable, Stories } from '@storybook/blocks';
+import { Title, Description, Primary, Controls } from '@storybook/addon-docs/blocks';
 import 'myshadcn/styles.css';
 import { HugoUIProvider, hugoUITheme } from 'hugo-ui';
 import enMessages from '../../hugo-ui/src/lang/en.json';
 import zhMessages from '../../hugo-ui/src/lang/zh.json';
 import arMessages from '../../hugo-ui/src/lang/ar.json';
-import { expect } from '@storybook/test';
+import { expect } from 'storybook/test';
 import * as matchers from '@testing-library/jest-dom/matchers';
 
 expect.extend(matchers);
@@ -43,7 +43,7 @@ const preview: Preview = {
           <Title />
           <Description />
           <Primary />
-          <ArgsTable />
+          <Controls />
         </>
       ),
     },

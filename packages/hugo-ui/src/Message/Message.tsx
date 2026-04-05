@@ -142,33 +142,33 @@ export const HugoUIMessage = ({
       break;
   }
 
-  const textContent = (elem: React.ReactElement | string): string => {
+  const textContent = (elem: React.ReactNode): string => {
     if (!elem) {
       return '';
     }
     if (typeof elem === 'string') {
       return elem;
     }
+    if (!React.isValidElement(elem)) {
+      return '';
+    }
 
-    const children = elem.props && elem.props.children;
+    const children = (elem.props as { children?: React.ReactNode } | undefined)?.children;
     if (children instanceof Array) {
       return children.map(textContent).join(' ');
     }
     return textContent(children);
   };
 
-  let _iconAriaProps = {};
-  if (iconAriaProps) {
-    _iconAriaProps = {
-      ...iconAriaProps,
-      'aria-label':
-        iconAriaProps['aria-label'] !== undefined ? iconAriaProps['aria-label'] : iconLabel,
-    };
-  } else {
-    _iconAriaProps = {
-      'aria-label': iconLabel,
-    };
-  }
+  const _iconAriaProps = iconAriaProps
+    ? {
+        ...iconAriaProps,
+        'aria-label':
+          iconAriaProps['aria-label'] !== undefined ? iconAriaProps['aria-label'] : iconLabel,
+      }
+    : {
+        'aria-label': iconLabel,
+      };
 
   const isSuccess = type === 'success' || type === 'destructiveSuccess';
   const StatusIcon = isSuccess ? CheckCircleIcon : ErrorIcon;

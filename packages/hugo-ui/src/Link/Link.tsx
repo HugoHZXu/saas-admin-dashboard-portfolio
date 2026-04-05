@@ -64,7 +64,6 @@ export const useLinkAriaLabel = (props: UseLinkAriaLabelProps) => {
     : label;
 };
 
-// eslint-disable-next-line react/display-name
 export const HugoUILink = React.forwardRef<HTMLAnchorElement, HugoUILinkProps>((props, ref) => {
   const {
     children,

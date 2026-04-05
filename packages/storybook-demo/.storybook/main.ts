@@ -1,16 +1,17 @@
 import type { StorybookConfig } from '@storybook/react-vite';
 import path from 'path';
+import { fileURLToPath } from 'url';
 import tailwindcss from '@tailwindcss/postcss';
 import autoprefixer from 'autoprefixer';
+
+const dirname = path.dirname(fileURLToPath(import.meta.url));
 
 const config: StorybookConfig = {
   framework: '@storybook/react-vite',
   stories: ['../src/**/*.stories.@(ts|tsx)', '../src/**/*.mdx'],
   addons: [
-    '@storybook/addon-essentials',
     '@storybook/addon-a11y',
-    '@storybook/addon-interactions',
-    '@storybook/addon-links'
+    '@storybook/addon-docs'
   ],
   docs: {
     autodocs: 'tag'
@@ -25,29 +26,29 @@ const config: StorybookConfig = {
     const hugoUIAliases = [
       {
         find: 'hugo-ui/styles/theme',
-        replacement: path.resolve(__dirname, '../../hugo-ui/src/styles/theme.ts')
+        replacement: path.resolve(dirname, '../../hugo-ui/src/styles/theme.ts')
       },
       {
         find: 'hugo-ui/utils/wcagUtils',
-        replacement: path.resolve(__dirname, '../../hugo-ui/src/utils/wcagUtils.ts')
+        replacement: path.resolve(dirname, '../../hugo-ui/src/utils/wcagUtils.ts')
       },
       {
         find: /^hugo-ui$/,
-        replacement: path.resolve(__dirname, '../../hugo-ui/src/index.ts')
+        replacement: path.resolve(dirname, '../../hugo-ui/src/index.ts')
       }
     ];
     const myshadcnAliases = [
       {
         find: '@/',
-        replacement: `${path.resolve(__dirname, '../../myshadcn/src')}/`
+        replacement: `${path.resolve(dirname, '../../myshadcn/src')}/`
       },
       {
         find: 'myshadcn/styles.css',
-        replacement: path.resolve(__dirname, '../../myshadcn/src/styles/globals.css')
+        replacement: path.resolve(dirname, '../../myshadcn/src/styles/globals.css')
       },
       {
         find: /^myshadcn$/,
-        replacement: path.resolve(__dirname, '../../myshadcn/src/index.ts')
+        replacement: path.resolve(dirname, '../../myshadcn/src/index.ts')
       }
     ];
     // Put our specific subpath aliases before any existing aliases.

@@ -2,6 +2,9 @@
   "extends": "./tsconfig.json",
   "compilerOptions": {
     "allowJs": true,
+    "module": "commonjs",
+    "rootDir": ".",
     "types": ["jest", "@testing-library/jest-dom", "node"]
-  }
+  },
+  "include": ["src", "setupTests.ts"]
 }
