@@ -1,14 +1,12 @@
 # Dependency Upgrade Notes
 
-Date: 2026-05-26
+Date: 2026-04-05
 
 ## Scope
 
-This upgrade modernizes the `admin-dashboard` workspace baseline before any new Table work.
+This upgrade modernizes the `admin-dashboard` workspace baseline before portfolio feature work.
 It covers the root tooling, `packages/hugo-ui`, `packages/myshadcn`, and
 `packages/storybook-demo`.
-
-The legacy `Table` folder was not changed.
 
 ## Environment
 
@@ -23,30 +21,30 @@ warning-free install with the latest dev tooling.
 
 ## Major Version Targets
 
-| Area | Before | After |
-| --- | --- | --- |
-| React | 18.x | `19.2.6` |
-| MUI | `5.15.14` | `9.0.1` |
-| Emotion | 11.11.x | `11.14.x` |
-| react-intl | `6.6.4` | `10.1.9` |
-| Storybook | `7.6.17` | `10.4.1` |
-| Vite | `5.2.10` | `8.0.14` |
-| TypeScript | `5.4.5` | `6.0.3` |
-| Jest | `29.7.0` | `30.4.x` |
-| ESLint | `8.57.0` | `10.4.0` |
-| Tailwind | `4.2.1` | `4.3.0` |
+| Area       | Before    | After     |
+| ---------- | --------- | --------- |
+| React      | 18.x      | `19.2.6`  |
+| MUI        | `5.15.14` | `9.0.1`   |
+| Emotion    | 11.11.x   | `11.14.x` |
+| react-intl | `6.6.4`   | `10.1.9`  |
+| Storybook  | `7.6.17`  | `10.4.1`  |
+| Vite       | `5.2.10`  | `8.0.14`  |
+| TypeScript | `5.4.5`   | `6.0.3`   |
+| Jest       | `29.7.0`  | `30.4.x`  |
+| ESLint     | `8.57.0`  | `10.4.0`  |
+| Tailwind   | `4.2.1`   | `4.3.0`   |
 
 ## Migration Work
 
-- Replaced legacy ESLint `.eslintrc.cjs` with `eslint.config.mjs` flat config.
+- Replaced the previous ESLint `.eslintrc.cjs` setup with `eslint.config.mjs` flat config.
 - Migrated Storybook config to Storybook 10:
   - Switched docs block imports to `@storybook/addon-docs/blocks`.
   - Switched interaction/action helpers to `storybook/test` and `storybook/actions`.
-  - Removed legacy `@storybook/addons`, `@storybook/core-events`, essentials/interactions
+  - Removed deprecated `@storybook/addons`, `@storybook/core-events`, essentials/interactions
     package usage.
   - Updated `.storybook/main.ts` to ESM-safe `import.meta.url` path resolution.
 - Migrated MUI usage for v9:
-  - `TextField` legacy `InputProps`, `inputProps`, and `InputLabelProps` are internally
+  - `TextField` MUI v5 compatibility props `InputProps`, `inputProps`, and `InputLabelProps` are internally
     mapped to `slotProps`.
   - `Dialog` transition now uses `slots.transition`.
   - Button style overrides no longer rely on removed composed icon-size override keys.
@@ -76,7 +74,7 @@ It runs:
 
 Latest successful results:
 
-- `hugo-ui`: 16 Jest suites, 136 tests passed.
+- `hugo-ui`: 18 Jest suites, 151 tests passed.
 - `myshadcn`: 2 Jest suites, 2 tests passed.
 - `hugo-ui` and `myshadcn` library builds passed.
 - Storybook static build passed on Storybook `10.4.1`.

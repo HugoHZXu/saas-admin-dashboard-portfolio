@@ -6,6 +6,7 @@
 - `packages/hugo-ui` is the primary component library and source of truth for shared components.
 - `packages/myshadcn` is a secondary component package for shadcn-style and Tailwind-based implementations.
 - `packages/storybook-demo` is the interactive verification surface for both libraries.
+- The broader product direction is a desensitized B2B SaaS admin dashboard portfolio. Use `docs/project-brief.md`, `docs/desensitization-rules.md`, and `docs/implementation-roadmap.md` as working context before expanding dashboard features.
 
 ## Core Boundaries
 
@@ -14,6 +15,17 @@
 - Preserve user changes already present in the worktree. Do not revert unrelated edits.
 - Keep `hugo-ui` and `myshadcn` responsibilities separate. Do not move experimental `myshadcn` implementations into `hugo-ui` unless the user explicitly asks for it.
 - When touching shared infra such as providers, aliases, tokens, exports, or Storybook config, prefer the smallest viable change. Do not do opportunistic cleanup in the same patch.
+- Do not add private company code, real customer data, real endpoints, access tokens, screenshots, production logs, or internal business rules.
+- Use only synthetic B2B SaaS admin examples such as Organization, User, Domain, Admin, Role, Status, and Activity Log.
+
+## Portfolio-Specific Guardrails
+
+- Keep `Table` generic. Do not add page-level search, filters, batch actions, route navigation, or data-fetching behavior directly to `Table`.
+- Put Organization-specific search, filters, query state, sorting behavior, pagination behavior, and navigation in page-level code or the BFF/mock service layer.
+- Render status pills with `StatusTag` instead of hardcoded story or page styles.
+- Shared UI styling should use `hugo-ui` theme roles, typography, and component-scoped token files.
+- Mock data must be synthetic and should not resemble real customer records.
+- Do not write final public README or portfolio narrative ahead of implemented dashboard flows unless the user explicitly asks for it.
 
 ## Plan Before Editing
 
@@ -132,6 +144,8 @@ Follow the default validation ladder and expand only when risk or scope requires
 - Build all packages and Storybook: `npm run build:all`
 - Full repo verification: `npm run verify`
 - Create a changeset: `npm run changeset`
+
+Use Node.js `22.12.0` or newer for validation. If the shell resolves an older Node version, prefix commands with `PATH="$HOME/.nvm/versions/node/v22.12.0/bin:$PATH"`.
 
 ## Package Notes
 

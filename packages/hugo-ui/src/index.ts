@@ -7,7 +7,9 @@ export { HugoUIModalFooter as ModalFooter } from './Modal';
 export { HugoUIModalContentText as ModalContentText } from './Modal';
 export { HugoUIFeedback as Feedback } from './Modal';
 export { HugoUIMessage as Message } from './Message';
+export { HugoUIStatusTag as StatusTag } from './StatusTag';
 export { HugoUITypography as Typography } from './Typography';
+export { HugoUITable as Table } from './Table/Table';
 export type { HugoUIInputProps, HugoUIInputExtraProps } from './Input/Input';
 export type {
   HugoUIButtonCommonProps,
@@ -46,9 +48,19 @@ export type {
   HugoUIMessageProps as MessageProps,
 } from './Message';
 export type {
+  HugoUIStatusTagProps as StatusTagProps,
+  HugoUIStatusTagTone as StatusTagTone,
+} from './StatusTag';
+export type {
   HugoUITypographyProps as TypographyProps,
   HugoUITypographyVariantType as TypographyVariantType,
 } from './Typography';
+export type {
+  HugoUITableProps as TableProps,
+  HugoUITableColumn as TableColumn,
+  HugoUITableSort as TableSort,
+  HugoUITablePagination as TablePagination,
+} from './Table/Table';
 export { hugoUITheme } from './styles/theme';
 export { HugoUIProvider } from './provider';
 export type { HugoUIProviderProps } from './provider';

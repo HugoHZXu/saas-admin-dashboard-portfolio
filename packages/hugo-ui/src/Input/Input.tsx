@@ -52,24 +52,24 @@ export type HugoUIInputExtraProps = {
   autoFocusByKeyboard?: boolean;
 };
 
-export type HugoUIInputLegacyProps = {
+export type HugoUIInputCompatibilityProps = {
   /**
-   * Legacy MUI v5 prop. Prefer `slotProps.input` for new code.
+   * MUI v5 compatibility prop. Prefer `slotProps.input` for new code.
    */
   InputProps?: Partial<OutlinedInputProps>;
   /**
-   * Legacy MUI v5 prop. Prefer `slotProps.htmlInput` for new code.
+   * MUI v5 compatibility prop. Prefer `slotProps.htmlInput` for new code.
    */
   inputProps?: React.InputHTMLAttributes<HTMLInputElement>;
   /**
-   * Legacy MUI v5 prop. Prefer `slotProps.inputLabel` for new code.
+   * MUI v5 compatibility prop. Prefer `slotProps.inputLabel` for new code.
    */
   InputLabelProps?: Partial<MuiInputLabelProps>;
 };
 
 export type HugoUIInputProps = Omit<TextFieldProps, 'value' | 'placeholder'> &
   HugoUIInputExtraProps &
-  HugoUIInputLegacyProps;
+  HugoUIInputCompatibilityProps;
 
 const DEFAULT_MAX_LENGTH = 500;
 
