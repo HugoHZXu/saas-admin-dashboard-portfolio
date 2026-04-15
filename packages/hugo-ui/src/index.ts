@@ -10,6 +10,10 @@ export { HugoUIMessage as Message } from './Message';
 export { HugoUIStatusTag as StatusTag } from './StatusTag';
 export { HugoUITypography as Typography } from './Typography';
 export { HugoUITable as Table } from './Table/Table';
+export { HugoUISearchBox as SearchBox } from './SearchBox';
+export { HugoUIToggle as Toggle } from './Toggle';
+export { HugoUIPageTemplate as PageTemplate } from './Templates';
+export { HugoUIContentTemplate as ContentTemplate } from './Templates';
 export type { HugoUIInputProps, HugoUIInputExtraProps } from './Input/Input';
 export type {
   HugoUIButtonCommonProps,
@@ -61,6 +65,15 @@ export type {
   HugoUITableSort as TableSort,
   HugoUITablePagination as TablePagination,
 } from './Table/Table';
+export type { HugoUISearchBoxProps as SearchBoxProps } from './SearchBox';
+export type { HugoUIToggleProps as ToggleProps, HugoUIToggleOption as ToggleOption } from './Toggle';
+export type {
+  HugoUIPageTemplateProps as PageTemplateProps,
+  HugoUIPageTemplateNavItem as PageTemplateNavItem,
+  HugoUIPageTemplateNavProps as PageTemplateNavProps,
+  HugoUIContentTemplateProps as ContentTemplateProps,
+  HugoUIContentTemplateType as ContentTemplateType,
+} from './Templates';
 export { hugoUITheme } from './styles/theme';
 export { HugoUIProvider } from './provider';
 export type { HugoUIProviderProps } from './provider';
