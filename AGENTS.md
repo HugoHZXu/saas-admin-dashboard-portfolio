@@ -6,7 +6,7 @@
 - `packages/hugo-ui` is the primary component library and source of truth for shared components.
 - `packages/myshadcn` is a secondary component package for shadcn-style and Tailwind-based implementations.
 - `packages/storybook-demo` is the interactive verification surface for both libraries.
-- The broader product direction is a desensitized B2B SaaS admin dashboard portfolio. Use `docs/project-brief.md`, `docs/desensitization-rules.md`, and `docs/implementation-roadmap.md` as working context before expanding dashboard features.
+- The broader product direction is a desensitized B2B SaaS admin dashboard portfolio. Use `docs/project-brief.md`, `docs/desensitization-rules.md`, `docs/implementation-roadmap.md`, and `docs/agent-workflow.md` as working context before expanding dashboard features.
 
 ## Core Boundaries
 
@@ -20,12 +20,45 @@
 
 ## Portfolio-Specific Guardrails
 
+- Treat this repository as a desensitized B2B SaaS admin dashboard portfolio, not an open-source copy of any prior product.
+- Preserve reusable capability patterns only. Do not copy private implementation assets, class names, token names, endpoint names, screenshots, customer data, permission rules, or product-specific wording from external/internal projects.
 - Keep `Table` generic. Do not add page-level search, filters, batch actions, route navigation, or data-fetching behavior directly to `Table`.
 - Put Organization-specific search, filters, query state, sorting behavior, pagination behavior, and navigation in page-level code or the BFF/mock service layer.
+- `SearchBox` is the preferred search control for table search. Do not build search fields by composing the generic `Input` unless the user explicitly asks for an input-only prototype.
+- Search and Filter are mutually exclusive table control modes in this dashboard pattern. Use a `Toggle`-style mode switch instead of showing search and filter controls side by side.
+- Do not build complete frontend-only query behavior for Organization Table before the BFF/mock service contract exists. Loading, error, empty, pagination, filtering, and sorting should ultimately be driven by the BFF response shape.
 - Render status pills with `StatusTag` instead of hardcoded story or page styles.
+- Keep business state to visual tone mapping in the app/business layer; `StatusTag` stays visual and generic.
 - Shared UI styling should use `hugo-ui` theme roles, typography, and component-scoped token files.
 - Mock data must be synthetic and should not resemble real customer records.
 - Do not write final public README or portfolio narrative ahead of implemented dashboard flows unless the user explicitly asks for it.
+
+## Design System Rules
+
+- `packages/hugo-ui/src/styles/color.ts` is the raw palette. `packages/hugo-ui/src/styles/colorRoles.ts` is the semantic role layer.
+- Components should consume `theme.hugoUIColorRoles` first. Use `theme.hugoUIColors` only as an escape hatch when no semantic role fits.
+- If the same raw color is needed by more than one component for the same purpose, prefer adding or reusing a semantic role instead of repeating `hugoUIColors` references.
+- Do not use `alpha(...)` to invent hover, selected, active, or status colors when an existing raw token or semantic role fits. Use `alpha(...)` only for deliberate transparency effects that cannot be represented by existing tokens.
+- Hover and selected surfaces should prefer low-contrast semantic surface roles such as `surface.tinted`, not high-contrast brand or accent colors.
+- Public component styling should be split into component logic, style files, and token files. Avoid embedding theme decisions directly in component JSX.
+- `org-management` must not use standalone CSS files for application styling. Use Emotion/MUI `styled` or `GlobalStyles`, and consume design-system tokens.
+- Public `hugo-ui` component changes must include tests, Storybook stories, export updates, and a changeset when the consumer-visible surface changes.
+
+## Current Architecture Boundaries
+
+- `packages/hugo-ui`: design system, generic components, theme tokens, and component-level tests.
+- `packages/storybook-demo`: component demos and visual state coverage. Do not place business logic here.
+- `packages/org-management`: standalone dashboard app, routing, page state, table toolbar behavior, and temporary UI skeletons.
+- Future BFF/mock service: data aggregation, Organization/User list contracts, pagination/filter/sort execution, and Activity Log event normalization.
+- Shared types can be introduced when they clarify the contract between app and BFF/mock service; do not add shared packages speculatively.
+
+## Project Skills
+
+- Use `$portfolio-desensitization-review` when adding mock data, business copy, docs, README content, or code adapted from prior experience.
+- Use `$hugo-ui-component-change` when changing or adding `hugo-ui` components, props, exports, stories, tests, or component tokens.
+- Use `$design-token-audit` before changing color roles, raw palette usage, hover/selected states, status colors, or header/surface styling.
+- Use `$admin-dashboard-feature-slice` before implementing Organization Table, Organization Detail, Activity Log, or future User Management slices.
+- Use `$activity-log-normalization` before implementing Activity Log BFF normalization or audit-event view models.
 
 ## Plan Before Editing
 
@@ -72,6 +105,7 @@ For high-risk changes:
 - Public API or consumer-visible package changes require a changeset unless the user explicitly waives it.
 - Export changes must keep package entrypoints, consumer import paths, and relevant README examples aligned.
 - Generated output must not be left behind in the worktree unless the user explicitly asked for build artifacts.
+- Do not start a local dev server after code updates unless the user explicitly asks for it. Developers will start dev servers themselves.
 - Validation must follow the default ladder below unless the task is investigation-only or the user requested a narrower scope.
 
 ## Default Validation Ladder
@@ -146,6 +180,7 @@ Follow the default validation ladder and expand only when risk or scope requires
 - Create a changeset: `npm run changeset`
 
 Use Node.js `22.12.0` or newer for validation. If the shell resolves an older Node version, prefix commands with `PATH="$HOME/.nvm/versions/node/v22.12.0/bin:$PATH"`.
+Do not run `npm run dev:*` or `npm run storybook` at the end of an implementation unless the user explicitly asks for a running local server.
 
 ## Package Notes
 

@@ -1,0 +1,4 @@
+interface:
+  display_name: "Admin Dashboard Feature Slice"
+  short_description: "Keep dashboard feature work inside the right app/BFF/component boundaries."
+  default_prompt: "Use $admin-dashboard-feature-slice to plan this dashboard feature across app, BFF/mock, shared types, and hugo-ui boundaries."

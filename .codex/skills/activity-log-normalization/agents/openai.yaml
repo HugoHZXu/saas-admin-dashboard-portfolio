@@ -1,0 +1,4 @@
+interface:
+  display_name: "Activity Log Normalization"
+  short_description: "Design BFF-owned audit event normalization for Activity Log."
+  default_prompt: "Use $activity-log-normalization to design or review this Activity Log event normalization work."
