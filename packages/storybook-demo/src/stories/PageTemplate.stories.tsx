@@ -35,6 +35,30 @@ const DemoContent = () => (
   </div>
 );
 
+const TallDemoContent = () => (
+  <div
+    style={{
+      display: 'grid',
+      gap: 16,
+    }}
+  >
+    {Array.from({ length: 16 }).map((_, index) => (
+      <div
+        key={index}
+        style={{
+          minHeight: 96,
+          border: '1px solid #d5d7de',
+          borderRadius: 8,
+          background: '#fff',
+          padding: 24,
+        }}
+      >
+        Dashboard section {index + 1}
+      </div>
+    ))}
+  </div>
+);
+
 const meta = {
   title: 'HugoUI/Templates/PageTemplate',
   component: PageTemplate,
@@ -93,6 +117,22 @@ export const ChildSelected: Story = {
       }}
     >
       <DemoContent />
+    </PageTemplate>
+  ),
+};
+
+export const ScrollableMainContent: Story = {
+  render: () => (
+    <PageTemplate
+      appTitle="Organization Management"
+      appIcon={<BusinessIcon />}
+      navProps={{
+        navItems,
+        defaultSelected: 'activityLog',
+        defaultExpanded: ['organizations'],
+      }}
+    >
+      <TallDemoContent />
     </PageTemplate>
   ),
 };

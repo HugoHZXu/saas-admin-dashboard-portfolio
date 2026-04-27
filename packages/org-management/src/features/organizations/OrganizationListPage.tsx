@@ -13,8 +13,9 @@ import {
   Toggle,
   ToggleOption,
 } from 'hugo-ui';
+import { useOrganizationsQuery } from '@/api/orgManagementApi';
+import { Organization, OrganizationListInput, OrganizationStatus } from '@/api/types';
 import { getOrganizationDetailPath } from '@/routes/paths';
-import { Organization, OrganizationStatus, organizations } from './mockOrganizations';
 import {
   FilterModePanel,
   OrganizationCell,
@@ -26,38 +27,43 @@ import {
   SummaryGrid,
   SummaryLabel,
   SummaryValue,
+  StatusFilterButton,
   TableToolbar,
 } from './OrganizationListPage.styles';
 
 type TableControlMode = 'search' | 'filter';
 
 const statusToneMap: Record<OrganizationStatus, StatusTagTone> = {
-  Active: 'success',
-  Paused: 'warning',
-  Archived: 'neutral',
+  active: 'success',
+  inactive: 'warning',
+  archived: 'neutral',
 };
 
-const sortOrganizations = (rows: Organization[], sort: TableSort) => {
-  if (!sort) {
-    return rows;
-  }
+const statusOptions: { value: OrganizationStatus; label: string }[] = [
+  { value: 'active', label: 'Active' },
+  { value: 'inactive', label: 'Inactive' },
+  { value: 'archived', label: 'Archived' },
+];
 
-  return [...rows].sort((first, second) => {
-    const direction = sort.direction === 'asc' ? 1 : -1;
+const sortFieldMap: Record<string, string> = {
+  name: 'name',
+  status: 'status',
+  users: 'userCount',
+  admins: 'adminCount',
+  domains: 'domainCount',
+  lastUpdatedOn: 'lastUpdatedOn',
+};
 
-    switch (sort.columnId) {
-      case 'name':
-        return first.name.localeCompare(second.name) * direction;
-      case 'status':
-        return first.status.localeCompare(second.status) * direction;
-      case 'users':
-        return (first.users - second.users) * direction;
-      case 'domains':
-        return (first.domains - second.domains) * direction;
-      default:
-        return 0;
-    }
-  });
+const formatStatusLabel = (status: OrganizationStatus) => {
+  const option = statusOptions.find((item) => item.value === status);
+
+  return option?.label ?? status;
+};
+
+const formatDate = (value: string) => {
+  return new Intl.DateTimeFormat(undefined, {
+    dateStyle: 'medium',
+  }).format(new Date(value));
 };
 
 const organizationColumns: TableColumn<Organization>[] = [
@@ -69,7 +75,7 @@ const organizationColumns: TableColumn<Organization>[] = [
     render: (row) => (
       <OrganizationCell>
         <OrganizationName>{row.name}</OrganizationName>
-        <OrganizationDomain>{row.primaryDomain}</OrganizationDomain>
+        <OrganizationDomain>{row.domains[0]?.name ?? 'No domain'}</OrganizationDomain>
       </OrganizationCell>
     ),
   },
@@ -78,13 +84,15 @@ const organizationColumns: TableColumn<Organization>[] = [
     header: 'Status',
     sortable: true,
     minWidth: 120,
-    render: (row) => <StatusTag tone={statusToneMap[row.status]}>{row.status}</StatusTag>,
+    render: (row) => (
+      <StatusTag tone={statusToneMap[row.status]}>{formatStatusLabel(row.status)}</StatusTag>
+    ),
   },
   {
-    id: 'plan',
-    header: 'Plan',
-    minWidth: 140,
-    render: (row) => row.plan,
+    id: 'country',
+    header: 'Country',
+    minWidth: 120,
+    render: (row) => row.country,
   },
   {
     id: 'users',
@@ -92,7 +100,15 @@ const organizationColumns: TableColumn<Organization>[] = [
     sortable: true,
     align: 'right',
     width: 120,
-    render: (row) => row.users,
+    render: (row) => row.userCount,
+  },
+  {
+    id: 'admins',
+    header: 'Admins',
+    sortable: true,
+    align: 'right',
+    width: 120,
+    render: (row) => row.adminCount ?? row.admins.length,
   },
   {
     id: 'domains',
@@ -100,13 +116,14 @@ const organizationColumns: TableColumn<Organization>[] = [
     sortable: true,
     align: 'right',
     width: 120,
-    render: (row) => row.domains,
+    render: (row) => row.domains.length,
   },
   {
-    id: 'lastActivity',
-    header: 'Last activity',
+    id: 'lastUpdatedOn',
+    header: 'Last updated',
+    sortable: true,
     minWidth: 160,
-    render: (row) => row.lastActivity,
+    render: (row) => formatDate(row.lastUpdatedOn),
   },
 ];
 
@@ -120,39 +137,78 @@ export function OrganizationListPage() {
   const [search, setSearch] = useState('');
   const [controlMode, setControlMode] = useState<TableControlMode>('search');
   const [sort, setSort] = useState<TableSort>({ columnId: 'name', direction: 'asc' });
+  const [page, setPage] = useState(0);
+  const [pageSize, setPageSize] = useState(5);
+  const [statusFilters, setStatusFilters] = useState<OrganizationStatus[]>([]);
 
-  const visibleOrganizations = useMemo(() => {
-    const query = controlMode === 'search' ? search.trim().toLowerCase() : '';
-    const filteredRows = query
-      ? organizations.filter((organization) =>
-          [organization.name, organization.primaryDomain, organization.plan, organization.status]
-            .join(' ')
-            .toLowerCase()
-            .includes(query)
-        )
-      : organizations;
+  const queryInput = useMemo<OrganizationListInput>(
+    () => ({
+      pageNumber: page,
+      pageSize,
+      sortField: sort?.columnId ? sortFieldMap[sort.columnId] : undefined,
+      sortDirection: sort?.direction ?? undefined,
+      searchString: controlMode === 'search' ? search.trim() || undefined : undefined,
+      statuses: controlMode === 'filter' && statusFilters.length > 0 ? statusFilters : undefined,
+    }),
+    [controlMode, page, pageSize, search, sort, statusFilters]
+  );
 
-    return sortOrganizations(filteredRows, sort);
-  }, [controlMode, search, sort]);
+  const organizationsQuery = useOrganizationsQuery(queryInput);
+  const organizationPage = organizationsQuery.data?.organizations ?? null;
+
+  const visibleOrganizations = organizationPage?.items ?? [];
 
   const summary = useMemo(
     () => ({
-      active: organizations.filter((organization) => organization.status === 'Active').length,
-      users: organizations.reduce((total, organization) => total + organization.users, 0),
-      domains: organizations.reduce((total, organization) => total + organization.domains, 0),
+      matching: organizationPage?.totalElements ?? 0,
+      users: visibleOrganizations.reduce(
+        (total, organization) => total + organization.userCount,
+        0
+      ),
+      domains: visibleOrganizations.reduce(
+        (total, organization) => total + organization.domains.length,
+        0
+      ),
     }),
-    []
+    [organizationPage?.totalElements, visibleOrganizations]
   );
 
   const openOrganizationDetail = (organization: Organization) => {
-    navigate(getOrganizationDetailPath(organization.id));
+    if (organization.id) {
+      navigate(getOrganizationDetailPath(organization.id));
+    }
   };
 
   const handleControlModeChange = (mode: TableControlMode) => {
     setControlMode(mode);
+    setPage(0);
     if (mode === 'filter') {
       setSearch('');
     }
+  };
+
+  const handleSearchChange = (value: string) => {
+    setSearch(value);
+    setPage(0);
+  };
+
+  const handleSortChange = (nextSort: TableSort) => {
+    setSort(nextSort);
+    setPage(0);
+  };
+
+  const handlePageSizeChange = (nextPageSize: number) => {
+    setPageSize(nextPageSize);
+    setPage(0);
+  };
+
+  const toggleStatusFilter = (status: OrganizationStatus) => {
+    setPage(0);
+    setStatusFilters((currentFilters) =>
+      currentFilters.includes(status)
+        ? currentFilters.filter((item) => item !== status)
+        : [...currentFilters, status]
+    );
   };
 
   return (
@@ -164,15 +220,15 @@ export function OrganizationListPage() {
       <OrganizationPageRoot>
         <SummaryGrid aria-label="Organization summary">
           <SummaryCard>
-            <SummaryLabel>Active organizations</SummaryLabel>
-            <SummaryValue>{summary.active}</SummaryValue>
+            <SummaryLabel>Matching organizations</SummaryLabel>
+            <SummaryValue>{summary.matching}</SummaryValue>
           </SummaryCard>
           <SummaryCard>
-            <SummaryLabel>Managed users</SummaryLabel>
+            <SummaryLabel>Users on page</SummaryLabel>
             <SummaryValue>{summary.users}</SummaryValue>
           </SummaryCard>
           <SummaryCard>
-            <SummaryLabel>Verified domains</SummaryLabel>
+            <SummaryLabel>Domains on page</SummaryLabel>
             <SummaryValue>{summary.domains}</SummaryValue>
           </SummaryCard>
         </SummaryGrid>
@@ -190,15 +246,22 @@ export function OrganizationListPage() {
                 aria-label="Search organizations"
                 placeholder="Search organizations"
                 value={search}
-                onChange={setSearch}
-                onSearch={setSearch}
+                onChange={handleSearchChange}
+                onSearch={handleSearchChange}
               />
             </SearchFieldContainer>
           ) : (
             <FilterModePanel aria-label="Organization filters">
-              <StatusTag tone="success">Active</StatusTag>
-              <StatusTag tone="warning">Paused</StatusTag>
-              <StatusTag tone="neutral">Archived</StatusTag>
+              {statusOptions.map((option) => (
+                <StatusFilterButton
+                  key={option.value}
+                  type="button"
+                  aria-pressed={statusFilters.includes(option.value)}
+                  onClick={() => toggleStatusFilter(option.value)}
+                >
+                  <StatusTag tone={statusToneMap[option.value]}>{option.label}</StatusTag>
+                </StatusFilterButton>
+              ))}
             </FilterModePanel>
           )}
         </TableToolbar>
@@ -207,18 +270,20 @@ export function OrganizationListPage() {
           ariaLabel="Organizations"
           columns={organizationColumns}
           rows={visibleOrganizations}
-          getRowId={(row) => row.id}
+          getRowId={(row) => row.id ?? row.referenceId}
           sort={sort}
-          onSortChange={setSort}
+          onSortChange={handleSortChange}
           onRowClick={openOrganizationDetail}
+          loading={organizationsQuery.loading}
+          error={organizationsQuery.error?.message ?? null}
           empty="No organizations match the current filters."
           pagination={{
-            page: 0,
-            pageSize: visibleOrganizations.length || 5,
-            total: visibleOrganizations.length,
+            page: organizationPage?.currentPage ?? page,
+            pageSize,
+            total: organizationPage?.totalElements ?? 0,
             pageSizeOptions: [5, 10, 25],
-            onPageChange: () => undefined,
-            onPageSizeChange: () => undefined,
+            onPageChange: setPage,
+            onPageSizeChange: handlePageSizeChange,
           }}
         />
       </OrganizationPageRoot>

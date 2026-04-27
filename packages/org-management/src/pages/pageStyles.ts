@@ -1,15 +1,5 @@
 import { styled } from '@mui/material/styles';
 
-export const PlaceholderPanel = styled('div')(({ theme }) => ({
-  display: 'grid',
-  gap: 10,
-  padding: 20,
-  border: `1px solid ${theme.hugoUIColorRoles.border.default}`,
-  borderRadius: 8,
-  background: theme.hugoUIColorRoles.surface.default,
-  boxShadow: theme.hugoUIShadows.LIGHT_SHADOW.boxShadow,
-}));
-
 export const DetailGrid = styled('div')(({ theme }) => ({
   display: 'grid',
   gridTemplateColumns: 'repeat(2, minmax(0, 1fr))',
@@ -69,4 +59,35 @@ export const DefinitionValue = styled('dd')(({ theme }) => ({
   margin: 0,
   color: theme.hugoUIColorRoles.text.primary,
   fontSize: 14,
+}));
+
+export const ActivityPageRoot = styled('div')(({ theme }) => ({
+  display: 'grid',
+  gap: theme.hugoUISpacer.SPACER_MD,
+}));
+
+export const ActivityToolbar = styled('div')(({ theme }) => ({
+  display: 'grid',
+  gridTemplateColumns: 'minmax(0, 360px) auto',
+  alignItems: 'center',
+  justifyContent: 'space-between',
+  gap: theme.hugoUISpacer.SPACER_MD,
+
+  [theme.breakpoints.down('sm')]: {
+    gridTemplateColumns: '1fr',
+  },
+}));
+
+export const ActivitySearchContainer = styled('div')(({ theme }) => ({
+  width: '100%',
+
+  [theme.breakpoints.up('md')]: {
+    width: 360,
+  },
+}));
+
+export const ActivityCountText = styled('span')(({ theme }) => ({
+  color: theme.hugoUIColorRoles.text.subtle,
+  fontSize: 13,
+  fontWeight: 700,
 }));

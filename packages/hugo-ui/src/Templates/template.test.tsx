@@ -16,7 +16,7 @@ const navItems: HugoUIPageTemplateNavItem[] = [
 
 describe('HugoUIPageTemplate', () => {
   it('renders the app title and children', () => {
-    render(
+    const { container } = render(
       <HugoUIPageTemplate appTitle="Organization Management">
         <div>Dashboard content</div>
       </HugoUIPageTemplate>
@@ -24,10 +24,12 @@ describe('HugoUIPageTemplate', () => {
 
     expect(screen.getByRole('heading', { name: 'Organization Management' })).toBeInTheDocument();
     expect(screen.getByText('Dashboard content')).toBeInTheDocument();
+    expect(container.querySelector('.HugoUIPageTemplate-bodyNoNav')).not.toBeNull();
+    expect(container.querySelector('.HugoUIPageTemplate-content')).not.toBeNull();
   });
 
   it('marks the selected nav item', () => {
-    render(
+    const { container } = render(
       <HugoUIPageTemplate
         appTitle="Organization Management"
         navProps={{
@@ -38,13 +40,17 @@ describe('HugoUIPageTemplate', () => {
       />
     );
 
+    expect(container.querySelector('.HugoUIPageTemplate-nav')).not.toBeNull();
+    expect(container.querySelector('.HugoUIPageTemplate-bodyNoNav')).toBeNull();
     expect(screen.getByRole('button', { name: 'Activity Log' })).toHaveClass(
       'HugoUIPageTemplate-navItemSelected'
     );
   });
 
   it('runs navigation selection through onBeforeSelection', () => {
-    const onBeforeSelection = jest.fn((_selection: string, onSelection: () => void) => onSelection());
+    const onBeforeSelection = jest.fn((_selection: string, onSelection: () => void) =>
+      onSelection()
+    );
 
     render(
       <HugoUIPageTemplate

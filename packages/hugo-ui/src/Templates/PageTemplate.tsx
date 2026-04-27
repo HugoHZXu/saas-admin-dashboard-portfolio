@@ -50,6 +50,7 @@ export function HugoUIPageTemplate({
 }: HugoUIPageTemplateProps) {
   const [selectedId, setSelectedId] = useState(navProps?.defaultSelected);
   const [expandedIds, setExpandedIds] = useState<string[]>(navProps?.defaultExpanded ?? []);
+  const hasVisibleNav = Boolean(navProps && !navProps.hidden);
 
   useEffect(() => {
     setSelectedId(navProps?.defaultSelected);
@@ -113,7 +114,11 @@ export function HugoUIPageTemplate({
               aria-expanded={expanded}
               onClick={() => toggleExpanded(item.id)}
             >
-              {expanded ? <ExpandMoreIcon fontSize="small" /> : <ChevronRightIcon fontSize="small" />}
+              {expanded ? (
+                <ExpandMoreIcon fontSize="small" />
+              ) : (
+                <ChevronRightIcon fontSize="small" />
+              )}
             </IconButton>
           )}
         </Box>
@@ -135,11 +140,15 @@ export function HugoUIPageTemplate({
         {appTitle && <h1 className={`${ROOT_PREFIX}-appTitle`}>{appTitle}</h1>}
         {titleSlot && <div className={`${ROOT_PREFIX}-titleSlot`}>{titleSlot}</div>}
       </header>
-      <div className={`${ROOT_PREFIX}-body`}>
-        {navProps && !navProps.hidden && (
+      <div
+        className={classnames(`${ROOT_PREFIX}-body`, {
+          [`${ROOT_PREFIX}-bodyNoNav`]: !hasVisibleNav,
+        })}
+      >
+        {hasVisibleNav && (
           <aside className={`${ROOT_PREFIX}-nav`} aria-label="Primary navigation">
             <Stack className={`${ROOT_PREFIX}-navList`}>
-              {navProps.navItems.map((item) => renderNavItem(item))}
+              {navProps?.navItems.map((item) => renderNavItem(item))}
             </Stack>
           </aside>
         )}

@@ -70,6 +70,25 @@ export const FilterModePanel = styled('div')(({ theme }) => ({
   },
 }));
 
+export const StatusFilterButton = styled('button')(({ theme }) => ({
+  appearance: 'none',
+  border: `1px solid ${theme.hugoUIColorRoles.border.default}`,
+  borderRadius: 8,
+  background: theme.hugoUIColorRoles.surface.default,
+  cursor: 'pointer',
+  padding: 2,
+
+  '&[aria-pressed="true"]': {
+    borderColor: theme.hugoUIColorRoles.border.strong,
+    background: theme.hugoUIColorRoles.surface.tinted,
+  },
+
+  '&:focus-visible': {
+    outline: `2px solid ${theme.hugoUIColorRoles.focus.ring}`,
+    outlineOffset: 2,
+  },
+}));
+
 export const OrganizationCell = styled('div')(() => ({
   display: 'grid',
   gap: 3,

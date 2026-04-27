@@ -11,10 +11,15 @@ export const PageTemplateRoot = styled('div')(({ theme }) => {
 
   return {
     minHeight: '100vh',
+    height: '100vh',
+    overflow: 'hidden',
+    display: 'flex',
+    flexDirection: 'column',
     background: tokens.colors.pageBackground,
     color: tokens.colors.textDefault,
 
     [`.${PAGE_TEMPLATE_ROOT_PREFIX}-appHeader`]: {
+      flex: '0 0 auto',
       display: 'flex',
       alignItems: 'center',
       gap: tokens.spacing.headerGap,
@@ -51,12 +56,19 @@ export const PageTemplateRoot = styled('div')(({ theme }) => {
     },
 
     [`.${PAGE_TEMPLATE_ROOT_PREFIX}-body`]: {
+      flex: '1 1 auto',
       display: 'grid',
       gridTemplateColumns: `${tokens.sizing.desktopNavWidth}px minmax(0, 1fr)`,
-      minHeight: `calc(100vh - ${tokens.sizing.headerHeight}px)`,
+      minHeight: 0,
+    },
+
+    [`.${PAGE_TEMPLATE_ROOT_PREFIX}-bodyNoNav`]: {
+      gridTemplateColumns: 'minmax(0, 1fr)',
     },
 
     [`.${PAGE_TEMPLATE_ROOT_PREFIX}-nav`]: {
+      minHeight: 0,
+      overflowY: 'auto',
       borderRight: `1px solid ${tokens.colors.borderDefault}`,
       background: tokens.colors.navBackground,
     },
@@ -145,6 +157,8 @@ export const PageTemplateRoot = styled('div')(({ theme }) => {
 
     [`.${PAGE_TEMPLATE_ROOT_PREFIX}-content`]: {
       minWidth: 0,
+      minHeight: 0,
+      overflowY: 'auto',
       padding: tokens.spacing.contentPadding,
     },
 
@@ -156,9 +170,11 @@ export const PageTemplateRoot = styled('div')(({ theme }) => {
       [`.${PAGE_TEMPLATE_ROOT_PREFIX}-body`]: {
         display: 'grid',
         gridTemplateColumns: '1fr',
+        gridTemplateRows: 'auto minmax(0, 1fr)',
       },
 
       [`.${PAGE_TEMPLATE_ROOT_PREFIX}-nav`]: {
+        maxHeight: '40vh',
         borderRight: 0,
         borderBottom: `1px solid ${tokens.colors.borderDefault}`,
       },
