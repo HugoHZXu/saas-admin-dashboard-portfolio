@@ -1,6 +1,6 @@
 # UI Demo Monorepo
 
-Vite + React + TypeScript monorepo powered by npm workspaces. Includes a primary component library (`hugo-ui`), a shadcn-style component package (`myshadcn`), and a Storybook demo app.
+Vite + React + TypeScript monorepo powered by npm workspaces. Includes a primary component library (`hugo-ui`), a shadcn-style component package (`hugo-ui-shadcn`), and a Storybook demo app.
 
 ## Quick start
 
@@ -14,8 +14,8 @@ Open http://localhost:6006 to view the stories.
 ## Packages
 
 - `packages/hugo-ui`: React component library
-- `packages/myshadcn`: Tailwind + shadcn-style React component library
-- `packages/storybook-demo`: Storybook app showcasing `hugo-ui` and `myshadcn`
+- `packages/hugo-ui-shadcn`: Tailwind + shadcn-style React component library
+- `packages/storybook-demo`: Storybook app showcasing `hugo-ui` and `hugo-ui-shadcn`
 
 ## Theme provider usage
 
@@ -25,11 +25,7 @@ Use `HugoUIProvider` at the app root to inject the theme once:
 import { HugoUIProvider, hugoUITheme } from 'hugo-ui';
 
 function App() {
-  return (
-    <HugoUIProvider theme={hugoUITheme}>
-      {/* app components */}
-    </HugoUIProvider>
-  );
+  return <HugoUIProvider theme={hugoUITheme}>{/* app components */}</HugoUIProvider>;
 }
 ```
 
@@ -44,11 +40,7 @@ const baseTheme = createTheme({
 });
 
 function App() {
-  return (
-    <HugoUIProvider theme={baseTheme}>
-      {/* app components */}
-    </HugoUIProvider>
-  );
+  return <HugoUIProvider theme={baseTheme}>{/* app components */}</HugoUIProvider>;
 }
 ```
 

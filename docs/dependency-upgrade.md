@@ -5,7 +5,7 @@ Date: 2026-04-05
 ## Scope
 
 This upgrade modernizes the `admin-dashboard` workspace baseline before portfolio feature work.
-It covers the root tooling, `packages/hugo-ui`, `packages/myshadcn`, and
+It covers the root tooling, `packages/hugo-ui`, `packages/hugo-ui-shadcn`, and
 `packages/storybook-demo`.
 
 ## Environment
@@ -52,7 +52,7 @@ warning-free install with the latest dev tooling.
 - Adjusted React 19 typings where `ReactElement` props are now stricter.
 - Updated Jest config for TypeScript 6 and ESM-only `react-intl@10`.
 - Added explicit `lodash` dependency because `hugo-ui` imports lodash helpers directly.
-- Removed unused `@fontsource-variable/geist` from `myshadcn`; its Tailwind font stack did
+- Removed unused `@fontsource-variable/geist` from `hugo-ui-shadcn`; its Tailwind font stack did
   not use Geist and the CSS import caused Storybook/Vite asset warnings.
 - Added TypeScript `ignoreDeprecations: "6.0"` for existing `baseUrl` usage while keeping the
   current alias layout intact.
@@ -75,8 +75,8 @@ It runs:
 Latest successful results:
 
 - `hugo-ui`: 18 Jest suites, 151 tests passed.
-- `myshadcn`: 2 Jest suites, 2 tests passed.
-- `hugo-ui` and `myshadcn` library builds passed.
+- `hugo-ui-shadcn`: 2 Jest suites, 11 tests passed.
+- `hugo-ui` and `hugo-ui-shadcn` library builds passed.
 - Storybook static build passed on Storybook `10.4.1`.
 
 Storybook still prints a Vite chunk-size warning for the generated preview bundle. This is a

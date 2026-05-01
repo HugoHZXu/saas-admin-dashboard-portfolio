@@ -4,7 +4,7 @@
 
 - This repository is an npm workspaces monorepo for UI component development.
 - `packages/hugo-ui` is the primary component library and source of truth for shared components.
-- `packages/myshadcn` is a secondary component package for shadcn-style and Tailwind-based implementations.
+- `packages/hugo-ui-shadcn` is a secondary component package for shadcn-style and Tailwind-based implementations.
 - `packages/storybook-demo` is the interactive verification surface for both libraries.
 - The broader product direction is a desensitized B2B SaaS admin dashboard portfolio. Use `docs/project-brief.md`, `docs/desensitization-rules.md`, `docs/implementation-roadmap.md`, and `docs/agent-workflow.md` as working context before expanding dashboard features.
 
@@ -13,7 +13,7 @@
 - Prefer small, package-scoped changes. Avoid mixing unrelated edits across packages.
 - Do not edit generated output in `dist`, `coverage`, `storybook-static`, or `node_modules`.
 - Preserve user changes already present in the worktree. Do not revert unrelated edits.
-- Keep `hugo-ui` and `myshadcn` responsibilities separate. Do not move experimental `myshadcn` implementations into `hugo-ui` unless the user explicitly asks for it.
+- Keep `hugo-ui` and `hugo-ui-shadcn` responsibilities separate. Do not move experimental `hugo-ui-shadcn` implementations into `hugo-ui` unless the user explicitly asks for it.
 - When touching shared infra such as providers, aliases, tokens, exports, or Storybook config, prefer the smallest viable change. Do not do opportunistic cleanup in the same patch.
 - Do not add private company code, real customer data, real endpoints, access tokens, screenshots, production logs, or internal business rules.
 - Use only synthetic B2B SaaS admin examples such as Organization, User, Domain, Admin, Role, Status, and Activity Log.
@@ -81,7 +81,7 @@ Treat these as high risk and call out the impact surface before making edits:
 - Changes to package exports, subpath exports, or root `index.ts` files
 - Changes to providers, theme setup, aliases, tokens, or shared style infrastructure
 - Changes to public component props or consumer-facing package APIs
-- Changes that make `storybook-demo` depend on new behavior from `hugo-ui` or `myshadcn`
+- Changes that make `storybook-demo` depend on new behavior from `hugo-ui` or `hugo-ui-shadcn`
 
 For high-risk changes:
 
@@ -96,11 +96,11 @@ For high-risk changes:
 - If aliases or provider wiring change, verify Storybook still resolves local package imports.
 - If theme or token files change, assume cross-component blast radius until verified.
 - If a story or docs page relies on locale, keep `preview.tsx` provider setup working for `en`, `zh`, and `ar`.
-- Do not let `myshadcn` utility patterns or styling decisions silently leak into `hugo-ui`.
+- Do not let `hugo-ui-shadcn` utility patterns or styling decisions silently leak into `hugo-ui`.
 
 ## Definition Of Done
 
-- Component behavior changes in `packages/hugo-ui` or `packages/myshadcn` must include tests when behavior changed.
+- Component behavior changes in `packages/hugo-ui` or `packages/hugo-ui-shadcn` must include tests when behavior changed.
 - Public-facing component changes must update or add Storybook stories in `packages/storybook-demo` when visible usage changed.
 - Public API or consumer-visible package changes require a changeset unless the user explicitly waives it.
 - Export changes must keep package entrypoints, consumer import paths, and relevant README examples aligned.
@@ -125,15 +125,15 @@ Follow the default validation ladder and expand only when risk or scope requires
 - If the component has a matching story, update or verify the story in `packages/storybook-demo/src/stories/`.
 - After a public component change, run `npm run build-hugo-ui`.
 
-### `myshadcn` Component Changes
+### `hugo-ui-shadcn` Component Changes
 
-- For changes under `packages/myshadcn/src/components/ui/`, run `npm run test-myshadcn` first.
+- For changes under `packages/hugo-ui-shadcn/src/components/ui/`, run `npm run test-hugo-ui-shadcn` first.
 - If the component is used in Storybook, verify or update the relevant story.
-- After a public component change, run `npm run build-myshadcn`.
+- After a public component change, run `npm run build-hugo-ui-shadcn`.
 
 ### Export Surface Changes
 
-- If you changed `packages/hugo-ui/src/index.ts`, package subpath exports, or `packages/myshadcn/src/index.ts`, check all affected exports compile and remain consumable.
+- If you changed `packages/hugo-ui/src/index.ts`, package subpath exports, or `packages/hugo-ui-shadcn/src/index.ts`, check all affected exports compile and remain consumable.
 - Review nearby README examples when consumer-facing imports changed.
 - Check whether the change requires a changeset.
 
@@ -151,7 +151,7 @@ Follow the default validation ladder and expand only when risk or scope requires
 
 ### Cross-Package Changes
 
-- If the change spans `hugo-ui`, `myshadcn`, and `storybook-demo`, prefer the root validation commands.
+- If the change spans `hugo-ui`, `hugo-ui-shadcn`, and `storybook-demo`, prefer the root validation commands.
 - Use `npm run typecheck`, `npm run test:all`, `npm run build:all`, or `npm run verify` when the impact surface is broad.
 
 ## Validation Failures And Stop Conditions
@@ -171,10 +171,10 @@ Follow the default validation ladder and expand only when risk or scope requires
 - Lint all workspaces: `npm run lint`
 - Typecheck all workspaces: `npm run typecheck`
 - Test `hugo-ui`: `npm run test`
-- Test `myshadcn`: `npm run test-myshadcn`
+- Test `hugo-ui-shadcn`: `npm run test-hugo-ui-shadcn`
 - Test all component packages: `npm run test:all`
 - Build `hugo-ui`: `npm run build-hugo-ui`
-- Build `myshadcn`: `npm run build-myshadcn`
+- Build `hugo-ui-shadcn`: `npm run build-hugo-ui-shadcn`
 - Build all packages and Storybook: `npm run build:all`
 - Full repo verification: `npm run verify`
 - Create a changeset: `npm run changeset`
@@ -190,10 +190,10 @@ Do not run `npm run dev:*` or `npm run storybook` at the end of an implementatio
 - Main public exports live in `packages/hugo-ui/src/index.ts` and component `index.ts` files.
 - When public APIs change, keep exports, tests, and README usage aligned.
 
-### `packages/myshadcn`
+### `packages/hugo-ui-shadcn`
 
 - Uses React, TypeScript, Vite, Jest, Tailwind CSS v4, and shadcn-style primitives.
-- Main public exports live in `packages/myshadcn/src/index.ts`.
+- Main public exports live in `packages/hugo-ui-shadcn/src/index.ts`.
 - Keep stylesheet imports and Storybook aliases aligned when moving files or changing paths.
 
 ### `packages/storybook-demo`

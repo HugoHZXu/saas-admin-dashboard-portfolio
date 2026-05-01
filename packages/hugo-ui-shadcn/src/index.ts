@@ -1,7 +1,18 @@
 export { Button, buttonVariants } from './components/ui/button';
-export type { ButtonProps } from './components/ui/button';
+export type {
+  ButtonProps,
+  HugoUIShadcnButtonSize,
+  HugoUIShadcnButtonTone,
+  HugoUIShadcnButtonVariant,
+} from './components/ui/button';
 export { Input } from './components/ui/input';
-export type { InputProps } from './components/ui/input';
+export type {
+  InputClassNames,
+  InputProps,
+  InputSize,
+  InputSlotProps,
+  InputStatus,
+} from './components/ui/input';
 export {
   Card,
   CardContent,
@@ -20,6 +31,6 @@ export type {
 } from './components/ui/card';
 export { Badge, badgeVariants } from './components/ui/badge';
 export type { BadgeProps } from './components/ui/badge';
-export { MyShadcnProvider } from './provider';
-export type { MyShadcnProviderProps } from './provider';
+export { HugoUIShadcnProvider } from './provider';
+export type { HugoUIShadcnProviderProps } from './provider';
 export { cn } from './components/lib/utils';

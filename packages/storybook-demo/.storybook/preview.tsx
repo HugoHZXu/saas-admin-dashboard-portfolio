@@ -1,6 +1,6 @@
 import type { Preview } from '@storybook/react';
 import { Title, Description, Primary, Controls } from '@storybook/addon-docs/blocks';
-import 'myshadcn/styles.css';
+import 'hugo-ui-shadcn/styles.css';
 import { HugoUIProvider, hugoUITheme } from 'hugo-ui';
 import enMessages from '../../hugo-ui/src/lang/en.json';
 import zhMessages from '../../hugo-ui/src/lang/zh.json';
@@ -63,7 +63,7 @@ const preview: Preview = {
         })),
       },
     },
-  }
+  },
 };
 
 export default preview;

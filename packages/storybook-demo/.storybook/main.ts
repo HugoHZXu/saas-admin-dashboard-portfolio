@@ -9,12 +9,9 @@ const dirname = path.dirname(fileURLToPath(import.meta.url));
 const config: StorybookConfig = {
   framework: '@storybook/react-vite',
   stories: ['../src/**/*.stories.@(ts|tsx)', '../src/**/*.mdx'],
-  addons: [
-    '@storybook/addon-a11y',
-    '@storybook/addon-docs'
-  ],
+  addons: ['@storybook/addon-a11y', '@storybook/addon-docs'],
   docs: {
-    autodocs: 'tag'
+    autodocs: 'tag',
   },
   async viteFinal(config) {
     // Provide a minimal process.env shim for browser builds that reference Node globals.
@@ -26,44 +23,41 @@ const config: StorybookConfig = {
     const hugoUIAliases = [
       {
         find: 'hugo-ui/styles/theme',
-        replacement: path.resolve(dirname, '../../hugo-ui/src/styles/theme.ts')
+        replacement: path.resolve(dirname, '../../hugo-ui/src/styles/theme.ts'),
       },
       {
         find: 'hugo-ui/utils/wcagUtils',
-        replacement: path.resolve(dirname, '../../hugo-ui/src/utils/wcagUtils.ts')
+        replacement: path.resolve(dirname, '../../hugo-ui/src/utils/wcagUtils.ts'),
       },
       {
         find: /^hugo-ui$/,
-        replacement: path.resolve(dirname, '../../hugo-ui/src/index.ts')
-      }
+        replacement: path.resolve(dirname, '../../hugo-ui/src/index.ts'),
+      },
     ];
-    const myshadcnAliases = [
+    const hugoUIShadcnAliases = [
       {
         find: '@/',
-        replacement: `${path.resolve(dirname, '../../myshadcn/src')}/`
+        replacement: `${path.resolve(dirname, '../../hugo-ui-shadcn/src')}/`,
       },
       {
-        find: 'myshadcn/styles.css',
-        replacement: path.resolve(dirname, '../../myshadcn/src/styles/globals.css')
+        find: 'hugo-ui-shadcn/styles.css',
+        replacement: path.resolve(dirname, '../../hugo-ui-shadcn/src/styles/globals.css'),
       },
       {
-        find: /^myshadcn$/,
-        replacement: path.resolve(dirname, '../../myshadcn/src/index.ts')
-      }
+        find: /^hugo-ui-shadcn$/,
+        replacement: path.resolve(dirname, '../../hugo-ui-shadcn/src/index.ts'),
+      },
     ];
     // Put our specific subpath aliases before any existing aliases.
     config.resolve.alias = Array.isArray(alias)
-      ? [...myshadcnAliases, ...hugoUIAliases, ...alias]
-      : [...myshadcnAliases, ...hugoUIAliases];
+      ? [...hugoUIShadcnAliases, ...hugoUIAliases, ...alias]
+      : [...hugoUIShadcnAliases, ...hugoUIAliases];
     config.css = config.css || {};
     config.css.postcss = {
-      plugins: [
-        tailwindcss(),
-        autoprefixer()
-      ]
+      plugins: [tailwindcss(), autoprefixer()],
     };
     return config;
-  }
+  },
 };
 
 export default config;

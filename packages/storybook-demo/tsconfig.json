@@ -7,10 +7,10 @@
       "hugo-ui/styles/theme": ["../hugo-ui/src/styles/theme.ts"],
       "hugo-ui/utils/wcagUtils": ["../hugo-ui/src/utils/wcagUtils.ts"],
       "hugo-ui/*": ["../hugo-ui/src/*"],
-      "myshadcn": ["../myshadcn/src/index.ts"],
-      "myshadcn/styles.css": ["../myshadcn/src/styles/globals.css"],
-      "myshadcn/*": ["../myshadcn/src/*"],
-      "@/*": ["../myshadcn/src/*"]
+      "hugo-ui-shadcn": ["../hugo-ui-shadcn/src/index.ts"],
+      "hugo-ui-shadcn/styles.css": ["../hugo-ui-shadcn/src/styles/globals.css"],
+      "hugo-ui-shadcn/*": ["../hugo-ui-shadcn/src/*"],
+      "@/*": ["../hugo-ui-shadcn/src/*"]
     }
   },
   "include": ["src", ".storybook"]

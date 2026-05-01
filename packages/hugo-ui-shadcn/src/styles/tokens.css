@@ -1,0 +1,172 @@
+:root {
+  --hugo-ui-shadcn-text: #49494c;
+  --hugo-ui-shadcn-dark-purple: #350b59;
+  --hugo-ui-shadcn-mid-purple: #5d3c7a;
+  --hugo-ui-shadcn-purple-grape: #7d3f98;
+  --hugo-ui-shadcn-purple-plum: #9955c6;
+  --hugo-ui-shadcn-lavender: #da99ff;
+  --hugo-ui-shadcn-light-purple: #eed3ff;
+  --hugo-ui-shadcn-success-green: #008805;
+  --hugo-ui-shadcn-success-green-bg: #f2faf3;
+  --hugo-ui-shadcn-error-or-destruct: #cb2a2a;
+  --hugo-ui-shadcn-destruct-state-1: #982020;
+  --hugo-ui-shadcn-destruct-state-2: #651515;
+  --hugo-ui-shadcn-error-bg: #fcf4f4;
+  --hugo-ui-shadcn-blue: #1573d4;
+  --hugo-ui-shadcn-alert: #eb6a00;
+  --hugo-ui-shadcn-neutral-plum: #f6f1ff;
+  --hugo-ui-shadcn-neutral-light-plum: #f4f2f6;
+  --hugo-ui-shadcn-neutral-dark-plum: #a19aba;
+  --hugo-ui-shadcn-neutral-dark-grey: #cccccc;
+  --hugo-ui-shadcn-neutral-mid-grey: #f2f2f2;
+  --hugo-ui-shadcn-neutral-light-grey: #fafafa;
+  --hugo-ui-shadcn-neutral-white: #ffffff;
+  --hugo-ui-shadcn-text-header: #282036;
+  --hugo-ui-shadcn-neutral-grey-200: #f2f2f2;
+  --hugo-ui-shadcn-neutral-grey-500: #e0e0e0;
+  --hugo-ui-shadcn-neutral-grey-600: #c8c8c8;
+  --hugo-ui-shadcn-neutral-grey-800: #9e9e9e;
+  --hugo-ui-shadcn-neutral-grey-1100: #5c5c5c;
+  --hugo-ui-shadcn-neutral-grey-1200: #3d3d3d;
+  --hugo-ui-shadcn-plum-100: #f6f1ff;
+
+  --hugo-ui-shadcn-brand-primary: var(--hugo-ui-shadcn-purple-plum);
+  --hugo-ui-shadcn-brand-accent: var(--hugo-ui-shadcn-purple-grape);
+  --hugo-ui-shadcn-brand-deep: var(--hugo-ui-shadcn-dark-purple);
+  --hugo-ui-shadcn-text-primary: var(--hugo-ui-shadcn-text-header);
+  --hugo-ui-shadcn-text-default: var(--hugo-ui-shadcn-text);
+  --hugo-ui-shadcn-text-inverse: var(--hugo-ui-shadcn-neutral-white);
+  --hugo-ui-shadcn-text-subtle: var(--hugo-ui-shadcn-neutral-grey-800);
+  --hugo-ui-shadcn-text-disabled: var(--hugo-ui-shadcn-neutral-dark-grey);
+  --hugo-ui-shadcn-surface-default: var(--hugo-ui-shadcn-neutral-white);
+  --hugo-ui-shadcn-surface-subtle: var(--hugo-ui-shadcn-neutral-light-grey);
+  --hugo-ui-shadcn-surface-inverse: var(--hugo-ui-shadcn-dark-purple);
+  --hugo-ui-shadcn-surface-tinted: var(--hugo-ui-shadcn-plum-100);
+  --hugo-ui-shadcn-surface-tinted-strong: var(--hugo-ui-shadcn-lavender);
+  --hugo-ui-shadcn-border-default: var(--hugo-ui-shadcn-neutral-dark-grey);
+  --hugo-ui-shadcn-border-strong: var(--hugo-ui-shadcn-neutral-grey-800);
+  --hugo-ui-shadcn-focus-ring: var(--hugo-ui-shadcn-blue);
+  --hugo-ui-shadcn-focus-ring-on-dark: var(--hugo-ui-shadcn-neutral-white);
+  --hugo-ui-shadcn-status-success: var(--hugo-ui-shadcn-success-green);
+  --hugo-ui-shadcn-status-warning: var(--hugo-ui-shadcn-alert);
+  --hugo-ui-shadcn-status-error: var(--hugo-ui-shadcn-error-or-destruct);
+  --hugo-ui-shadcn-status-destruct-strong: var(--hugo-ui-shadcn-destruct-state-1);
+  --hugo-ui-shadcn-status-destruct-active: var(--hugo-ui-shadcn-destruct-state-2);
+  --hugo-ui-shadcn-accent-soft: var(--hugo-ui-shadcn-lavender);
+  --hugo-ui-shadcn-button-brand-hover: #71379a;
+  --hugo-ui-shadcn-button-brand-active: #5d2985;
+  --hugo-ui-shadcn-button-border-light: #b8b8b8;
+  --hugo-ui-shadcn-button-border-mid: #8b8b8b;
+  --hugo-ui-shadcn-button-inverse-hover: color-mix(
+    in oklab,
+    var(--hugo-ui-shadcn-surface-default) 80%,
+    transparent
+  );
+  --hugo-ui-shadcn-button-inverse-active: color-mix(
+    in oklab,
+    var(--hugo-ui-shadcn-surface-default) 60%,
+    transparent
+  );
+  --hugo-ui-shadcn-button-brand-soft-hover: color-mix(
+    in oklab,
+    var(--hugo-ui-shadcn-surface-tinted-strong) 20%,
+    transparent
+  );
+  --hugo-ui-shadcn-button-brand-soft-active: color-mix(
+    in oklab,
+    var(--hugo-ui-shadcn-brand-deep) 20%,
+    transparent
+  );
+  --hugo-ui-shadcn-button-tertiary-brand-hover: color-mix(
+    in oklab,
+    var(--hugo-ui-shadcn-surface-tinted) 15%,
+    transparent
+  );
+  --hugo-ui-shadcn-button-tertiary-brand-active: color-mix(
+    in oklab,
+    var(--hugo-ui-shadcn-brand-deep) 40%,
+    transparent
+  );
+
+  --background: var(--hugo-ui-shadcn-surface-default);
+  --foreground: var(--hugo-ui-shadcn-text-default);
+  --card: var(--hugo-ui-shadcn-surface-default);
+  --card-foreground: var(--hugo-ui-shadcn-text-primary);
+  --popover: var(--hugo-ui-shadcn-surface-default);
+  --popover-foreground: var(--hugo-ui-shadcn-text-primary);
+  --primary: var(--hugo-ui-shadcn-brand-primary);
+  --primary-foreground: var(--hugo-ui-shadcn-text-inverse);
+  --secondary: var(--hugo-ui-shadcn-surface-tinted);
+  --secondary-foreground: var(--hugo-ui-shadcn-brand-deep);
+  --muted: var(--hugo-ui-shadcn-surface-subtle);
+  --muted-foreground: var(--hugo-ui-shadcn-text-subtle);
+  --accent: var(--hugo-ui-shadcn-surface-tinted);
+  --accent-foreground: var(--hugo-ui-shadcn-brand-deep);
+  --destructive: var(--hugo-ui-shadcn-status-error);
+  --destructive-foreground: var(--hugo-ui-shadcn-text-inverse);
+  --border: var(--hugo-ui-shadcn-border-default);
+  --input: var(--hugo-ui-shadcn-border-strong);
+  --ring: var(--hugo-ui-shadcn-focus-ring);
+  --radius: 4px;
+}
+
+@theme inline {
+  --font-sans: 'Noto Sans', sans-serif, BlinkMacSystemFont, system-ui, -apple-system;
+  --color-ring: var(--ring);
+  --color-input: var(--input);
+  --color-border: var(--border);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-accent: var(--accent);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-muted: var(--muted);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-secondary: var(--secondary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary: var(--primary);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-popover: var(--popover);
+  --color-card-foreground: var(--card-foreground);
+  --color-card: var(--card);
+  --color-foreground: var(--foreground);
+  --color-background: var(--background);
+  --color-hugo-brand-primary: var(--hugo-ui-shadcn-brand-primary);
+  --color-hugo-brand-accent: var(--hugo-ui-shadcn-brand-accent);
+  --color-hugo-brand-deep: var(--hugo-ui-shadcn-brand-deep);
+  --color-hugo-text-inverse: var(--hugo-ui-shadcn-text-inverse);
+  --color-hugo-text-disabled: var(--hugo-ui-shadcn-text-disabled);
+  --color-hugo-surface-default: var(--hugo-ui-shadcn-surface-default);
+  --color-hugo-neutral-200: var(--hugo-ui-shadcn-neutral-grey-200);
+  --color-hugo-neutral-500: var(--hugo-ui-shadcn-neutral-grey-500);
+  --color-hugo-neutral-800: var(--hugo-ui-shadcn-neutral-grey-800);
+  --color-hugo-neutral-1100: var(--hugo-ui-shadcn-neutral-grey-1100);
+  --color-hugo-neutral-1200: var(--hugo-ui-shadcn-neutral-grey-1200);
+  --color-hugo-neutral-disabled: var(--hugo-ui-shadcn-neutral-dark-grey);
+  --color-hugo-status-error: var(--hugo-ui-shadcn-status-error);
+  --color-hugo-status-destruct-strong: var(--hugo-ui-shadcn-status-destruct-strong);
+  --color-hugo-status-destruct-active: var(--hugo-ui-shadcn-status-destruct-active);
+  --color-hugo-error-bg: var(--hugo-ui-shadcn-error-bg);
+  --color-hugo-focus: var(--hugo-ui-shadcn-focus-ring);
+  --color-hugo-focus-on-dark: var(--hugo-ui-shadcn-focus-ring-on-dark);
+  --color-hugo-button-brand-hover: var(--hugo-ui-shadcn-button-brand-hover);
+  --color-hugo-button-brand-active: var(--hugo-ui-shadcn-button-brand-active);
+  --color-hugo-button-border-light: var(--hugo-ui-shadcn-button-border-light);
+  --color-hugo-button-border-mid: var(--hugo-ui-shadcn-button-border-mid);
+  --color-hugo-button-inverse-hover: var(--hugo-ui-shadcn-button-inverse-hover);
+  --color-hugo-button-inverse-active: var(--hugo-ui-shadcn-button-inverse-active);
+  --color-hugo-button-brand-soft-hover: var(--hugo-ui-shadcn-button-brand-soft-hover);
+  --color-hugo-button-brand-soft-active: var(--hugo-ui-shadcn-button-brand-soft-active);
+  --color-hugo-button-tertiary-brand-hover: var(--hugo-ui-shadcn-button-tertiary-brand-hover);
+  --color-hugo-button-tertiary-brand-active: var(--hugo-ui-shadcn-button-tertiary-brand-active);
+  --leading-hugo-button: 19px;
+  --tracking-hugo-button: 0.02em;
+  --tracking-hugo-button-small: 0;
+  --radius-sm: calc(var(--radius) * 0.75);
+  --radius-md: var(--radius);
+  --radius-lg: calc(var(--radius) * 2);
+  --radius-xl: calc(var(--radius) * 3);
+  --radius-2xl: calc(var(--radius) * 4);
+  --radius-3xl: calc(var(--radius) * 5);
+  --radius-4xl: calc(var(--radius) * 6);
+}

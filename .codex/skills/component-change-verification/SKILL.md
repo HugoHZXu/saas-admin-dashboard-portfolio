@@ -10,7 +10,7 @@ Use this skill after making component-related edits in this repository, or when 
 This repository has three important roles:
 
 - `packages/hugo-ui`: primary component library and source of truth
-- `packages/myshadcn`: experimental or parallel shadcn-style package that should not silently drive `hugo-ui` decisions
+- `packages/hugo-ui-shadcn`: experimental or parallel shadcn-style package that should not silently drive `hugo-ui` decisions
 - `packages/storybook-demo`: demo and verification surface for both libraries, not the source of truth for component behavior
 
 Prefer the smallest reliable validation path. Expand only when the change touches shared surfaces or high-risk files.
@@ -71,9 +71,9 @@ Map the change class to the smallest command set that gives confidence.
 Use repository-defined scripts when they exist. In this repo, prefer:
 
 - `npm run test`
-- `npm run test-myshadcn`
+- `npm run test-hugo-ui-shadcn`
 - `npm run build-hugo-ui`
-- `npm run build-myshadcn`
+- `npm run build-hugo-ui-shadcn`
 - `npm run build-storybook`
 - `npm run typecheck`
 - `npm run test:all`
@@ -91,8 +91,8 @@ If a named command does not exist in the current repo state, use the nearest exi
 Typical examples:
 
 - `packages/hugo-ui/src/<Component>/...`: `npm run test`, then `npm run build-hugo-ui` if public behavior changed
-- `packages/myshadcn/src/components/ui/...`: `npm run test-myshadcn`, then `npm run build-myshadcn` if public behavior changed
-- If a `myshadcn` change suggests a broader `hugo-ui` redesign, do not apply that redesign unless the user explicitly asked for it
+- `packages/hugo-ui-shadcn/src/components/ui/...`: `npm run test-hugo-ui-shadcn`, then `npm run build-hugo-ui-shadcn` if public behavior changed
+- If a `hugo-ui-shadcn` change suggests a broader `hugo-ui` redesign, do not apply that redesign unless the user explicitly asked for it
 
 ### `public-api`
 

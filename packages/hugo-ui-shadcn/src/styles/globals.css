@@ -1,0 +1,13 @@
+@import 'tw-animate-css';
+@import 'shadcn/tailwind.css';
+@import './tokens.css';
+@import './base.css';
+@import './components.css';
+
+@source '..';
+
+@tailwind base;
+
+@custom-variant dark (&:is(.dark *));
+@tailwind components;
+@tailwind utilities;
