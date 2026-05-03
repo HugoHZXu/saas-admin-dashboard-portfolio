@@ -10,11 +10,11 @@ It covers the root tooling, `packages/hugo-ui`, `packages/hugo-ui-shadcn`, and
 
 ## Environment
 
-- Verified runtime: Node.js `22.12.0`, npm `10.9.0`.
+- Verified runtime: Node.js `22.12.0`, pnpm `10.34.1`.
 - Added `.nvmrc` with `22.12.0`.
-- Added root `engines` metadata for Node/npm.
+- Added root `engines` metadata for Node/pnpm.
 
-Note: the latest ESLint/Changesets dependency tree currently emits npm `EBADENGINE`
+Note: the latest ESLint/Changesets dependency tree can emit package-manager `EBADENGINE`
 warnings on Node `22.12.0` because some transitive packages request `22.13+` or newer.
 The workspace scripts pass on `22.12.0`; use Node `22.22.2+` or Node `24+` if you want a
 warning-free install with the latest dev tooling.
@@ -62,21 +62,22 @@ warning-free install with the latest dev tooling.
 The following command passes:
 
 ```bash
-npm run verify
+pnpm run verify
 ```
 
 It runs:
 
-- `npm run lint`
-- `npm run typecheck`
-- `npm run test:all`
-- `npm run build:all`
+- `pnpm run lint`
+- `pnpm run typecheck`
+- `pnpm run test:all`
+- `pnpm run build:all`
 
-Latest successful results:
+Latest successful results after the pnpm migration:
 
-- `hugo-ui`: 18 Jest suites, 151 tests passed.
-- `hugo-ui-shadcn`: 2 Jest suites, 11 tests passed.
-- `hugo-ui` and `hugo-ui-shadcn` library builds passed.
+- `hugo-ui`: 21 Jest suites, 164 tests passed.
+- `hugo-ui-shadcn`: 2 Jest suites, 13 tests passed.
+- `org-management-server`: 4 Jest suites, 21 tests passed.
+- package builds for `hugo-ui`, `hugo-ui-shadcn`, `org-management-server`, and `org-management` passed.
 - Storybook static build passed on Storybook `10.4.1`.
 
 Storybook still prints a Vite chunk-size warning for the generated preview bundle. This is a

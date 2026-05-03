@@ -1,12 +1,12 @@
 # UI Demo Monorepo
 
-Vite + React + TypeScript monorepo powered by npm workspaces. Includes a primary component library (`hugo-ui`), a shadcn-style component package (`hugo-ui-shadcn`), and a Storybook demo app.
+Vite + React + TypeScript monorepo powered by pnpm workspaces. Includes a primary component library (`hugo-ui`), a shadcn-style component package (`hugo-ui-shadcn`), and a Storybook demo app.
 
 ## Quick start
 
 ```bash
-npm install
-npm run storybook
+pnpm install
+pnpm run storybook
 ```
 
 Open http://localhost:6006 to view the stories.
@@ -47,17 +47,17 @@ function App() {
 ## Validation
 
 ```bash
-npm run typecheck
-npm run test:all
-npm run build:all
-npm run verify
+pnpm run typecheck
+pnpm run test:all
+pnpm run build:all
+pnpm run verify
 ```
 
 ## Lint and format
 
 ```bash
-npm run lint
-npm run format
+pnpm run lint
+pnpm run format
 ```
 
 ## Chromatic
@@ -71,5 +71,5 @@ CHROMATIC_PROJECT_TOKEN=your_token_here
 Then run:
 
 ```bash
-npm -w packages/storybook-demo run chromatic
+pnpm --filter storybook-demo run chromatic
 ```

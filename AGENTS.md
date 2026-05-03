@@ -2,7 +2,7 @@
 
 ## Repo Role
 
-- This repository is an npm workspaces monorepo for UI component development.
+- This repository is a pnpm workspaces monorepo for UI component development.
 - `packages/hugo-ui` is the primary component library and source of truth for shared components.
 - `packages/hugo-ui-shadcn` is a secondary component package for shadcn-style and Tailwind-based implementations.
 - `packages/storybook-demo` is the interactive verification surface for both libraries.
@@ -123,13 +123,13 @@ Follow the default validation ladder and expand only when risk or scope requires
 
 - If you only changed one `hugo-ui` component under `packages/hugo-ui/src/<Component>/`, run the closest package tests first.
 - If the component has a matching story, update or verify the story in `packages/storybook-demo/src/stories/`.
-- After a public component change, run `npm run build-hugo-ui`.
+- After a public component change, run `./scripts/codex-node.sh pnpm run build-hugo-ui`.
 
 ### `hugo-ui-shadcn` Component Changes
 
-- For changes under `packages/hugo-ui-shadcn/src/components/ui/`, run `npm run test-hugo-ui-shadcn` first.
+- For changes under `packages/hugo-ui-shadcn/src/components/ui/`, run `./scripts/codex-node.sh pnpm run test-hugo-ui-shadcn` first.
 - If the component is used in Storybook, verify or update the relevant story.
-- After a public component change, run `npm run build-hugo-ui-shadcn`.
+- After a public component change, run `./scripts/codex-node.sh pnpm run build-hugo-ui-shadcn`.
 
 ### Export Surface Changes
 
@@ -152,7 +152,7 @@ Follow the default validation ladder and expand only when risk or scope requires
 ### Cross-Package Changes
 
 - If the change spans `hugo-ui`, `hugo-ui-shadcn`, and `storybook-demo`, prefer the root validation commands.
-- Use `npm run typecheck`, `npm run test:all`, `npm run build:all`, or `npm run verify` when the impact surface is broad.
+- Use `./scripts/codex-node.sh pnpm run typecheck`, `./scripts/codex-node.sh pnpm run test:all`, `./scripts/codex-node.sh pnpm run build:all`, or `./scripts/codex-node.sh pnpm run verify` when the impact surface is broad.
 
 ## Validation Failures And Stop Conditions
 
@@ -166,21 +166,21 @@ Follow the default validation ladder and expand only when risk or scope requires
 
 ## Common Commands
 
-- Install dependencies: `npm install`
-- Start Storybook: `npm run storybook`
-- Lint all workspaces: `npm run lint`
-- Typecheck all workspaces: `npm run typecheck`
-- Test `hugo-ui`: `npm run test`
-- Test `hugo-ui-shadcn`: `npm run test-hugo-ui-shadcn`
-- Test all component packages: `npm run test:all`
-- Build `hugo-ui`: `npm run build-hugo-ui`
-- Build `hugo-ui-shadcn`: `npm run build-hugo-ui-shadcn`
-- Build all packages and Storybook: `npm run build:all`
-- Full repo verification: `npm run verify`
-- Create a changeset: `npm run changeset`
+- Install dependencies: `./scripts/codex-node.sh pnpm install`
+- Start Storybook: `./scripts/codex-node.sh pnpm run storybook`
+- Lint all workspaces: `./scripts/codex-node.sh pnpm run lint`
+- Typecheck all workspaces: `./scripts/codex-node.sh pnpm run typecheck`
+- Test `hugo-ui`: `./scripts/codex-node.sh pnpm run test`
+- Test `hugo-ui-shadcn`: `./scripts/codex-node.sh pnpm run test-hugo-ui-shadcn`
+- Test all component packages: `./scripts/codex-node.sh pnpm run test:all`
+- Build `hugo-ui`: `./scripts/codex-node.sh pnpm run build-hugo-ui`
+- Build `hugo-ui-shadcn`: `./scripts/codex-node.sh pnpm run build-hugo-ui-shadcn`
+- Build all packages and Storybook: `./scripts/codex-node.sh pnpm run build:all`
+- Full repo verification: `./scripts/codex-node.sh pnpm run verify`
+- Create a changeset: `./scripts/codex-node.sh pnpm run changeset`
 
-Use Node.js `22.12.0` or newer for validation. If the shell resolves an older Node version, prefix commands with `PATH="$HOME/.nvm/versions/node/v22.12.0/bin:$PATH"`.
-Do not run `npm run dev:*` or `npm run storybook` at the end of an implementation unless the user explicitly asks for a running local server.
+Codex command sessions may not inherit the interactive terminal's nvm PATH. When running Node.js, pnpm, or package scripts in this repository, use `./scripts/codex-node.sh <command>` so `.nvmrc` is loaded before the command runs.
+Do not run `./scripts/codex-node.sh pnpm run dev:*` or `./scripts/codex-node.sh pnpm run storybook` at the end of an implementation unless the user explicitly asks for a running local server.
 
 ## Package Notes
 

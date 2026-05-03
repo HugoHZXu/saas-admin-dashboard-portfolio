@@ -38,10 +38,10 @@ const buttonVariants = cva(
         inverse: '',
       },
       size: {
-        sm: 'min-h-6 px-4 text-xs leading-4 tracking-hugo-button-small',
-        default: 'min-h-10 px-6',
-        lg: 'min-h-12 px-8',
-        icon: 'min-h-10 min-w-14 px-4',
+        sm: 'h-6 px-4 text-xs leading-4 tracking-hugo-button-small [&_svg]:h-4 [&_svg]:w-4',
+        default: 'h-10 px-6 [&_svg]:h-6 [&_svg]:w-6',
+        lg: 'h-12 px-8 [&_svg]:h-6 [&_svg]:w-6',
+        icon: 'h-10 w-14 px-0 [&_svg]:h-6 [&_svg]:w-6',
       },
     },
     compoundVariants: [
@@ -134,11 +134,12 @@ type ButtonProps = NativeButtonProps &
     loadingPosition?: 'start' | 'center';
   };
 
-const buttonSpinner = (position: 'start' | 'center') => (
+const buttonSpinner = (position: 'start' | 'center', size: HugoUIShadcnButtonSize) => (
   <span
     aria-hidden="true"
     className={cn(
-      'size-4 rounded-full border-2 border-current border-t-transparent animate-spin',
+      'rounded-full border-2 border-current border-t-transparent animate-spin',
+      size === 'sm' ? 'h-4 w-4' : 'h-6 w-6',
       position === 'center' && 'absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2'
     )}
     data-position={position}
@@ -201,18 +202,37 @@ function Button({
     onClick?.(event);
   };
 
-  const renderContent = (label: React.ReactNode) => (
-    <>
-      {showCenterLoading && buttonSpinner('center')}
-      <span
-        className={cn('inline-flex items-center gap-2', showCenterLoading && 'invisible')}
-        data-slot="button-content"
-      >
-        {showStartLoading && buttonSpinner('start')}
-        {label && <span data-slot="button-label">{label}</span>}
-      </span>
-    </>
-  );
+  const renderContentPart = (child: React.ReactNode, index: number) => {
+    if (typeof child === 'string' || typeof child === 'number') {
+      return (
+        <span data-slot="button-label" key={`button-label-${index}`}>
+          {child}
+        </span>
+      );
+    }
+
+    return child;
+  };
+
+  const renderContent = (content: React.ReactNode) => {
+    const contentParts = React.Children.toArray(content);
+
+    return (
+      <>
+        {showCenterLoading && buttonSpinner('center', resolvedSize)}
+        <span
+          className={cn(
+            'inline-flex items-center justify-center gap-2',
+            showCenterLoading && 'invisible'
+          )}
+          data-slot="button-content"
+        >
+          {showStartLoading && buttonSpinner('start', resolvedSize)}
+          {contentParts.map(renderContentPart)}
+        </span>
+      </>
+    );
+  };
 
   if (asChild) {
     const child = React.Children.only(children) as React.ReactElement<

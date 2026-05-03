@@ -15,6 +15,7 @@ describe('Button', () => {
     expect(button).toHaveAttribute('data-size', 'default');
     expect(button).toHaveClass('hugo-ui-shadcn-button');
     expect(button.className).toContain('inline-flex');
+    expect(button).toHaveClass('h-10');
     expect(button.className).toContain('bg-hugo-brand-primary');
     expect(button.style.getPropertyValue('--hugo-ui-shadcn-button-brand-hover')).toBe('');
 
@@ -34,7 +35,12 @@ describe('Button', () => {
     expect(button).toHaveAttribute('data-variant', 'outline');
     expect(button).toHaveAttribute('data-tone', 'neutral');
     expect(button).toHaveAttribute('data-size', 'sm');
-    expect(screen.getByTestId('end-icon')).toBeInTheDocument();
+    expect(button).toHaveClass('h-6');
+
+    const icon = screen.getByTestId('end-icon');
+    expect(icon).toBeInTheDocument();
+    expect(icon.closest('[data-slot="button-content"]')).not.toBeNull();
+    expect(icon.closest('[data-slot="button-label"]')).toBeNull();
   });
 
   it('supports icon-only buttons through size and aria-label', () => {
@@ -47,7 +53,10 @@ describe('Button', () => {
     const button = screen.getByRole('button', { name: 'Completed' });
     expect(button).toHaveAttribute('data-icon-only', 'true');
     expect(button).toHaveAttribute('aria-label', 'Completed');
+    expect(button).toHaveClass('h-10');
+    expect(button).toHaveClass('w-14');
     expect(screen.getByTestId('start-icon')).toBeInTheDocument();
+    expect(button.querySelector('[data-slot="button-label"]')).toBeNull();
   });
 
   it('disables click behavior while loading', () => {
@@ -63,6 +72,11 @@ describe('Button', () => {
     expect(button).toBeDisabled();
     expect(button).toHaveAttribute('aria-busy', 'true');
     expect(button).toHaveAttribute('data-loading', 'true');
+
+    const spinner = button.querySelector('[data-slot="button-spinner"]');
+    expect(spinner).not.toBeNull();
+    expect(spinner).toHaveClass('h-6');
+    expect(spinner).toHaveClass('w-6');
 
     fireEvent.click(button);
     expect(handleClick).not.toHaveBeenCalled();

@@ -3,8 +3,8 @@
   "version": "0.0.0",
   "private": true,
   "dependencies": {
-    "hugo-ui": "1.0.2",
-    "hugo-ui-shadcn": "0.1.0",
+    "hugo-ui": "workspace:*",
+    "hugo-ui-shadcn": "workspace:*",
     "@mui/icons-material": "9.0.1",
     "react": "^19.2.6",
     "react-dom": "^19.2.6"

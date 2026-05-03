@@ -59,10 +59,10 @@ Choose validation based on the changed surface:
 - `org-management` feature changes: run package typecheck/lint/build.
 - Shared token/provider/export changes: expand validation to affected consumers.
 
-Use Node.js `22.12.0` or newer for validation. If needed, prefix commands with:
+Use Node.js `22.12.0` or newer for validation. Codex command sessions should use the repository wrapper so `.nvmrc` is loaded before Node.js or pnpm commands run:
 
 ```bash
-PATH="$HOME/.nvm/versions/node/v22.12.0/bin:$PATH"
+./scripts/codex-node.sh pnpm run verify
 ```
 
 ## Reporting Format
@@ -74,4 +74,3 @@ When handing off work, include:
 - which Skill guidance was relevant
 - what validation ran
 - what remains intentionally deferred
-

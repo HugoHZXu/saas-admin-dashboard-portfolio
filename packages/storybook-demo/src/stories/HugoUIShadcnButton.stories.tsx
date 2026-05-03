@@ -59,7 +59,7 @@ type Story = StoryObj<typeof meta>;
 export const Primary: Story = {};
 
 export const Variants: Story = {
-  render: (args) => (
+  render: ({ children: _children, ...args }) => (
     <div style={buttonRowStyle}>
       <Button {...args} tone="brand" variant="solid">
         Solid
@@ -75,7 +75,7 @@ export const Variants: Story = {
 };
 
 export const Sizes: Story = {
-  render: (args) => (
+  render: ({ children: _children, ...args }) => (
     <div style={buttonRowStyle}>
       <Button {...args} size="lg">
         Large
@@ -91,7 +91,7 @@ export const Sizes: Story = {
 };
 
 export const Status: Story = {
-  render: (args) => (
+  render: ({ children: _children, ...args }) => (
     <div style={buttonRowStyle}>
       <Button {...args}>Rest</Button>
       <Button {...args} loading>
@@ -108,18 +108,18 @@ export const Status: Story = {
 };
 
 export const Icons: Story = {
-  render: (args) => (
+  render: ({ children: _children, ...args }) => (
     <div style={buttonRowStyle}>
       <Button {...args}>
-        <CheckCircle2 size={20} />
+        <CheckCircle2 />
         Completed
       </Button>
       <Button {...args}>
         Close
-        <X size={20} />
+        <X />
       </Button>
       <Button {...args} aria-label="Completed" size="icon">
-        <CheckCircle2 size={20} />
+        <CheckCircle2 />
       </Button>
     </div>
   ),
@@ -139,7 +139,7 @@ export const OnDark: Story = {
       values: [{ name: 'dark', value: '#444' }],
     },
   },
-  render: (args) => (
+  render: ({ children: _children, ...args }) => (
     <div style={buttonRowStyle}>
       <Button {...args} tone="inverse" variant="solid">
         Solid
