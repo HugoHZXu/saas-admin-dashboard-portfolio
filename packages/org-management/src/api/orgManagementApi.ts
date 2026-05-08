@@ -183,6 +183,7 @@ export const ORGANIZATION_ACTIVITY_LOGS_QUERY = gql`
 export const useOrganizationsQuery = (input: OrganizationListInput) =>
   useQuery(ORGANIZATIONS_QUERY, {
     variables: { input },
+    fetchPolicy: 'cache-and-network',
   });
 
 export const useOrganizationQuery = (id: string | undefined) =>

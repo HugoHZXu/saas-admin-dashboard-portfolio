@@ -1,0 +1,107 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id                   String                   @id
+  email                String                   @unique
+  firstName            String                   @map("first_name")
+  lastName             String                   @map("last_name")
+  accountStatus        String                   @map("account_status")
+  flaggedForDeletion   Boolean                  @default(false) @map("flagged_for_deletion")
+  lastSignedIn         DateTime?                @map("last_signed_in")
+  createdAt            DateTime                 @default(now()) @map("created_at")
+  updatedAt            DateTime                 @updatedAt @map("updated_at")
+  memberships          OrganizationMembership[]
+  actorActivityEvents  ActivityEvent[]          @relation("ActivityActor")
+  targetActivityEvents ActivityEvent[]          @relation("ActivityTarget")
+
+  @@map("users")
+}
+
+model Organization {
+  id             String                   @id
+  referenceId    String                   @unique @map("reference_id")
+  name           String
+  kind           String                   @default("tenant")
+  description    String?
+  address        String?
+  address2       String?
+  city           String?
+  region         String?
+  postalCode     String?                  @map("postal_code")
+  country        String
+  timezone       String?
+  domainName     String                   @map("domain_name")
+  status         String
+  createdAt      DateTime                 @default(now()) @map("created_at")
+  updatedAt      DateTime                 @updatedAt @map("updated_at")
+  memberships    OrganizationMembership[]
+  activityEvents ActivityEvent[]
+
+  @@index([kind])
+  @@map("organizations")
+}
+
+model Role {
+  id          String                     @id
+  key         String                     @unique
+  name        String
+  assignments MembershipRoleAssignment[]
+
+  @@map("roles")
+}
+
+model OrganizationMembership {
+  id               String                     @id
+  userId           String                     @map("user_id")
+  organizationId   String                     @map("organization_id")
+  membershipStatus String                     @map("membership_status")
+  createdAt        DateTime                   @default(now()) @map("created_at")
+  updatedAt        DateTime                   @updatedAt @map("updated_at")
+  user             User                       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  organization     Organization               @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  roleAssignments  MembershipRoleAssignment[]
+
+  @@unique([userId, organizationId])
+  @@index([userId])
+  @@index([organizationId])
+  @@map("organization_memberships")
+}
+
+model MembershipRoleAssignment {
+  id           String                 @id
+  membershipId String                 @map("membership_id")
+  roleId       String                 @map("role_id")
+  membership   OrganizationMembership @relation(fields: [membershipId], references: [id], onDelete: Cascade)
+  role         Role                   @relation(fields: [roleId], references: [id], onDelete: Cascade)
+
+  @@unique([membershipId, roleId])
+  @@index([membershipId])
+  @@map("membership_role_assignments")
+}
+
+model ActivityEvent {
+  id             String        @id
+  actorUserId    String?       @map("actor_user_id")
+  targetUserId   String?       @map("target_user_id")
+  organizationId String?       @map("organization_id")
+  action         String
+  result         String
+  message        String
+  metadataJson   String?       @map("metadata_json")
+  createdAt      DateTime      @default(now()) @map("created_at")
+  actor          User?         @relation("ActivityActor", fields: [actorUserId], references: [id], onDelete: SetNull)
+  targetUser     User?         @relation("ActivityTarget", fields: [targetUserId], references: [id], onDelete: SetNull)
+  organization   Organization? @relation(fields: [organizationId], references: [id], onDelete: SetNull)
+
+  @@index([targetUserId])
+  @@index([organizationId])
+  @@index([createdAt])
+  @@map("activity_events")
+}

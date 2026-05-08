@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useMemo } from 'react';
 import FilterListIcon from '@mui/icons-material/FilterList';
 import SearchIcon from '@mui/icons-material/Search';
 import { useNavigate } from 'react-router-dom';
@@ -17,6 +17,10 @@ import { useOrganizationsQuery } from '@/api/orgManagementApi';
 import { Organization, OrganizationListInput, OrganizationStatus } from '@/api/types';
 import { getOrganizationDetailPath } from '@/routes/paths';
 import {
+  useOrganizationListTableStore,
+  type OrganizationTableControlMode,
+} from './organizationListStore';
+import {
   FilterModePanel,
   OrganizationCell,
   OrganizationDomain,
@@ -30,8 +34,6 @@ import {
   StatusFilterButton,
   TableToolbar,
 } from './OrganizationListPage.styles';
-
-type TableControlMode = 'search' | 'filter';
 
 const statusToneMap: Record<OrganizationStatus, StatusTagTone> = {
   active: 'success',
@@ -127,19 +129,27 @@ const organizationColumns: TableColumn<Organization>[] = [
   },
 ];
 
-const tableControlOptions: ToggleOption<TableControlMode>[] = [
+const tableControlOptions: ToggleOption<OrganizationTableControlMode>[] = [
   { value: 'search', label: 'Search', icon: <SearchIcon /> },
   { value: 'filter', label: 'Filter', icon: <FilterListIcon /> },
 ];
 
 export function OrganizationListPage() {
   const navigate = useNavigate();
-  const [search, setSearch] = useState('');
-  const [controlMode, setControlMode] = useState<TableControlMode>('search');
-  const [sort, setSort] = useState<TableSort>({ columnId: 'name', direction: 'asc' });
-  const [page, setPage] = useState(0);
-  const [pageSize, setPageSize] = useState(5);
-  const [statusFilters, setStatusFilters] = useState<OrganizationStatus[]>([]);
+  const search = useOrganizationListTableStore((state) => state.search);
+  const controlMode = useOrganizationListTableStore((state) => state.controlMode);
+  const sort = useOrganizationListTableStore((state) => state.sort);
+  const page = useOrganizationListTableStore((state) => state.page);
+  const pageSize = useOrganizationListTableStore((state) => state.pageSize);
+  const statusFilters = useOrganizationListTableStore((state) => state.statusFilters);
+  const setControlMode = useOrganizationListTableStore((state) => state.setControlMode);
+  const setSearch = useOrganizationListTableStore((state) => state.setSearch);
+  const setSort = useOrganizationListTableStore((state) => state.setSort);
+  const setPage = useOrganizationListTableStore((state) => state.setPage);
+  const setPageSize = useOrganizationListTableStore((state) => state.setPageSize);
+  const toggleStoredStatusFilter = useOrganizationListTableStore(
+    (state) => state.toggleStatusFilter
+  );
 
   const queryInput = useMemo<OrganizationListInput>(
     () => ({
@@ -155,6 +165,7 @@ export function OrganizationListPage() {
 
   const organizationsQuery = useOrganizationsQuery(queryInput);
   const organizationPage = organizationsQuery.data?.organizations ?? null;
+  const tableLoading = organizationsQuery.loading && !organizationPage;
 
   const visibleOrganizations = organizationPage?.items ?? [];
 
@@ -179,36 +190,24 @@ export function OrganizationListPage() {
     }
   };
 
-  const handleControlModeChange = (mode: TableControlMode) => {
+  const handleControlModeChange = (mode: OrganizationTableControlMode) => {
     setControlMode(mode);
-    setPage(0);
-    if (mode === 'filter') {
-      setSearch('');
-    }
   };
 
   const handleSearchChange = (value: string) => {
     setSearch(value);
-    setPage(0);
   };
 
   const handleSortChange = (nextSort: TableSort) => {
     setSort(nextSort);
-    setPage(0);
   };
 
   const handlePageSizeChange = (nextPageSize: number) => {
     setPageSize(nextPageSize);
-    setPage(0);
   };
 
   const toggleStatusFilter = (status: OrganizationStatus) => {
-    setPage(0);
-    setStatusFilters((currentFilters) =>
-      currentFilters.includes(status)
-        ? currentFilters.filter((item) => item !== status)
-        : [...currentFilters, status]
-    );
+    toggleStoredStatusFilter(status);
   };
 
   return (
@@ -274,7 +273,7 @@ export function OrganizationListPage() {
           sort={sort}
           onSortChange={handleSortChange}
           onRowClick={openOrganizationDetail}
-          loading={organizationsQuery.loading}
+          loading={tableLoading}
           error={organizationsQuery.error?.message ?? null}
           empty="No organizations match the current filters."
           pagination={{

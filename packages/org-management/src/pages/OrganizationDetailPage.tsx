@@ -1,6 +1,13 @@
 import { useMemo, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { ContentTemplate, StatusTag, StatusTagTone, Table, TableSort } from 'hugo-ui';
+import {
+  ContentTemplate,
+  DetailCard,
+  StatusTag,
+  StatusTagTone,
+  Table,
+  TableSort,
+} from 'hugo-ui';
 import {
   useOrganizationActivityLogsQuery,
   useOrganizationQuery,
@@ -12,7 +19,6 @@ import {
   DefinitionLabel,
   DefinitionList,
   DefinitionValue,
-  DetailCard,
   DetailCardWide,
   DetailGrid,
   PanelHeading,

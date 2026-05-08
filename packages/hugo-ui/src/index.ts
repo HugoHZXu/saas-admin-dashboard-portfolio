@@ -14,6 +14,7 @@ export { HugoUISearchBox as SearchBox } from './SearchBox';
 export { HugoUIToggle as Toggle } from './Toggle';
 export { HugoUIPageTemplate as PageTemplate } from './Templates';
 export { HugoUIContentTemplate as ContentTemplate } from './Templates';
+export { HugoUIDetailCard as DetailCard } from './DetailCard';
 export type { HugoUIInputProps, HugoUIInputExtraProps } from './Input/Input';
 export type {
   HugoUIButtonCommonProps,
@@ -74,6 +75,7 @@ export type {
   HugoUIContentTemplateProps as ContentTemplateProps,
   HugoUIContentTemplateType as ContentTemplateType,
 } from './Templates';
+export type { HugoUIDetailCardProps as DetailCardProps } from './DetailCard';
 export { hugoUITheme } from './styles/theme';
 export { HugoUIProvider } from './provider';
 export type { HugoUIProviderProps } from './provider';

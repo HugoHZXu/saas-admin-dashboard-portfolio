@@ -9,5 +9,11 @@ export const orgManagementApolloClient = new ApolloClient({
   link: new HttpLink({
     uri: getOrgManagementGraphqlUrl(),
   }),
-  cache: new InMemoryCache(),
+  cache: new InMemoryCache({
+    typePolicies: {
+      LocalizedMessage: {
+        keyFields: false,
+      },
+    },
+  }),
 });

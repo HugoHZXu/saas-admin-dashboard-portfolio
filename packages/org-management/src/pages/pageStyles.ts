@@ -1,4 +1,5 @@
 import { styled } from '@mui/material/styles';
+import { DetailCard } from 'hugo-ui';
 
 export const DetailGrid = styled('div')(({ theme }) => ({
   display: 'grid',
@@ -8,16 +9,6 @@ export const DetailGrid = styled('div')(({ theme }) => ({
   [theme.breakpoints.down('sm')]: {
     gridTemplateColumns: '1fr',
   },
-}));
-
-export const DetailCard = styled('section')(({ theme }) => ({
-  display: 'grid',
-  gap: 14,
-  padding: 18,
-  border: `1px solid ${theme.hugoUIColorRoles.border.default}`,
-  borderRadius: 8,
-  background: theme.hugoUIColorRoles.surface.default,
-  boxShadow: theme.hugoUIShadows.LIGHT_SHADOW.boxShadow,
 }));
 
 export const DetailCardWide = styled(DetailCard)(() => ({
@@ -90,4 +81,31 @@ export const ActivityCountText = styled('span')(({ theme }) => ({
   color: theme.hugoUIColorRoles.text.subtle,
   fontSize: 13,
   fontWeight: 700,
+}));
+
+export const AccessStateRoot = styled('div')(({ theme }) => ({
+  display: 'grid',
+  minHeight: '100%',
+  placeItems: 'center',
+  padding: theme.hugoUISpacer.SPACER_XL,
+}));
+
+export const AccessStatePanel = styled(DetailCard)(({ theme }) => ({
+  maxWidth: 560,
+  width: '100%',
+  gap: theme.hugoUISpacer.SPACER_SM,
+}));
+
+export const AccessStateTitle = styled('h2')(({ theme }) => ({
+  margin: 0,
+  color: theme.hugoUIColorRoles.text.primary,
+  fontSize: 22,
+  lineHeight: 1.2,
+}));
+
+export const AccessStateText = styled('p')(({ theme }) => ({
+  margin: 0,
+  color: theme.hugoUIColorRoles.text.subtle,
+  fontSize: 14,
+  lineHeight: 1.55,
 }));

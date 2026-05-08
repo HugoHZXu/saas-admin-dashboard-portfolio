@@ -1,0 +1,33 @@
+{
+  "name": "user-management",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "dependencies": {
+    "@apollo/client": "4.2.0",
+    "@emotion/react": "11.14.0",
+    "@emotion/styled": "11.14.1",
+    "@mui/icons-material": "9.0.1",
+    "@mui/material": "9.0.1",
+    "@mui/system": "9.0.1",
+    "@mui/utils": "9.0.1",
+    "graphql": "16.14.0",
+    "hugo-ui": "workspace:*",
+    "react": "^19.2.6",
+    "react-dom": "^19.2.6",
+    "react-intl": "10.1.9",
+    "react-router-dom": "7.15.1",
+    "zustand": "^5.0.14"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-react": "6.0.2",
+    "vite": "8.0.14"
+  },
+  "scripts": {
+    "dev": "vite --host 127.0.0.1 --port 5175",
+    "build": "tsc -p tsconfig.json --noEmit && vite build",
+    "preview": "vite preview --host 127.0.0.1 --port 4175",
+    "lint": "eslint \"src/**/*.{ts,tsx}\" \"vite.config.ts\"",
+    "typecheck": "tsc -p tsconfig.json --noEmit"
+  }
+}
