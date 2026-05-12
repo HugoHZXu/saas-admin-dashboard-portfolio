@@ -36,6 +36,11 @@ const activityDefinitions: Record<string, ActivityDefinition> = {
     actionDefaultMessage: 'Suspended user',
     summaryDefaultMessage: '{actorName} suspended {targetName}.',
   },
+  ACTIVATE_USER: {
+    action: 'ACTIVATE_USER',
+    actionDefaultMessage: 'Activated user',
+    summaryDefaultMessage: '{actorName} activated {targetName}.',
+  },
   ORGANIZATION_UPDATED: {
     action: 'ORGANIZATION_UPDATED',
     actionDefaultMessage: 'Updated organization',
@@ -59,7 +64,8 @@ const unknownDefinition: ActivityDefinition = {
   summaryDefaultMessage: '{actorName} recorded an unmapped activity for {targetName}.',
 };
 
-const createDisplayName = (firstName: string, lastName: string) => `${firstName} ${lastName}`.trim();
+const createDisplayName = (firstName: string, lastName: string) =>
+  `${firstName} ${lastName}`.trim();
 
 const toUserRef = (user: ActivityEventRecord['actor']): UserRef => {
   if (!user) {

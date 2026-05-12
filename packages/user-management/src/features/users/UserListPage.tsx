@@ -176,9 +176,12 @@ const userColumns: TableColumn<UserTableRow>[] = [
     sortable: true,
     minWidth: 150,
     render: (row) => (
-      <StatusTag tone={accountStatusToneMap[row.accountStatus]}>
-        {formatStatusLabel(row.accountStatus)}
-      </StatusTag>
+      <RoleList aria-label={row.flaggedForDeletion ? 'Status, flagged for deletion' : 'Status'}>
+        <StatusTag tone={accountStatusToneMap[row.accountStatus]}>
+          {formatStatusLabel(row.accountStatus)}
+        </StatusTag>
+        {row.flaggedForDeletion && <StatusTag tone="danger">Flagged</StatusTag>}
+      </RoleList>
     ),
   },
   {

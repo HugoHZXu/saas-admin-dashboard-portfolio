@@ -2,13 +2,11 @@ import { GraphQLFieldConfigMap, GraphQLNonNull } from 'graphql';
 import { PrismaClient } from '@prisma/client';
 import {
   AddUserToOrganizationByEmailInput,
-  AddUserToOrganizationInput,
   ChangeUserRolesInput,
   RemoveUserFromOrganizationInput,
 } from './membership.types';
 import {
   AddUserToOrganizationByEmailInputType,
-  AddUserToOrganizationInputType,
   ChangeUserRolesInputType,
   MutationResultType,
   RemoveUserFromOrganizationInputType,
@@ -21,14 +19,6 @@ export const createMembershipMutationFields = (
   const membershipService = createMembershipService(prisma);
 
   return {
-    addUserToOrganization: {
-      type: new GraphQLNonNull(MutationResultType),
-      args: {
-        input: { type: new GraphQLNonNull(AddUserToOrganizationInputType) },
-      },
-      resolve: (_source, args: { input: AddUserToOrganizationInput }) =>
-        membershipService.addUserToOrganization(args.input),
-    },
     addUserToOrganizationByEmail: {
       type: new GraphQLNonNull(MutationResultType),
       args: {

@@ -1,11 +1,3 @@
-export type AddUserToOrganizationInput = {
-  actorUserId?: string | null;
-  userId: string;
-  organizationId: string;
-  roleIds: string[];
-  reason?: string | null;
-};
-
 export type AddUserToOrganizationByEmailInput = {
   actorUserId?: string | null;
   email: string;
@@ -13,7 +5,13 @@ export type AddUserToOrganizationByEmailInput = {
   reason?: string | null;
 };
 
-export type ChangeUserRolesInput = AddUserToOrganizationInput;
+export type ChangeUserRolesInput = {
+  actorUserId?: string | null;
+  userId: string;
+  organizationId: string;
+  roleIds: string[];
+  reason?: string | null;
+};
 
 export type RemoveUserFromOrganizationInput = {
   actorUserId?: string | null;

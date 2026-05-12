@@ -1,6 +1,7 @@
 import { gql, type TypedDocumentNode } from '@apollo/client';
 import { useMutation, useQuery } from '@apollo/client/react';
 import {
+  ActivateUserInput,
   ActivityLogListInput,
   ActivityRecord,
   AddUserToOrganizationByEmailInput,
@@ -9,7 +10,9 @@ import {
   OrganizationListInput,
   OrganizationScope,
   PageResponse,
+  RemoveUserFromOrganizationInput,
   Role,
+  SuspendUserInput,
   UserDetail,
   UserListInput,
   UserListItem,
@@ -70,6 +73,30 @@ type ChangeUserRolesMutationData = {
 
 type ChangeUserRolesMutationVariables = {
   input: ChangeUserRolesInput;
+};
+
+type SuspendUserMutationData = {
+  suspendUser: MutationResult;
+};
+
+type SuspendUserMutationVariables = {
+  input: SuspendUserInput;
+};
+
+type ActivateUserMutationData = {
+  activateUser: MutationResult;
+};
+
+type ActivateUserMutationVariables = {
+  input: ActivateUserInput;
+};
+
+type RemoveUserFromOrganizationMutationData = {
+  removeUserFromOrganization: MutationResult;
+};
+
+type RemoveUserFromOrganizationMutationVariables = {
+  input: RemoveUserFromOrganizationInput;
 };
 
 const ROLE_FIELDS = gql`
@@ -162,6 +189,7 @@ export const USERS_QUERY = gql`
         lastName
         displayName
         accountStatus
+        flaggedForDeletion
         lastSignedIn
         dateRegistered
         membershipId
@@ -187,6 +215,7 @@ export const USER_QUERY = gql`
       lastName
       displayName
       accountStatus
+      flaggedForDeletion
       lastSignedIn
       dateRegistered
       memberships {
@@ -254,6 +283,39 @@ export const CHANGE_USER_ROLES_MUTATION = gql`
   }
 ` as TypedDocumentNode<ChangeUserRolesMutationData, ChangeUserRolesMutationVariables>;
 
+export const SUSPEND_USER_MUTATION = gql`
+  mutation SuspendUser($input: SuspendUserInput!) {
+    suspendUser(input: $input) {
+      success
+      code
+      message
+    }
+  }
+` as TypedDocumentNode<SuspendUserMutationData, SuspendUserMutationVariables>;
+
+export const ACTIVATE_USER_MUTATION = gql`
+  mutation ActivateUser($input: ActivateUserInput!) {
+    activateUser(input: $input) {
+      success
+      code
+      message
+    }
+  }
+` as TypedDocumentNode<ActivateUserMutationData, ActivateUserMutationVariables>;
+
+export const REMOVE_USER_FROM_ORGANIZATION_MUTATION = gql`
+  mutation RemoveUserFromOrganization($input: RemoveUserFromOrganizationInput!) {
+    removeUserFromOrganization(input: $input) {
+      success
+      code
+      message
+    }
+  }
+` as TypedDocumentNode<
+  RemoveUserFromOrganizationMutationData,
+  RemoveUserFromOrganizationMutationVariables
+>;
+
 export const useOrganizationScopesQuery = () =>
   useQuery(ORGANIZATION_SCOPES_QUERY, {
     variables: {
@@ -296,3 +358,10 @@ export const useAddUserToOrganizationByEmailMutation = () =>
   useMutation(ADD_USER_TO_ORGANIZATION_BY_EMAIL_MUTATION);
 
 export const useChangeUserRolesMutation = () => useMutation(CHANGE_USER_ROLES_MUTATION);
+
+export const useSuspendUserMutation = () => useMutation(SUSPEND_USER_MUTATION);
+
+export const useActivateUserMutation = () => useMutation(ACTIVATE_USER_MUTATION);
+
+export const useRemoveUserFromOrganizationMutation = () =>
+  useMutation(REMOVE_USER_FROM_ORGANIZATION_MUTATION);

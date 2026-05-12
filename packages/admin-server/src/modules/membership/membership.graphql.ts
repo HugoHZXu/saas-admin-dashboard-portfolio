@@ -17,17 +17,6 @@ export const MutationResultType = new GraphQLObjectType({
   },
 });
 
-export const AddUserToOrganizationInputType = new GraphQLInputObjectType({
-  name: 'AddUserToOrganizationInput',
-  fields: {
-    actorUserId: { type: GraphQLID },
-    userId: { type: new GraphQLNonNull(GraphQLID) },
-    organizationId: { type: new GraphQLNonNull(GraphQLID) },
-    roleIds: { type: new GraphQLNonNull(new GraphQLList(new GraphQLNonNull(GraphQLID))) },
-    reason: { type: GraphQLString },
-  },
-});
-
 export const AddUserToOrganizationByEmailInputType = new GraphQLInputObjectType({
   name: 'AddUserToOrganizationByEmailInput',
   fields: {

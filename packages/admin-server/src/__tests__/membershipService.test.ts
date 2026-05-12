@@ -95,30 +95,6 @@ describe('membership service transactions', () => {
     }
   });
 
-  it('rejects duplicate memberships without writing activity', async () => {
-    const { prisma, cleanup } = await createTestDb();
-    const service = createMembershipService(prisma);
-
-    try {
-      const beforeCount = await prisma.activityEvent.count();
-
-      await expect(
-        service.addUserToOrganization({
-          actorUserId: 'user-tenant-admin',
-          userId: 'user-tenant-member',
-          organizationId: 'org-demo-001',
-          roleIds: [],
-        })
-      ).rejects.toMatchObject({
-        code: 'DUPLICATE_MEMBERSHIP',
-      });
-
-      await expect(prisma.activityEvent.count()).resolves.toBe(beforeCount);
-    } finally {
-      await cleanup();
-    }
-  });
-
   it('adds a public user by email to a tenant organization and removes Public membership', async () => {
     const { prisma, cleanup } = await createTestDb();
     const service = createMembershipService(prisma);
@@ -138,6 +114,41 @@ describe('membership service transactions', () => {
         findMembershipRoleKeys(prisma, 'user-public-new-001', 'org-demo-001')
       ).resolves.toEqual([]);
       await expect(findMembership(prisma, 'user-public-new-001', 'org-public')).resolves.toBeNull();
+      await expect(
+        prisma.user.findUnique({
+          where: { id: 'user-public-new-001' },
+          select: { flaggedForDeletion: true },
+        })
+      ).resolves.toEqual({ flaggedForDeletion: false });
+    } finally {
+      await cleanup();
+    }
+  });
+
+  it('clears flaggedForDeletion when a flagged Public user is added by email to a tenant organization', async () => {
+    const { prisma, cleanup } = await createTestDb();
+    const service = createMembershipService(prisma);
+
+    try {
+      await expect(
+        service.addUserToOrganizationByEmail({
+          actorUserId: 'user-tenant-admin',
+          email: 'morgan.gray@public-signups.example',
+          organizationId: 'org-demo-001',
+        })
+      ).resolves.toMatchObject({
+        success: true,
+      });
+
+      await expect(
+        findMembership(prisma, 'user-public-flagged-001', 'org-public')
+      ).resolves.toBeNull();
+      await expect(
+        prisma.user.findUnique({
+          where: { id: 'user-public-flagged-001' },
+          select: { flaggedForDeletion: true },
+        })
+      ).resolves.toEqual({ flaggedForDeletion: false });
     } finally {
       await cleanup();
     }
@@ -223,7 +234,7 @@ describe('membership service transactions', () => {
       await expect(prisma.activityEvent.count()).resolves.toBe(beforeCount);
       await expect(
         prisma.organizationMembership.count({ where: { organizationId: 'org-public' } })
-      ).resolves.toBe(3);
+      ).resolves.toBe(4);
     } finally {
       await cleanup();
     }
@@ -257,17 +268,16 @@ describe('membership service transactions', () => {
     }
   });
 
-  it('adds a public user to a tenant organization and writes activity in one transaction', async () => {
+  it('adds a public user by email to a tenant organization and writes activity in one transaction', async () => {
     const { prisma, cleanup } = await createTestDb();
     const service = createMembershipService(prisma);
 
     try {
       await expect(
-        service.addUserToOrganization({
+        service.addUserToOrganizationByEmail({
           actorUserId: 'user-tenant-admin',
-          userId: 'user-public-new-002',
+          email: 'jamie.ross@public-signups.example',
           organizationId: 'org-demo-001',
-          roleIds: [],
         })
       ).resolves.toMatchObject({
         success: true,
@@ -568,6 +578,129 @@ describe('membership service transactions', () => {
       await expect(
         findMembershipRoleKeys(prisma, 'user-platform-support', 'org-platform-ops')
       ).resolves.toEqual(['organization_admin', 'platform_admin']);
+    } finally {
+      await cleanup();
+    }
+  });
+
+  it('removes one tenant membership without changing Public or deletion flag when another tenant remains', async () => {
+    const { prisma, cleanup } = await createTestDb();
+    const service = createMembershipService(prisma);
+
+    try {
+      await expect(
+        service.removeUserFromOrganization({
+          actorUserId: 'user-platform-lead',
+          userId: 'user-multi-tenant-admin',
+          organizationId: 'org-demo-003',
+        })
+      ).resolves.toMatchObject({
+        success: true,
+      });
+
+      await expect(
+        findMembership(prisma, 'user-multi-tenant-admin', 'org-demo-003')
+      ).resolves.toBeNull();
+      await expect(
+        findMembership(prisma, 'user-multi-tenant-admin', 'org-demo-002')
+      ).resolves.toMatchObject({
+        id: 'membership-northstar-admin',
+      });
+      await expect(
+        findMembership(prisma, 'user-multi-tenant-admin', 'org-public')
+      ).resolves.toBeNull();
+      await expect(
+        prisma.user.findUnique({
+          where: { id: 'user-multi-tenant-admin' },
+          select: { flaggedForDeletion: true },
+        })
+      ).resolves.toEqual({ flaggedForDeletion: false });
+    } finally {
+      await cleanup();
+    }
+  });
+
+  it('falls back to Public membership and flags the user after removing the last tenant membership', async () => {
+    const { prisma, cleanup } = await createTestDb();
+    const service = createMembershipService(prisma);
+
+    try {
+      await expect(
+        service.removeUserFromOrganization({
+          actorUserId: 'user-tenant-admin',
+          userId: 'user-tenant-member',
+          organizationId: 'org-demo-001',
+        })
+      ).resolves.toMatchObject({
+        success: true,
+      });
+
+      await expect(findMembership(prisma, 'user-tenant-member', 'org-demo-001')).resolves.toBeNull();
+      await expect(findMembership(prisma, 'user-tenant-member', 'org-public')).resolves.toMatchObject(
+        {
+          userId: 'user-tenant-member',
+          organizationId: 'org-public',
+        }
+      );
+      await expect(
+        prisma.user.findUnique({
+          where: { id: 'user-tenant-member' },
+          select: { flaggedForDeletion: true },
+        })
+      ).resolves.toEqual({ flaggedForDeletion: true });
+    } finally {
+      await cleanup();
+    }
+  });
+
+  it('rejects removing Public, self, or missing memberships without writing activity', async () => {
+    const { prisma, cleanup } = await createTestDb();
+    const service = createMembershipService(prisma);
+
+    try {
+      const beforeActivityCount = await prisma.activityEvent.count();
+
+      await expect(
+        service.removeUserFromOrganization({
+          actorUserId: 'user-platform-public-admin',
+          userId: 'user-public-new-001',
+          organizationId: 'org-public',
+        })
+      ).rejects.toMatchObject({
+        code: 'PUBLIC_MEMBERSHIP_REMOVE_UNSUPPORTED',
+      });
+
+      await expect(
+        service.removeUserFromOrganization({
+          actorUserId: 'user-tenant-admin',
+          userId: 'user-tenant-admin',
+          organizationId: 'org-demo-001',
+        })
+      ).rejects.toMatchObject({
+        code: 'SELF_MEMBERSHIP_REMOVE_UNSUPPORTED',
+      });
+
+      await expect(
+        service.removeUserFromOrganization({
+          actorUserId: 'user-tenant-admin',
+          userId: 'user-tenant-member',
+          organizationId: 'org-demo-002',
+        })
+      ).rejects.toMatchObject({
+        code: 'MEMBERSHIP_NOT_FOUND',
+      });
+
+      await expect(prisma.activityEvent.count()).resolves.toBe(beforeActivityCount);
+      await expect(
+        findMembership(prisma, 'user-public-new-001', 'org-public')
+      ).resolves.toMatchObject({
+        id: 'membership-public-new-001',
+      });
+      await expect(findMembership(prisma, 'user-tenant-admin', 'org-demo-001')).resolves.toMatchObject(
+        {
+          id: 'membership-acme-admin',
+        }
+      );
     } finally {
       await cleanup();
     }

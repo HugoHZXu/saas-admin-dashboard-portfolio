@@ -1,6 +1,7 @@
 import { randomUUID } from 'crypto';
 import { Prisma } from '@prisma/client';
 import { PrismaExecutor } from '../../db/types';
+import { ORGANIZATION_IDS, ORGANIZATION_KINDS } from '../../domain/adminConstants';
 
 export const membershipWithRolesInclude = {
   user: true,
@@ -43,6 +44,17 @@ export const membershipRepository = {
     });
   },
 
+  countTenantMemberships(prisma: PrismaExecutor, userId: string) {
+    return prisma.organizationMembership.count({
+      where: {
+        userId,
+        organization: {
+          kind: ORGANIZATION_KINDS.tenant,
+        },
+      },
+    });
+  },
+
   createWithRoles(
     prisma: PrismaExecutor,
     userId: string,
@@ -61,6 +73,25 @@ export const membershipRepository = {
             roleId,
           })),
         },
+      },
+      include: membershipWithRolesInclude,
+    });
+  },
+
+  ensurePublicMembership(prisma: PrismaExecutor, userId: string) {
+    return prisma.organizationMembership.upsert({
+      where: {
+        userId_organizationId: {
+          userId,
+          organizationId: ORGANIZATION_IDS.public,
+        },
+      },
+      update: {},
+      create: {
+        id: createId('membership'),
+        userId,
+        organizationId: ORGANIZATION_IDS.public,
+        membershipStatus: 'active',
       },
       include: membershipWithRolesInclude,
     });

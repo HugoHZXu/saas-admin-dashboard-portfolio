@@ -1,7 +1,8 @@
 import { GraphQLFieldConfigMap, GraphQLID, GraphQLNonNull } from 'graphql';
 import { PrismaClient } from '@prisma/client';
-import { UserDetailQuery, UserListQuery, SuspendUserInput } from './user.types';
+import { ActivateUserInput, SuspendUserInput, UserDetailQuery, UserListQuery } from './user.types';
 import {
+  ActivateUserInputType,
   SuspendUserInputType,
   UserDetailType,
   UserListInputType,
@@ -46,6 +47,14 @@ export const createUserMutationFields = (
         input: { type: new GraphQLNonNull(SuspendUserInputType) },
       },
       resolve: (_source, args: { input: SuspendUserInput }) => userService.suspendUser(args.input),
+    },
+    activateUser: {
+      type: new GraphQLNonNull(MutationResultType),
+      args: {
+        input: { type: new GraphQLNonNull(ActivateUserInputType) },
+      },
+      resolve: (_source, args: { input: ActivateUserInput }) =>
+        userService.activateUser(args.input),
     },
   };
 };

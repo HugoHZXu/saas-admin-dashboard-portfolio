@@ -15,6 +15,7 @@ const enMessages: Record<string, string> = {
   'userManagement.activity.action.CHANGE_USER_ROLES': 'Changed user roles',
   'userManagement.activity.action.REMOVE_USER_FROM_ORGANIZATION': 'Removed user from organization',
   'userManagement.activity.action.SUSPEND_USER': 'Suspended user',
+  'userManagement.activity.action.ACTIVATE_USER': 'Activated user',
   'userManagement.activity.action.ORGANIZATION_CREATED': 'Created organization',
   'userManagement.activity.action.ORGANIZATION_UPDATED': 'Updated organization',
   'userManagement.activity.action.DOMAIN_VERIFIED': 'Verified domain',
@@ -27,6 +28,7 @@ const enMessages: Record<string, string> = {
   'userManagement.activity.summary.REMOVE_USER_FROM_ORGANIZATION':
     '{actorName} removed {targetName} from {organizationName}.',
   'userManagement.activity.summary.SUSPEND_USER': '{actorName} suspended {targetName}.',
+  'userManagement.activity.summary.ACTIVATE_USER': '{actorName} activated {targetName}.',
   'userManagement.activity.summary.ORGANIZATION_CREATED': '{actorName} created {organizationName}.',
   'userManagement.activity.summary.ORGANIZATION_UPDATED':
     '{actorName} updated organization settings for {organizationName}.',

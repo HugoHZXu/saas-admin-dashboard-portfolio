@@ -340,7 +340,7 @@ describe('admin-server GraphQL', () => {
         referenceId: 'org-ref-001',
         name: 'Acme Cloud',
         kind: 'TENANT',
-        userCount: 2,
+        userCount: 4,
         domains: [{ name: 'acme-cloud.example' }],
         admins: [{ email: 'mina.patel@acme-cloud.example' }],
       });
@@ -391,7 +391,7 @@ describe('admin-server GraphQL', () => {
           referenceId: 'org-ref-public',
           name: 'Public',
           kind: 'PUBLIC',
-          userCount: 3,
+          userCount: 4,
           domains: [{ name: 'public-signups.example' }],
           admins: [],
         }),
@@ -448,6 +448,7 @@ describe('admin-server GraphQL', () => {
               totalElements
               items {
                 email
+                flaggedForDeletion
                 organization {
                   id
                   name
@@ -469,16 +470,30 @@ describe('admin-server GraphQL', () => {
       });
 
       expect(payload.errors).toBeUndefined();
-      expect(payload.data.users.totalElements).toBe(2);
+      expect(payload.data.users.totalElements).toBe(4);
       expect(payload.data.users.items).toEqual(
         expect.arrayContaining([
           expect.objectContaining({
             email: 'mina.patel@acme-cloud.example',
+            flaggedForDeletion: false,
             organization: { id: 'org-demo-001', name: 'Acme Cloud' },
             roles: [{ key: 'organization_admin', name: 'Organization Administrator' }],
           }),
           expect.objectContaining({
             email: 'sam.rivera@acme-cloud.example',
+            flaggedForDeletion: false,
+            organization: { id: 'org-demo-001', name: 'Acme Cloud' },
+            roles: [],
+          }),
+          expect.objectContaining({
+            email: 'lee.carter@acme-cloud.example',
+            flaggedForDeletion: false,
+            organization: { id: 'org-demo-001', name: 'Acme Cloud' },
+            roles: [{ key: 'workspace_manager', name: 'Workspace Manager' }],
+          }),
+          expect.objectContaining({
+            email: 'nora.singh@acme-cloud.example',
+            flaggedForDeletion: false,
             organization: { id: 'org-demo-001', name: 'Acme Cloud' },
             roles: [],
           }),
@@ -500,6 +515,7 @@ describe('admin-server GraphQL', () => {
               totalElements
               items {
                 email
+                flaggedForDeletion
                 organization {
                   id
                   name
@@ -520,21 +536,30 @@ describe('admin-server GraphQL', () => {
       });
 
       expect(payload.errors).toBeUndefined();
-      expect(payload.data.users.totalElements).toBe(3);
+      expect(payload.data.users.totalElements).toBe(4);
       expect(payload.data.users.items).toEqual(
         expect.arrayContaining([
           expect.objectContaining({
             email: 'alex.kim@public-signups.example',
+            flaggedForDeletion: false,
             organization: { id: 'org-public', name: 'Public' },
             roles: [],
           }),
           expect.objectContaining({
             email: 'jamie.ross@public-signups.example',
+            flaggedForDeletion: false,
             organization: { id: 'org-public', name: 'Public' },
             roles: [],
           }),
           expect.objectContaining({
             email: 'quinn.parker@public-signups.example',
+            flaggedForDeletion: false,
+            organization: { id: 'org-public', name: 'Public' },
+            roles: [],
+          }),
+          expect.objectContaining({
+            email: 'morgan.gray@public-signups.example',
+            flaggedForDeletion: true,
             organization: { id: 'org-public', name: 'Public' },
             roles: [],
           }),
@@ -734,6 +759,213 @@ describe('admin-server GraphQL', () => {
     }
   });
 
+  it('removes an organization user through GraphQL and exposes the Activity Log event', async () => {
+    const { prisma, url, cleanup } = await listen();
+
+    try {
+      const { response, payload } = await postGraphql(url, {
+        query: `
+          mutation RemoveUserFromOrganization($input: RemoveUserFromOrganizationInput!) {
+            removeUserFromOrganization(input: $input) {
+              success
+              code
+              message
+            }
+          }
+        `,
+        variables: {
+          input: {
+            actorUserId: 'user-tenant-admin',
+            userId: 'user-tenant-member',
+            organizationId: 'org-demo-001',
+            reason: 'Synthetic access cleanup',
+          },
+        },
+      });
+
+      expect(response.status).toBe(200);
+      expect(payload.errors).toBeUndefined();
+      expect(payload.data.removeUserFromOrganization).toEqual({
+        success: true,
+        code: 'OK',
+        message: 'User was removed from organization.',
+      });
+
+      await expect(
+        prisma.organizationMembership.findUnique({
+          where: {
+            userId_organizationId: {
+              userId: 'user-tenant-member',
+              organizationId: 'org-demo-001',
+            },
+          },
+        })
+      ).resolves.toBeNull();
+      await expect(
+        prisma.organizationMembership.findUnique({
+          where: {
+            userId_organizationId: {
+              userId: 'user-tenant-member',
+              organizationId: 'org-public',
+            },
+          },
+        })
+      ).resolves.toMatchObject({
+        userId: 'user-tenant-member',
+        organizationId: 'org-public',
+      });
+      await expect(
+        prisma.user.findUnique({
+          where: { id: 'user-tenant-member' },
+          select: { flaggedForDeletion: true },
+        })
+      ).resolves.toEqual({ flaggedForDeletion: true });
+
+      const { payload: activityPayload } = await postGraphql(url, {
+        query: `
+          query ActivityLogs($input: ActivityLogListInput) {
+            activityLogs(input: $input) {
+              totalElements
+              items {
+                action
+                actionLabel {
+                  defaultMessage
+                }
+                summaryMessage {
+                  defaultMessage
+                }
+              }
+            }
+          }
+        `,
+        variables: {
+          input: {
+            targetUserId: 'user-tenant-member',
+            organizationId: 'org-demo-001',
+            actions: ['REMOVE_USER_FROM_ORGANIZATION'],
+            pageSize: 5,
+          },
+        },
+      });
+
+      expect(activityPayload.errors).toBeUndefined();
+      expect(activityPayload.data.activityLogs.totalElements).toBe(1);
+      expect(activityPayload.data.activityLogs.items[0]).toEqual({
+        action: 'REMOVE_USER_FROM_ORGANIZATION',
+        actionLabel: {
+          defaultMessage: 'Removed user from organization',
+        },
+        summaryMessage: {
+          defaultMessage: '{actorName} removed {targetName} from {organizationName}.',
+        },
+      });
+    } finally {
+      await cleanup();
+    }
+  });
+
+  it('activates a suspended user through GraphQL', async () => {
+    const { prisma, url, cleanup } = await listen();
+
+    try {
+      await prisma.user.update({
+        where: {
+          id: 'user-tenant-member',
+        },
+        data: {
+          accountStatus: 'Suspended',
+        },
+      });
+
+      const { response, payload } = await postGraphql(url, {
+        query: `
+          mutation ActivateUser($input: ActivateUserInput!) {
+            activateUser(input: $input) {
+              success
+              code
+              message
+            }
+          }
+        `,
+        variables: {
+          input: {
+            actorUserId: 'user-tenant-admin',
+            userId: 'user-tenant-member',
+          },
+        },
+      });
+
+      expect(response.status).toBe(200);
+      expect(payload.errors).toBeUndefined();
+      expect(payload.data.activateUser).toEqual({
+        success: true,
+        code: 'OK',
+        message: 'User was activated.',
+      });
+
+      await expect(
+        prisma.user.findUnique({
+          where: {
+            id: 'user-tenant-member',
+          },
+          select: {
+            accountStatus: true,
+          },
+        })
+      ).resolves.toEqual({ accountStatus: 'Active' });
+
+      await expect(
+        prisma.activityEvent.count({
+          where: {
+            actorUserId: 'user-tenant-admin',
+            targetUserId: 'user-tenant-member',
+            action: 'ACTIVATE_USER',
+          },
+        })
+      ).resolves.toBe(1);
+
+      const { payload: activityPayload } = await postGraphql(url, {
+        query: `
+          query ActivityLogs($input: ActivityLogListInput) {
+            activityLogs(input: $input) {
+              totalElements
+              items {
+                action
+                actionLabel {
+                  defaultMessage
+                }
+                summaryMessage {
+                  defaultMessage
+                }
+              }
+            }
+          }
+        `,
+        variables: {
+          input: {
+            targetUserId: 'user-tenant-member',
+            actions: ['ACTIVATE_USER'],
+            pageSize: 5,
+          },
+        },
+      });
+
+      expect(activityPayload.errors).toBeUndefined();
+      expect(activityPayload.data.activityLogs.totalElements).toBe(1);
+      expect(activityPayload.data.activityLogs.items[0]).toEqual({
+        action: 'ACTIVATE_USER',
+        actionLabel: {
+          defaultMessage: 'Activated user',
+        },
+        summaryMessage: {
+          defaultMessage: '{actorName} activated {targetName}.',
+        },
+      });
+    } finally {
+      await cleanup();
+    }
+  });
+
   it('queries platform organization users with combined platform and user-management roles', async () => {
     const { url, cleanup } = await listen();
 
@@ -799,6 +1031,7 @@ describe('admin-server GraphQL', () => {
           query User($id: ID!, $organizationId: ID!) {
             user(id: $id, organizationId: $organizationId) {
               email
+              flaggedForDeletion
               memberships {
                 organization {
                   name
@@ -817,6 +1050,7 @@ describe('admin-server GraphQL', () => {
       });
 
       expect(payload.errors).toBeUndefined();
+      expect(payload.data.user.flaggedForDeletion).toBe(false);
       expect(payload.data.user.memberships).toHaveLength(1);
       expect(payload.data.user.memberships[0].organization.name).toBe('Northstar Labs');
       expect(payload.data.user.memberships[0].roles).toEqual([{ key: 'organization_admin' }]);

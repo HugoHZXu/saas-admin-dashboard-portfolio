@@ -43,6 +43,26 @@ export const seedUsers: Prisma.UserCreateManyInput[] = [
     updatedAt: new Date('2026-05-24T13:26:00.000Z'),
   },
   {
+    id: 'user-acme-workspace-manager',
+    email: 'lee.carter@acme-cloud.example',
+    firstName: 'Lee',
+    lastName: 'Carter',
+    accountStatus: 'Suspended',
+    lastSignedIn: new Date('2026-04-30T18:05:00.000Z'),
+    createdAt: new Date('2025-12-03T16:45:00.000Z'),
+    updatedAt: new Date('2026-05-12T10:15:00.000Z'),
+  },
+  {
+    id: 'user-acme-incomplete-member',
+    email: 'nora.singh@acme-cloud.example',
+    firstName: 'Nora',
+    lastName: 'Singh',
+    accountStatus: 'Incomplete',
+    lastSignedIn: null,
+    createdAt: new Date('2026-02-14T09:30:00.000Z'),
+    updatedAt: new Date('2026-02-14T09:30:00.000Z'),
+  },
+  {
     id: 'user-multi-tenant-admin',
     email: 'taylor.morgan@admin-demo.example',
     firstName: 'Taylor',
@@ -51,6 +71,16 @@ export const seedUsers: Prisma.UserCreateManyInput[] = [
     lastSignedIn: new Date('2026-05-18T09:20:00.000Z'),
     createdAt: new Date('2025-11-06T12:00:00.000Z'),
     updatedAt: new Date('2026-05-23T10:18:00.000Z'),
+  },
+  {
+    id: 'user-multi-tenant-mixed',
+    email: 'harper.reed@admin-demo.example',
+    firstName: 'Harper',
+    lastName: 'Reed',
+    accountStatus: 'Active',
+    lastSignedIn: new Date('2026-05-21T14:40:00.000Z'),
+    createdAt: new Date('2025-12-10T11:00:00.000Z'),
+    updatedAt: new Date('2026-05-21T14:40:00.000Z'),
   },
   {
     id: 'user-platform-public-admin',
@@ -101,6 +131,17 @@ export const seedUsers: Prisma.UserCreateManyInput[] = [
     lastSignedIn: new Date('2026-05-12T15:30:00.000Z'),
     createdAt: new Date('2026-05-08T08:45:00.000Z'),
     updatedAt: new Date('2026-05-12T15:30:00.000Z'),
+  },
+  {
+    id: 'user-public-flagged-001',
+    email: 'morgan.gray@public-signups.example',
+    firstName: 'Morgan',
+    lastName: 'Gray',
+    accountStatus: 'Active',
+    flaggedForDeletion: true,
+    lastSignedIn: new Date('2026-05-10T12:10:00.000Z'),
+    createdAt: new Date('2026-05-09T10:25:00.000Z'),
+    updatedAt: new Date('2026-05-14T12:10:00.000Z'),
   },
 ];
 
@@ -250,6 +291,22 @@ export const seedMemberships: Prisma.OrganizationMembershipCreateManyInput[] = [
     updatedAt: new Date('2025-10-21T15:16:00.000Z'),
   },
   {
+    id: 'membership-acme-workspace-manager',
+    userId: 'user-acme-workspace-manager',
+    organizationId: 'org-demo-001',
+    membershipStatus: 'active',
+    createdAt: new Date('2025-12-03T16:50:00.000Z'),
+    updatedAt: new Date('2025-12-03T16:50:00.000Z'),
+  },
+  {
+    id: 'membership-acme-incomplete-member',
+    userId: 'user-acme-incomplete-member',
+    organizationId: 'org-demo-001',
+    membershipStatus: 'active',
+    createdAt: new Date('2026-02-14T09:35:00.000Z'),
+    updatedAt: new Date('2026-02-14T09:35:00.000Z'),
+  },
+  {
     id: 'membership-northstar-admin',
     userId: 'user-multi-tenant-admin',
     organizationId: 'org-demo-002',
@@ -274,6 +331,22 @@ export const seedMemberships: Prisma.OrganizationMembershipCreateManyInput[] = [
     updatedAt: new Date('2026-01-17T12:05:00.000Z'),
   },
   {
+    id: 'membership-northstar-mixed-admin',
+    userId: 'user-multi-tenant-mixed',
+    organizationId: 'org-demo-002',
+    membershipStatus: 'active',
+    createdAt: new Date('2025-12-10T11:05:00.000Z'),
+    updatedAt: new Date('2025-12-10T11:05:00.000Z'),
+  },
+  {
+    id: 'membership-vertex-mixed-workspace',
+    userId: 'user-multi-tenant-mixed',
+    organizationId: 'org-demo-003',
+    membershipStatus: 'active',
+    createdAt: new Date('2025-12-11T11:05:00.000Z'),
+    updatedAt: new Date('2025-12-11T11:05:00.000Z'),
+  },
+  {
     id: 'membership-public-new-001',
     userId: 'user-public-new-001',
     organizationId: ORGANIZATION_IDS.public,
@@ -296,6 +369,14 @@ export const seedMemberships: Prisma.OrganizationMembershipCreateManyInput[] = [
     membershipStatus: 'active',
     createdAt: new Date('2026-05-08T08:45:00.000Z'),
     updatedAt: new Date('2026-05-08T08:45:00.000Z'),
+  },
+  {
+    id: 'membership-public-flagged-001',
+    userId: 'user-public-flagged-001',
+    organizationId: ORGANIZATION_IDS.public,
+    membershipStatus: 'active',
+    createdAt: new Date('2026-05-09T10:25:00.000Z'),
+    updatedAt: new Date('2026-05-14T12:10:00.000Z'),
   },
 ];
 
@@ -331,6 +412,11 @@ export const seedRoleAssignments: Prisma.MembershipRoleAssignmentCreateManyInput
     roleId: 'role-organization-admin',
   },
   {
+    id: 'assignment-acme-workspace-manager',
+    membershipId: 'membership-acme-workspace-manager',
+    roleId: 'role-workspace-manager',
+  },
+  {
     id: 'assignment-northstar-admin',
     membershipId: 'membership-northstar-admin',
     roleId: 'role-organization-admin',
@@ -339,6 +425,16 @@ export const seedRoleAssignments: Prisma.MembershipRoleAssignmentCreateManyInput
     id: 'assignment-vertex-admin',
     membershipId: 'membership-vertex-admin',
     roleId: 'role-organization-admin',
+  },
+  {
+    id: 'assignment-northstar-mixed-admin',
+    membershipId: 'membership-northstar-mixed-admin',
+    roleId: 'role-organization-admin',
+  },
+  {
+    id: 'assignment-vertex-mixed-workspace',
+    membershipId: 'membership-vertex-mixed-workspace',
+    roleId: 'role-workspace-manager',
   },
 ];
 

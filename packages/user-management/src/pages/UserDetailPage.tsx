@@ -1,6 +1,7 @@
 import { useCallback, useMemo, useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import {
+  Button,
   ContentTemplate,
   DetailCard,
   Modal,
@@ -13,9 +14,12 @@ import {
 import type { FeedbackMessageType, ModalButtonsType } from 'hugo-ui';
 import type { ActivityLogListInput, Role, RoleKey, UserAccountStatus } from '@/api/types';
 import {
+  useActivateUserMutation,
   useActivityLogsQuery,
   useAvailableRolesQuery,
   useChangeUserRolesMutation,
+  useRemoveUserFromOrganizationMutation,
+  useSuspendUserMutation,
   useUserQuery,
 } from '@/api/userManagementApi';
 import {
@@ -73,10 +77,54 @@ const roleDescriptionMap: Record<RoleKey, string> = {
   workspace_manager: 'Manage tenant workspace operations without User Management access.',
 };
 
-type RoleFeedback = {
+type UserDetailFeedback = {
   type: FeedbackMessageType['type'];
   message: string;
   description: string;
+};
+
+type AccountStatusAction = 'suspend' | 'activate';
+
+const accountStatusActionConfigMap: Record<
+  AccountStatusAction,
+  {
+    buttonLabel: string;
+    modalTitle: string;
+    confirmLabel: string;
+    bodyText: (displayName: string) => string;
+    successMessage: string;
+    errorMessage: string;
+  }
+> = {
+  suspend: {
+    buttonLabel: 'Suspend',
+    modalTitle: 'Suspend user',
+    confirmLabel: 'Suspend',
+    bodyText: (displayName) =>
+      `Suspend ${displayName}? The account will be marked suspended until it is activated.`,
+    successMessage: 'User suspended',
+    errorMessage: 'User was not suspended',
+  },
+  activate: {
+    buttonLabel: 'Activate',
+    modalTitle: 'Activate user',
+    confirmLabel: 'Activate',
+    bodyText: (displayName) => `Activate ${displayName}? The account will be marked active.`,
+    successMessage: 'User activated',
+    errorMessage: 'User was not activated',
+  },
+};
+
+const getAccountStatusAction = (status: UserAccountStatus): AccountStatusAction | null => {
+  if (status === 'Active') {
+    return 'suspend';
+  }
+
+  if (status === 'Suspended') {
+    return 'activate';
+  }
+
+  return null;
 };
 
 const getRoleDescription = (role: Role) =>
@@ -87,6 +135,7 @@ const roleIdsEqual = (first: string[], second: string[]) =>
 
 export function UserDetailPage() {
   const navigate = useNavigate();
+  const location = useLocation();
   const { userId } = useParams();
   const {
     selectedOrganization,
@@ -101,12 +150,18 @@ export function UserDetailPage() {
   });
   const [activityPageNumber, setActivityPageNumber] = useState(0);
   const [roleModalOpen, setRoleModalOpen] = useState(false);
+  const [accountStatusAction, setAccountStatusAction] = useState<AccountStatusAction | null>(null);
+  const [removeUserModalOpen, setRemoveUserModalOpen] = useState(false);
   const [draftRoleIds, setDraftRoleIds] = useState<string[]>([]);
-  const [roleFeedback, setRoleFeedback] = useState<RoleFeedback | null>(null);
+  const [feedback, setFeedback] = useState<UserDetailFeedback | null>(null);
 
   const userQuery = useUserQuery(userId, selectedOrganizationId ?? undefined);
   const availableRolesQuery = useAvailableRolesQuery(selectedOrganizationId ?? undefined);
   const [changeUserRoles, changeRolesMutation] = useChangeUserRolesMutation();
+  const [suspendUser, suspendUserMutation] = useSuspendUserMutation();
+  const [activateUser, activateUserMutation] = useActivateUserMutation();
+  const [removeUserFromOrganization, removeUserMutation] =
+    useRemoveUserFromOrganizationMutation();
   const user = userQuery.data?.user ?? null;
   const scopedMembership = useMemo(
     () =>
@@ -135,6 +190,8 @@ export function UserDetailPage() {
   const activityPage = activityQuery.data?.activityLogs ?? null;
   const availableRoles = availableRolesQuery.data?.availableRoles ?? [];
   const currentAccountId = currentAccount?.id ?? null;
+  const accountStatusMutationLoading = suspendUserMutation.loading || activateUserMutation.loading;
+  const removeUserMutationLoading = removeUserMutation.loading;
   const assignableRoles = useMemo(
     () => getAssignableRoles(scopedMembership?.roles ?? []),
     [scopedMembership?.roles]
@@ -149,6 +206,12 @@ export function UserDetailPage() {
     [currentRoleIds, draftRoleIds]
   );
   const isEditingCurrentAccount = Boolean(user?.id && currentAccountId === user.id);
+  const canShowRemoveUserAction = Boolean(
+    user?.id &&
+      selectedOrganization?.kind === 'TENANT' &&
+      selectedOrganizationId &&
+      currentAccountId !== user.id
+  );
   const isSelfOrganizationAdminLocked = Boolean(
     isEditingCurrentAccount &&
     scopedMembership?.roles.some((role) => role.key === 'organization_admin')
@@ -168,6 +231,42 @@ export function UserDetailPage() {
   const detailError = !userId
     ? 'The selected user route is missing an id.'
     : (userQuery.error?.message ?? null);
+  const availableAccountStatusAction = user ? getAccountStatusAction(user.accountStatus) : null;
+  const availableAccountStatusActionConfig = availableAccountStatusAction
+    ? accountStatusActionConfigMap[availableAccountStatusAction]
+    : null;
+  const canShowAccountStatusAction = Boolean(
+    availableAccountStatusAction &&
+    availableAccountStatusActionConfig &&
+    !(availableAccountStatusAction === 'suspend' && isSelfOrganizationAdminLocked)
+  );
+  const accountStatusActionConfig = accountStatusAction
+    ? accountStatusActionConfigMap[accountStatusAction]
+    : null;
+
+  const openAccountStatusModal = useCallback((action: AccountStatusAction) => {
+    setAccountStatusAction(action);
+  }, []);
+
+  const closeAccountStatusModal = useCallback(() => {
+    if (accountStatusMutationLoading) {
+      return;
+    }
+
+    setAccountStatusAction(null);
+  }, [accountStatusMutationLoading]);
+
+  const openRemoveUserModal = useCallback(() => {
+    setRemoveUserModalOpen(true);
+  }, []);
+
+  const closeRemoveUserModal = useCallback(() => {
+    if (removeUserMutationLoading) {
+      return;
+    }
+
+    setRemoveUserModalOpen(false);
+  }, [removeUserMutationLoading]);
 
   const openRoleModal = useCallback(() => {
     setDraftRoleIds(currentRoleIds);
@@ -220,7 +319,7 @@ export function UserDetailPage() {
 
       await refetchDemoSession();
       setRoleModalOpen(false);
-      setRoleFeedback({
+      setFeedback({
         type: 'success',
         message: 'Roles updated',
         description: result.message,
@@ -228,9 +327,97 @@ export function UserDetailPage() {
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : 'User roles were not changed.';
 
-      setRoleFeedback({
+      setFeedback({
         type: 'error',
         message: 'Roles were not updated',
+        description: errorMessage,
+      });
+    }
+  };
+
+  const handleAccountStatusConfirm = async () => {
+    if (
+      !user?.id ||
+      !accountStatusAction ||
+      !accountStatusActionConfig ||
+      (accountStatusAction === 'suspend' && isSelfOrganizationAdminLocked)
+    ) {
+      return;
+    }
+
+    try {
+      const variables = {
+        input: {
+          actorUserId: currentAccountId,
+          userId: user.id,
+        },
+      };
+      const result =
+        accountStatusAction === 'suspend'
+          ? (await suspendUser({ variables })).data?.suspendUser
+          : (await activateUser({ variables })).data?.activateUser;
+
+      if (!result?.success) {
+        throw new Error(result?.message ?? accountStatusActionConfig.errorMessage);
+      }
+
+      await userQuery.refetch();
+
+      if (activityInput) {
+        await activityQuery.refetch();
+      }
+
+      await refetchDemoSession();
+      setAccountStatusAction(null);
+      setFeedback({
+        type: 'success',
+        message: accountStatusActionConfig.successMessage,
+        description: result.message,
+      });
+    } catch (error) {
+      const errorMessage =
+        error instanceof Error ? error.message : accountStatusActionConfig.errorMessage;
+
+      setAccountStatusAction(null);
+      setFeedback({
+        type: 'error',
+        message: accountStatusActionConfig.errorMessage,
+        description: errorMessage,
+      });
+    }
+  };
+
+  const handleRemoveUserConfirm = async () => {
+    if (!user?.id || !selectedOrganizationId || !canShowRemoveUserAction) {
+      return;
+    }
+
+    try {
+      const { data } = await removeUserFromOrganization({
+        variables: {
+          input: {
+            actorUserId: currentAccountId,
+            userId: user.id,
+            organizationId: selectedOrganizationId,
+          },
+        },
+      });
+      const result = data?.removeUserFromOrganization;
+
+      if (!result?.success) {
+        throw new Error(result?.message ?? 'User was not removed from the organization.');
+      }
+
+      setRemoveUserModalOpen(false);
+      navigate({ pathname: '/', search: location.search }, { replace: true });
+    } catch (error) {
+      const errorMessage =
+        error instanceof Error ? error.message : 'User was not removed from the organization.';
+
+      setRemoveUserModalOpen(false);
+      setFeedback({
+        type: 'error',
+        message: 'User was not removed',
         description: errorMessage,
       });
     }
@@ -253,18 +440,52 @@ export function UserDetailPage() {
     },
   };
 
-  const roleFeedbackMessages = useMemo<FeedbackMessageType[]>(
+  const accountStatusModalButtons: ModalButtonsType = {
+    primary: {
+      label: accountStatusActionConfig?.confirmLabel ?? 'Confirm',
+      disabled: !accountStatusAction || accountStatusMutationLoading,
+      loading: accountStatusMutationLoading,
+      onClick: () => {
+        void handleAccountStatusConfirm();
+      },
+    },
+    secondary: {
+      level: 'secondary',
+      label: 'Cancel',
+      disabled: accountStatusMutationLoading,
+      onClick: closeAccountStatusModal,
+    },
+  };
+
+  const removeUserModalButtons: ModalButtonsType = {
+    primary: {
+      label: 'Remove',
+      disabled: !canShowRemoveUserAction || removeUserMutationLoading,
+      loading: removeUserMutationLoading,
+      onClick: () => {
+        void handleRemoveUserConfirm();
+      },
+    },
+    secondary: {
+      level: 'secondary',
+      label: 'Cancel',
+      disabled: removeUserMutationLoading,
+      onClick: closeRemoveUserModal,
+    },
+  };
+
+  const feedbackMessages = useMemo<FeedbackMessageType[]>(
     () =>
-      roleFeedback
+      feedback
         ? [
             {
-              type: roleFeedback.type,
-              message: roleFeedback.message,
-              description: roleFeedback.description,
+              type: feedback.type,
+              message: feedback.message,
+              description: feedback.description,
             },
           ]
         : [],
-    [roleFeedback]
+    [feedback]
   );
 
   if (scopeLoading || !selectedOrganizationId || !selectedOrganization) {
@@ -326,6 +547,34 @@ export function UserDetailPage() {
           : 'User detail from the admin BFF.'
       }
       onBack={() => navigate(-1)}
+      actionItems={
+        canShowAccountStatusAction || canShowRemoveUserAction ? (
+          <>
+            {canShowAccountStatusAction &&
+              availableAccountStatusAction &&
+              availableAccountStatusActionConfig && (
+                <Button
+                  level="primary"
+                  colorTheme={availableAccountStatusAction === 'suspend' ? 'red' : 'purple'}
+                  disabled={accountStatusMutationLoading}
+                  onClick={() => openAccountStatusModal(availableAccountStatusAction)}
+                >
+                  {availableAccountStatusActionConfig.buttonLabel}
+                </Button>
+              )}
+            {canShowRemoveUserAction && (
+              <Button
+                level="primary"
+                colorTheme="red"
+                disabled={removeUserMutationLoading}
+                onClick={openRemoveUserModal}
+              >
+                Remove
+              </Button>
+            )}
+          </>
+        ) : undefined
+      }
     >
       <DetailGrid>
         <DetailCardWide aria-label="Basic information">
@@ -336,6 +585,14 @@ export function UserDetailPage() {
               <DefinitionValue>
                 <StatusTag tone={accountStatusToneMap[user.accountStatus]}>
                   {accountStatusLabelMap[user.accountStatus]}
+                </StatusTag>
+              </DefinitionValue>
+            </DefinitionItem>
+            <DefinitionItem>
+              <DefinitionLabel>Flagged For Deletion</DefinitionLabel>
+              <DefinitionValue>
+                <StatusTag tone={user.flaggedForDeletion ? 'danger' : 'neutral'}>
+                  {user.flaggedForDeletion ? 'Flagged' : 'No'}
                 </StatusTag>
               </DefinitionValue>
             </DefinitionItem>
@@ -387,6 +644,40 @@ export function UserDetailPage() {
           />
         </DetailCardWide>
       </DetailGrid>
+      <Modal
+        type={accountStatusAction === 'suspend' ? 'destructive' : 'transactional'}
+        title={accountStatusActionConfig?.modalTitle ?? 'Confirm user status change'}
+        open={!!accountStatusAction}
+        onClose={closeAccountStatusModal}
+        loading={accountStatusMutationLoading}
+        showLoadingIndicator
+        disableAutoFocus
+        buttonDefs={accountStatusModalButtons}
+        maxWidth="sm"
+        fullWidth
+      >
+        <ModalContentText>
+          {accountStatusActionConfig?.bodyText(user.displayName) ??
+            'Confirm this user status change.'}
+        </ModalContentText>
+      </Modal>
+      <Modal
+        type="destructive"
+        title="Remove user from organization"
+        open={removeUserModalOpen}
+        onClose={closeRemoveUserModal}
+        loading={removeUserMutationLoading}
+        showLoadingIndicator
+        disableAutoFocus
+        buttonDefs={removeUserModalButtons}
+        maxWidth="sm"
+        fullWidth
+      >
+        <ModalContentText>
+          Remove {user.displayName} from {selectedOrganization.name}? This removes the scoped
+          membership for the selected organization.
+        </ModalContentText>
+      </Modal>
       <Modal
         title="Edit roles"
         open={roleModalOpen}
@@ -454,9 +745,9 @@ export function UserDetailPage() {
       </Modal>
       <Modal
         type="feedback"
-        open={!!roleFeedback}
-        messages={roleFeedbackMessages}
-        onClose={() => setRoleFeedback(null)}
+        open={!!feedback}
+        messages={feedbackMessages}
+        onClose={() => setFeedback(null)}
       />
     </ContentTemplate>
   );

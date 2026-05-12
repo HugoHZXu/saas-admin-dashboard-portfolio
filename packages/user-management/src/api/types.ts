@@ -100,6 +100,7 @@ export type UserListItem = {
   lastName: string;
   displayName: string;
   accountStatus: UserAccountStatus;
+  flaggedForDeletion: boolean;
   lastSignedIn: string | null;
   dateRegistered: string;
   membershipId: string;
@@ -121,6 +122,7 @@ export type UserDetail = {
   lastName: string;
   displayName: string;
   accountStatus: UserAccountStatus;
+  flaggedForDeletion: boolean;
   lastSignedIn: string | null;
   dateRegistered: string;
   memberships: UserMembership[];
@@ -149,6 +151,25 @@ export type ChangeUserRolesInput = {
   userId: string;
   organizationId: string;
   roleIds: string[];
+  reason?: string | null;
+};
+
+export type SuspendUserInput = {
+  actorUserId?: string | null;
+  userId: string;
+  reason?: string | null;
+};
+
+export type ActivateUserInput = {
+  actorUserId?: string | null;
+  userId: string;
+  reason?: string | null;
+};
+
+export type RemoveUserFromOrganizationInput = {
+  actorUserId?: string | null;
+  userId: string;
+  organizationId: string;
   reason?: string | null;
 };
 

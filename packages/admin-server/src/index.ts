@@ -15,7 +15,6 @@ export type {
 export type { UserDetail, UserListItem, UserListQuery } from './modules/user/user.types';
 export type {
   AddUserToOrganizationByEmailInput,
-  AddUserToOrganizationInput,
   ChangeUserRolesInput,
   RemoveUserFromOrganizationInput,
 } from './modules/membership/membership.types';

@@ -11,7 +11,6 @@ import { userRepository } from '../user/user.repository';
 import { membershipRepository } from './membership.repository';
 import {
   AddUserToOrganizationByEmailInput,
-  AddUserToOrganizationInput,
   ChangeUserRolesInput,
   RemoveUserFromOrganizationInput,
 } from './membership.types';
@@ -124,7 +123,6 @@ const removePublicMembershipIfPresent = async (
 };
 
 export type MembershipService = {
-  addUserToOrganization: (input: AddUserToOrganizationInput) => Promise<MutationResult>;
   addUserToOrganizationByEmail: (
     input: AddUserToOrganizationByEmailInput
   ) => Promise<MutationResult>;
@@ -132,9 +130,17 @@ export type MembershipService = {
   removeUserFromOrganization: (input: RemoveUserFromOrganizationInput) => Promise<MutationResult>;
 };
 
+type AddUserToOrganizationWithRolesInput = {
+  actorUserId?: string | null;
+  userId: string;
+  organizationId: string;
+  roleIds: string[];
+  reason?: string | null;
+};
+
 const addUserToOrganizationWithRoles = async (
   tx: PrismaExecutor,
-  input: AddUserToOrganizationInput
+  input: AddUserToOrganizationWithRolesInput
 ): Promise<MutationResult> => {
   const [user, organization, roles] = await Promise.all([
     userRepository.findById(tx, input.userId),
@@ -172,6 +178,7 @@ const addUserToOrganizationWithRoles = async (
   const roleIds = roles.map((role) => role.id);
   await membershipRepository.createWithRoles(tx, input.userId, input.organizationId, roleIds);
   await removePublicMembershipIfPresent(tx, input.userId, organization.kind);
+  await userRepository.updateFlaggedForDeletion(tx, input.userId, false);
 
   await activityRepository.create(tx, {
     actorUserId: input.actorUserId,
@@ -191,10 +198,6 @@ const addUserToOrganizationWithRoles = async (
 export const createMembershipService = (
   prisma: PrismaClient = defaultPrisma
 ): MembershipService => ({
-  async addUserToOrganization(input) {
-    return prisma.$transaction((tx) => addUserToOrganizationWithRoles(tx, input));
-  },
-
   async addUserToOrganizationByEmail(input) {
     return prisma.$transaction(async (tx) => {
       const email = normalizeEmail(input.email);
@@ -309,9 +312,40 @@ export const createMembershipService = (
         throw new DomainError('MEMBERSHIP_NOT_FOUND', 'User is not a member of this organization.');
       }
 
+      if (membership.organization.kind === ORGANIZATION_KINDS.public) {
+        throw new DomainError(
+          'PUBLIC_MEMBERSHIP_REMOVE_UNSUPPORTED',
+          'Public memberships cannot be removed from an organization.'
+        );
+      }
+
+      if (membership.organization.kind !== ORGANIZATION_KINDS.tenant) {
+        throw new DomainError(
+          'TENANT_MEMBERSHIP_REQUIRED',
+          'Only tenant memberships can be removed from an organization.'
+        );
+      }
+
+      if (input.actorUserId === input.userId) {
+        throw new DomainError(
+          'SELF_MEMBERSHIP_REMOVE_UNSUPPORTED',
+          'Users cannot remove themselves from an organization.'
+        );
+      }
+
       const removedRoleKeys = membership.roleAssignments.map((assignment) => assignment.role.key);
 
       await membershipRepository.deleteMembership(tx, membership.id);
+
+      const remainingTenantMembershipCount = await membershipRepository.countTenantMemberships(
+        tx,
+        input.userId
+      );
+
+      if (remainingTenantMembershipCount === 0) {
+        await membershipRepository.ensurePublicMembership(tx, input.userId);
+        await userRepository.updateFlaggedForDeletion(tx, input.userId, true);
+      }
 
       await activityRepository.create(tx, {
         actorUserId: input.actorUserId,

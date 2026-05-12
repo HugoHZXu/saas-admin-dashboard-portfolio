@@ -1,4 +1,5 @@
 import {
+  GraphQLBoolean,
   GraphQLID,
   GraphQLInputObjectType,
   GraphQLList,
@@ -6,11 +7,7 @@ import {
   GraphQLObjectType,
   GraphQLString,
 } from 'graphql';
-import {
-  createPageType,
-  PageInputFields,
-  UserAccountStatusType,
-} from '../../graphql/common';
+import { createPageType, PageInputFields, UserAccountStatusType } from '../../graphql/common';
 import { RoleType } from '../role/role.graphql';
 
 const IdNameType = new GraphQLObjectType({
@@ -40,6 +37,7 @@ export const UserListItemType = new GraphQLObjectType({
     lastName: { type: new GraphQLNonNull(GraphQLString) },
     displayName: { type: new GraphQLNonNull(GraphQLString) },
     accountStatus: { type: new GraphQLNonNull(UserAccountStatusType) },
+    flaggedForDeletion: { type: new GraphQLNonNull(GraphQLBoolean) },
     lastSignedIn: { type: GraphQLString },
     dateRegistered: { type: new GraphQLNonNull(GraphQLString) },
     membershipId: { type: new GraphQLNonNull(GraphQLID) },
@@ -57,6 +55,7 @@ export const UserDetailType = new GraphQLObjectType({
     lastName: { type: new GraphQLNonNull(GraphQLString) },
     displayName: { type: new GraphQLNonNull(GraphQLString) },
     accountStatus: { type: new GraphQLNonNull(UserAccountStatusType) },
+    flaggedForDeletion: { type: new GraphQLNonNull(GraphQLBoolean) },
     lastSignedIn: { type: GraphQLString },
     dateRegistered: { type: new GraphQLNonNull(GraphQLString) },
     memberships: {
@@ -80,6 +79,15 @@ export const UserListInputType = new GraphQLInputObjectType({
 
 export const SuspendUserInputType = new GraphQLInputObjectType({
   name: 'SuspendUserInput',
+  fields: {
+    actorUserId: { type: GraphQLID },
+    userId: { type: new GraphQLNonNull(GraphQLID) },
+    reason: { type: GraphQLString },
+  },
+});
+
+export const ActivateUserInputType = new GraphQLInputObjectType({
+  name: 'ActivateUserInput',
   fields: {
     actorUserId: { type: GraphQLID },
     userId: { type: new GraphQLNonNull(GraphQLID) },

@@ -7,6 +7,7 @@ import { activityRepository } from '../activity-log/activity-log.repository';
 import { organizationRepository } from '../organization/organization.repository';
 import { Role } from '../role/role.types';
 import {
+  ActivateUserInput,
   SuspendUserInput,
   UserDetail,
   UserDetailQuery,
@@ -18,7 +19,8 @@ import { UserDetailRecord, UserMembershipRecord, userRepository } from './user.r
 
 const formatDate = (value: Date) => value.toISOString();
 const formatOptionalDate = (value: Date | null) => value?.toISOString() ?? null;
-const createDisplayName = (firstName: string, lastName: string) => `${firstName} ${lastName}`.trim();
+const createDisplayName = (firstName: string, lastName: string) =>
+  `${firstName} ${lastName}`.trim();
 const metadata = (value: Record<string, unknown>) => JSON.stringify(value);
 
 const mapRole = (role: { id: string; key: string; name: string }): Role => ({
@@ -41,6 +43,7 @@ const mapUserListItem = (membership: UserMembershipRecord): UserListItem => ({
   lastName: membership.user.lastName,
   displayName: createDisplayName(membership.user.firstName, membership.user.lastName),
   accountStatus: membership.user.accountStatus as UserListItem['accountStatus'],
+  flaggedForDeletion: membership.user.flaggedForDeletion,
   lastSignedIn: formatOptionalDate(membership.user.lastSignedIn),
   dateRegistered: formatDate(membership.user.createdAt),
   membershipId: membership.id,
@@ -51,7 +54,9 @@ const mapUserListItem = (membership: UserMembershipRecord): UserListItem => ({
   roles: mapMembershipRoles(membership),
 });
 
-const mapUserMembership = (membership: UserDetailRecord['memberships'][number]): UserMembership => ({
+const mapUserMembership = (
+  membership: UserDetailRecord['memberships'][number]
+): UserMembership => ({
   id: membership.id,
   organization: {
     id: membership.organization.id,
@@ -68,6 +73,7 @@ const mapUserDetail = (user: UserDetailRecord): UserDetail => ({
   lastName: user.lastName,
   displayName: createDisplayName(user.firstName, user.lastName),
   accountStatus: user.accountStatus as UserDetail['accountStatus'],
+  flaggedForDeletion: user.flaggedForDeletion,
   lastSignedIn: formatOptionalDate(user.lastSignedIn),
   dateRegistered: formatDate(user.createdAt),
   memberships: user.memberships.map(mapUserMembership),
@@ -77,6 +83,7 @@ export type UserService = {
   listUsers: (query: UserListQuery) => Promise<PageResponse<UserListItem>>;
   getUserDetail: (query: UserDetailQuery) => Promise<UserDetail | undefined>;
   suspendUser: (input: SuspendUserInput) => Promise<ReturnType<typeof mutationSuccess>>;
+  activateUser: (input: ActivateUserInput) => Promise<ReturnType<typeof mutationSuccess>>;
 };
 
 export const createUserService = (prisma: PrismaClient = defaultPrisma): UserService => ({
@@ -130,6 +137,30 @@ export const createUserService = (prisma: PrismaClient = defaultPrisma): UserSer
       });
 
       return mutationSuccess('User was suspended.');
+    });
+  },
+
+  async activateUser(input) {
+    return prisma.$transaction(async (tx) => {
+      const user = await userRepository.findById(tx, input.userId);
+
+      if (!user) {
+        throw createNotFoundError('User', input.userId);
+      }
+
+      await userRepository.updateAccountStatus(tx, input.userId, 'Active');
+
+      await activityRepository.create(tx, {
+        actorUserId: input.actorUserId,
+        targetUserId: input.userId,
+        action: 'ACTIVATE_USER',
+        message: `${createDisplayName(user.firstName, user.lastName)} was activated.`,
+        metadataJson: metadata({
+          reason: input.reason ?? undefined,
+        }),
+      });
+
+      return mutationSuccess('User was activated.');
     });
   },
 });

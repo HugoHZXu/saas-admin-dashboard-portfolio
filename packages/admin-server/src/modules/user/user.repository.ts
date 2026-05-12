@@ -152,4 +152,13 @@ export const userRepository = {
       },
     });
   },
+
+  updateFlaggedForDeletion(prisma: PrismaExecutor, userId: string, flaggedForDeletion: boolean) {
+    return prisma.user.update({
+      where: { id: userId },
+      data: {
+        flaggedForDeletion,
+      },
+    });
+  },
 };
