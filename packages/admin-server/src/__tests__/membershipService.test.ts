@@ -340,6 +340,235 @@ describe('membership service transactions', () => {
     }
   });
 
+  it('adds organization_admin without replacing existing membership roles', async () => {
+    const { prisma, cleanup } = await createTestDb();
+    const service = createMembershipService(prisma);
+
+    try {
+      await expect(
+        service.updateOrganizationAdmins({
+          actorUserId: 'user-tenant-admin',
+          organizationId: 'org-demo-001',
+          addUserIds: ['user-acme-workspace-manager'],
+          removeUserIds: [],
+        })
+      ).resolves.toMatchObject({
+        success: true,
+      });
+
+      await expect(
+        findMembershipRoleKeys(prisma, 'user-acme-workspace-manager', 'org-demo-001')
+      ).resolves.toEqual(['organization_admin', 'workspace_manager']);
+
+      const activity = await prisma.activityEvent.findFirst({
+        where: {
+          action: 'ADD_ORGANIZATION_ADMIN',
+          targetUserId: 'user-acme-workspace-manager',
+          organizationId: 'org-demo-001',
+        },
+      });
+
+      expect(activity?.metadataJson).toContain('"roleKey":"organization_admin"');
+      expect(activity?.metadataJson).toContain('"operation":"add"');
+    } finally {
+      await cleanup();
+    }
+  });
+
+  it('removes organization_admin without removing membership or other roles', async () => {
+    const { prisma, cleanup } = await createTestDb();
+    const service = createMembershipService(prisma);
+
+    try {
+      await prisma.membershipRoleAssignment.create({
+        data: {
+          id: 'assignment-acme-workspace-manager-org-admin',
+          membershipId: 'membership-acme-workspace-manager',
+          roleId: 'role-organization-admin',
+        },
+      });
+
+      await expect(
+        service.updateOrganizationAdmins({
+          actorUserId: 'user-tenant-admin',
+          organizationId: 'org-demo-001',
+          addUserIds: [],
+          removeUserIds: ['user-acme-workspace-manager'],
+        })
+      ).resolves.toMatchObject({
+        success: true,
+      });
+
+      await expect(
+        findMembershipRoleKeys(prisma, 'user-acme-workspace-manager', 'org-demo-001')
+      ).resolves.toEqual(['workspace_manager']);
+      await expect(
+        findMembership(prisma, 'user-acme-workspace-manager', 'org-demo-001')
+      ).resolves.toMatchObject({
+        id: 'membership-acme-workspace-manager',
+      });
+
+      const activity = await prisma.activityEvent.findFirst({
+        where: {
+          action: 'REMOVE_ORGANIZATION_ADMIN',
+          targetUserId: 'user-acme-workspace-manager',
+          organizationId: 'org-demo-001',
+        },
+      });
+
+      expect(activity?.metadataJson).toContain('"roleKey":"organization_admin"');
+      expect(activity?.metadataJson).toContain('"operation":"remove"');
+    } finally {
+      await cleanup();
+    }
+  });
+
+  it('does not write activity for no-op organization admin updates', async () => {
+    const { prisma, cleanup } = await createTestDb();
+    const service = createMembershipService(prisma);
+
+    try {
+      const beforeActivityCount = await prisma.activityEvent.count({
+        where: {
+          action: 'ADD_ORGANIZATION_ADMIN',
+          targetUserId: 'user-tenant-admin',
+          organizationId: 'org-demo-001',
+        },
+      });
+
+      await expect(
+        service.updateOrganizationAdmins({
+          actorUserId: 'user-platform-lead',
+          organizationId: 'org-demo-001',
+          addUserIds: ['user-tenant-admin'],
+          removeUserIds: [],
+        })
+      ).resolves.toMatchObject({
+        success: true,
+      });
+
+      await expect(
+        prisma.activityEvent.count({
+          where: {
+            action: 'ADD_ORGANIZATION_ADMIN',
+            targetUserId: 'user-tenant-admin',
+            organizationId: 'org-demo-001',
+          },
+        })
+      ).resolves.toBe(beforeActivityCount);
+    } finally {
+      await cleanup();
+    }
+  });
+
+  it('rejects organization admin updates for users outside the organization', async () => {
+    const { prisma, cleanup } = await createTestDb();
+    const service = createMembershipService(prisma);
+
+    try {
+      const beforeActivityCount = await prisma.activityEvent.count();
+
+      await expect(
+        service.updateOrganizationAdmins({
+          actorUserId: 'user-tenant-admin',
+          organizationId: 'org-demo-001',
+          addUserIds: ['user-vertex-member'],
+          removeUserIds: [],
+        })
+      ).rejects.toMatchObject({
+        code: 'MEMBERSHIP_NOT_FOUND',
+      });
+
+      await expect(
+        findMembershipRoleKeys(prisma, 'user-vertex-member', 'org-demo-003')
+      ).resolves.toEqual([]);
+      await expect(prisma.activityEvent.count()).resolves.toBe(beforeActivityCount);
+    } finally {
+      await cleanup();
+    }
+  });
+
+  it('rejects organization admin updates for public organizations', async () => {
+    const { prisma, cleanup } = await createTestDb();
+    const service = createMembershipService(prisma);
+
+    try {
+      const beforeActivityCount = await prisma.activityEvent.count();
+
+      await expect(
+        service.updateOrganizationAdmins({
+          actorUserId: 'user-platform-public-admin',
+          organizationId: 'org-public',
+          addUserIds: ['user-public-new-001'],
+          removeUserIds: [],
+        })
+      ).rejects.toMatchObject({
+        code: 'PUBLIC_ORGANIZATION_ADMIN_UNSUPPORTED',
+      });
+
+      await expect(
+        findMembershipRoleKeys(prisma, 'user-public-new-001', 'org-public')
+      ).resolves.toEqual([]);
+      await expect(prisma.activityEvent.count()).resolves.toBe(beforeActivityCount);
+    } finally {
+      await cleanup();
+    }
+  });
+
+  it('rejects adding and removing the same organization admin in one request', async () => {
+    const { prisma, cleanup } = await createTestDb();
+    const service = createMembershipService(prisma);
+
+    try {
+      const beforeActivityCount = await prisma.activityEvent.count();
+
+      await expect(
+        service.updateOrganizationAdmins({
+          actorUserId: 'user-tenant-admin',
+          organizationId: 'org-demo-001',
+          addUserIds: ['user-tenant-member'],
+          removeUserIds: ['user-tenant-member'],
+        })
+      ).rejects.toMatchObject({
+        code: 'ORG_ADMIN_UPDATE_CONFLICT',
+      });
+
+      await expect(
+        findMembershipRoleKeys(prisma, 'user-tenant-member', 'org-demo-001')
+      ).resolves.toEqual([]);
+      await expect(prisma.activityEvent.count()).resolves.toBe(beforeActivityCount);
+    } finally {
+      await cleanup();
+    }
+  });
+
+  it('rejects removing the actor own organization_admin role without writing activity', async () => {
+    const { prisma, cleanup } = await createTestDb();
+    const service = createMembershipService(prisma);
+
+    try {
+      const beforeActivityCount = await prisma.activityEvent.count();
+
+      await expect(
+        service.updateOrganizationAdmins({
+          actorUserId: 'user-tenant-admin',
+          organizationId: 'org-demo-001',
+          addUserIds: [],
+          removeUserIds: ['user-tenant-admin'],
+        })
+      ).rejects.toMatchObject({
+        code: 'SELF_ORGANIZATION_ADMIN_ROLE_REQUIRED',
+      });
+
+      await expect(
+        findMembershipRoleKeys(prisma, 'user-tenant-admin', 'org-demo-001')
+      ).resolves.toEqual(['organization_admin']);
+      await expect(prisma.activityEvent.count()).resolves.toBe(beforeActivityCount);
+    } finally {
+      await cleanup();
+    }
+  });
+
   it('allows workspace_manager in a tenant organization', async () => {
     const { prisma, cleanup } = await createTestDb();
     const service = createMembershipService(prisma);

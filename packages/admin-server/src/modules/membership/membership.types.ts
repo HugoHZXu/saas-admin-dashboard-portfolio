@@ -19,3 +19,11 @@ export type RemoveUserFromOrganizationInput = {
   organizationId: string;
   reason?: string | null;
 };
+
+export type UpdateOrganizationAdminsInput = {
+  actorUserId?: string | null;
+  organizationId: string;
+  addUserIds: string[];
+  removeUserIds: string[];
+  reason?: string | null;
+};

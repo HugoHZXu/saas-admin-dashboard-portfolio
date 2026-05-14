@@ -117,6 +117,32 @@ export const membershipRepository = {
     });
   },
 
+  addRoleAssignment(prisma: PrismaExecutor, membershipId: string, roleId: string) {
+    return prisma.membershipRoleAssignment.upsert({
+      where: {
+        membershipId_roleId: {
+          membershipId,
+          roleId,
+        },
+      },
+      update: {},
+      create: {
+        id: createId('assignment'),
+        membershipId,
+        roleId,
+      },
+    });
+  },
+
+  removeRoleAssignment(prisma: PrismaExecutor, membershipId: string, roleId: string) {
+    return prisma.membershipRoleAssignment.deleteMany({
+      where: {
+        membershipId,
+        roleId,
+      },
+    });
+  },
+
   async deleteMembership(prisma: PrismaExecutor, membershipId: string) {
     await prisma.membershipRoleAssignment.deleteMany({
       where: {

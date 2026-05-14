@@ -10,6 +10,12 @@ export type PageResponse<T> = {
   pageSize: number;
 };
 
+export type MutationResult = {
+  success: boolean;
+  code: string;
+  message: string;
+};
+
 export type OrganizationStatus = 'active' | 'inactive' | 'archived';
 
 export type OrganizationDomain = {
@@ -27,6 +33,25 @@ export type OrganizationAdmin = {
   disabled?: boolean | null;
 };
 
+export type Role = {
+  id: string;
+  key: string;
+  name: string;
+};
+
+export type OrganizationMemberUser = {
+  id: string;
+  name: string;
+  email: string;
+};
+
+export type OrganizationMember = {
+  id: string;
+  user: OrganizationMemberUser;
+  status: string;
+  roles: Role[];
+};
+
 export type Organization = {
   id?: string | null;
   referenceId: string;
@@ -41,6 +66,7 @@ export type Organization = {
   timezone?: string | null;
   domains: OrganizationDomain[];
   admins: OrganizationAdmin[];
+  memberships?: OrganizationMember[] | null;
   createdOn: string;
   lastUpdatedOn: string;
   userCount: number;
@@ -55,6 +81,14 @@ export type OrganizationListInput = {
   sortDirection?: SortDirection;
   searchString?: string;
   statuses?: OrganizationStatus[];
+};
+
+export type UpdateOrganizationAdminsInput = {
+  actorUserId?: string | null;
+  organizationId: string;
+  addUserIds: string[];
+  removeUserIds: string[];
+  reason?: string | null;
 };
 
 export type UserRef = {

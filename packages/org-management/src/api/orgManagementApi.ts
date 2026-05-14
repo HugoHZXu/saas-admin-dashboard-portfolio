@@ -1,11 +1,13 @@
 import { gql, type TypedDocumentNode } from '@apollo/client';
-import { useQuery } from '@apollo/client/react';
+import { useMutation, useQuery } from '@apollo/client/react';
 import {
   ActivityLogListInput,
   ActivityRecord,
+  MutationResult,
   Organization,
   OrganizationListInput,
   PageResponse,
+  UpdateOrganizationAdminsInput,
 } from './types';
 
 type OrganizationsQueryData = {
@@ -39,6 +41,14 @@ type OrganizationActivityLogsQueryData = {
 type OrganizationActivityLogsQueryVariables = {
   organizationId: string;
   input: ActivityLogListInput;
+};
+
+type UpdateOrganizationAdminsMutationData = {
+  updateOrganizationAdmins: MutationResult;
+};
+
+type UpdateOrganizationAdminsMutationVariables = {
+  input: UpdateOrganizationAdminsInput;
 };
 
 const ORGANIZATION_FIELDS = gql`
@@ -141,6 +151,20 @@ export const ORGANIZATION_QUERY = gql`
   query Organization($id: ID!) {
     organization(id: $id) {
       ...OrganizationFields
+      memberships {
+        id
+        status
+        user {
+          id
+          name
+          email
+        }
+        roles {
+          id
+          key
+          name
+        }
+      }
     }
   }
   ${ORGANIZATION_FIELDS}
@@ -180,6 +204,19 @@ export const ORGANIZATION_ACTIVITY_LOGS_QUERY = gql`
   ${ACTIVITY_FIELDS}
 ` as TypedDocumentNode<OrganizationActivityLogsQueryData, OrganizationActivityLogsQueryVariables>;
 
+export const UPDATE_ORGANIZATION_ADMINS_MUTATION = gql`
+  mutation UpdateOrganizationAdmins($input: UpdateOrganizationAdminsInput!) {
+    updateOrganizationAdmins(input: $input) {
+      success
+      code
+      message
+    }
+  }
+` as TypedDocumentNode<
+  UpdateOrganizationAdminsMutationData,
+  UpdateOrganizationAdminsMutationVariables
+>;
+
 export const useOrganizationsQuery = (input: OrganizationListInput) =>
   useQuery(ORGANIZATIONS_QUERY, {
     variables: { input },
@@ -205,3 +242,6 @@ export const useOrganizationActivityLogsQuery = (
     variables: { organizationId: organizationId ?? '', input },
     skip: !organizationId,
   });
+
+export const useUpdateOrganizationAdminsMutation = () =>
+  useMutation(UPDATE_ORGANIZATION_ADMINS_MUTATION);

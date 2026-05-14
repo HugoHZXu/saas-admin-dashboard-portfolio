@@ -4,7 +4,9 @@ export type ActivityResult = 'success' | 'failed' | 'partial' | 'unknown';
 
 export type ActivityAction =
   | 'ADD_USER_TO_ORGANIZATION'
+  | 'ADD_ORGANIZATION_ADMIN'
   | 'CHANGE_USER_ROLES'
+  | 'REMOVE_ORGANIZATION_ADMIN'
   | 'REMOVE_USER_FROM_ORGANIZATION'
   | 'SUSPEND_USER'
   | 'ACTIVATE_USER'

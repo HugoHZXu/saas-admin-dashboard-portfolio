@@ -759,6 +759,128 @@ describe('admin-server GraphQL', () => {
     }
   });
 
+  it('updates organization admins through GraphQL and exposes explicit Activity Log events', async () => {
+    const { prisma, url, cleanup } = await listen();
+
+    try {
+      const { response, payload } = await postGraphql(url, {
+        query: `
+          mutation UpdateOrganizationAdmins($input: UpdateOrganizationAdminsInput!) {
+            updateOrganizationAdmins(input: $input) {
+              success
+              code
+              message
+            }
+          }
+        `,
+        variables: {
+          input: {
+            actorUserId: 'user-platform-lead',
+            organizationId: 'org-demo-001',
+            addUserIds: ['user-tenant-member'],
+            removeUserIds: ['user-tenant-admin'],
+          },
+        },
+      });
+
+      expect(response.status).toBe(200);
+      expect(payload.errors).toBeUndefined();
+      expect(payload.data.updateOrganizationAdmins).toEqual({
+        success: true,
+        code: 'OK',
+        message: 'Organization administrators were updated.',
+      });
+
+      await expect(
+        prisma.organizationMembership.findUnique({
+          where: {
+            userId_organizationId: {
+              userId: 'user-tenant-admin',
+              organizationId: 'org-demo-001',
+            },
+          },
+        })
+      ).resolves.toMatchObject({
+        id: 'membership-acme-admin',
+      });
+
+      const { payload: organizationPayload } = await postGraphql(url, {
+        query: `
+          query Organization($id: ID!) {
+            organization(id: $id) {
+              admins {
+                email
+              }
+            }
+          }
+        `,
+        variables: {
+          id: 'org-demo-001',
+        },
+      });
+
+      expect(organizationPayload.errors).toBeUndefined();
+      expect(organizationPayload.data.organization.admins).toEqual([
+        { email: 'sam.rivera@acme-cloud.example' },
+      ]);
+
+      const { payload: activityPayload } = await postGraphql(url, {
+        query: `
+          query ActivityLogs($input: ActivityLogListInput) {
+            activityLogs(input: $input) {
+              totalElements
+              items {
+                action
+                actionLabel {
+                  defaultMessage
+                }
+                summaryMessage {
+                  defaultMessage
+                }
+              }
+            }
+          }
+        `,
+        variables: {
+          input: {
+            organizationId: 'org-demo-001',
+            actions: ['ADD_ORGANIZATION_ADMIN', 'REMOVE_ORGANIZATION_ADMIN'],
+            pageSize: 5,
+          },
+        },
+      });
+
+      expect(activityPayload.errors).toBeUndefined();
+      expect(activityPayload.data.activityLogs.totalElements).toBe(2);
+      expect(activityPayload.data.activityLogs.items).toEqual(
+        expect.arrayContaining([
+          {
+            action: 'ADD_ORGANIZATION_ADMIN',
+            actionLabel: {
+              defaultMessage: 'Added organization administrator',
+            },
+            summaryMessage: {
+              defaultMessage:
+                '{actorName} made {targetName} an administrator in {organizationName}.',
+            },
+          },
+          {
+            action: 'REMOVE_ORGANIZATION_ADMIN',
+            actionLabel: {
+              defaultMessage: 'Removed organization administrator',
+            },
+            summaryMessage: {
+              defaultMessage:
+                '{actorName} removed administrator access for {targetName} in {organizationName}.',
+            },
+          },
+        ])
+      );
+    } finally {
+      await cleanup();
+    }
+  });
+
   it('removes an organization user through GraphQL and exposes the Activity Log event', async () => {
     const { prisma, url, cleanup } = await listen();
 

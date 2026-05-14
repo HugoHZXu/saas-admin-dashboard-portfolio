@@ -47,3 +47,14 @@ export const RemoveUserFromOrganizationInputType = new GraphQLInputObjectType({
     reason: { type: GraphQLString },
   },
 });
+
+export const UpdateOrganizationAdminsInputType = new GraphQLInputObjectType({
+  name: 'UpdateOrganizationAdminsInput',
+  fields: {
+    actorUserId: { type: GraphQLID },
+    organizationId: { type: new GraphQLNonNull(GraphQLID) },
+    addUserIds: { type: new GraphQLNonNull(new GraphQLList(new GraphQLNonNull(GraphQLID))) },
+    removeUserIds: { type: new GraphQLNonNull(new GraphQLList(new GraphQLNonNull(GraphQLID))) },
+    reason: { type: GraphQLString },
+  },
+});

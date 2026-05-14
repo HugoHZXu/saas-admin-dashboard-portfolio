@@ -4,12 +4,14 @@ import {
   AddUserToOrganizationByEmailInput,
   ChangeUserRolesInput,
   RemoveUserFromOrganizationInput,
+  UpdateOrganizationAdminsInput,
 } from './membership.types';
 import {
   AddUserToOrganizationByEmailInputType,
   ChangeUserRolesInputType,
   MutationResultType,
   RemoveUserFromOrganizationInputType,
+  UpdateOrganizationAdminsInputType,
 } from './membership.graphql';
 import { createMembershipService } from './membership.service';
 
@@ -42,6 +44,14 @@ export const createMembershipMutationFields = (
       },
       resolve: (_source, args: { input: RemoveUserFromOrganizationInput }) =>
         membershipService.removeUserFromOrganization(args.input),
+    },
+    updateOrganizationAdmins: {
+      type: new GraphQLNonNull(MutationResultType),
+      args: {
+        input: { type: new GraphQLNonNull(UpdateOrganizationAdminsInputType) },
+      },
+      resolve: (_source, args: { input: UpdateOrganizationAdminsInput }) =>
+        membershipService.updateOrganizationAdmins(args.input),
     },
   };
 };

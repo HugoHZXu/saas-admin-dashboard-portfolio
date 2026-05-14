@@ -19,6 +19,7 @@ type DemoSessionContextValue = {
   loading: boolean;
   errorMessage: string | null;
   selectAccount: (accountId: string) => void;
+  refetch: () => Promise<DemoSession | undefined>;
 };
 
 const DemoSessionContext = createContext<DemoSessionContextValue | null>(null);
@@ -29,7 +30,8 @@ type DemoSessionProviderProps = {
 
 export function DemoSessionProvider({ children }: DemoSessionProviderProps) {
   const [selectedUserId, setSelectedUserId] = useState<string | null>(() => readStoredAccountId());
-  const { data, loading, error } = useDemoSessionQuery(selectedUserId);
+  const { data, loading, error, refetch: refetchDemoSessionQuery } =
+    useDemoSessionQuery(selectedUserId);
   const session = data?.demoSession ?? null;
 
   useEffect(() => {
@@ -46,6 +48,12 @@ export function DemoSessionProvider({ children }: DemoSessionProviderProps) {
     setSelectedUserId(accountId);
   }, []);
 
+  const refetch = useCallback(async () => {
+    const result = await refetchDemoSessionQuery({ selectedUserId: selectedUserId || null });
+
+    return result.data?.demoSession;
+  }, [refetchDemoSessionQuery, selectedUserId]);
+
   const value = useMemo<DemoSessionContextValue>(
     () => ({
       session,
@@ -55,8 +63,9 @@ export function DemoSessionProvider({ children }: DemoSessionProviderProps) {
       loading,
       errorMessage: error?.message ?? null,
       selectAccount,
+      refetch,
     }),
-    [error, loading, selectAccount, selectedUserId, session]
+    [error, loading, refetch, selectAccount, selectedUserId, session]
   );
 
   return <DemoSessionContext.Provider value={value}>{children}</DemoSessionContext.Provider>;

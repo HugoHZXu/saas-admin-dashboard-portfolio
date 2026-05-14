@@ -52,6 +52,108 @@ export const DefinitionValue = styled('dd')(({ theme }) => ({
   fontSize: 14,
 }));
 
+export const AdminList = styled('div')(({ theme }) => ({
+  display: 'grid',
+  gap: theme.hugoUISpacer.SPACER_SM,
+}));
+
+export const AdminRow = styled('div')(() => ({
+  display: 'grid',
+  gap: 3,
+  minWidth: 0,
+}));
+
+export const AdminName = styled('strong')(({ theme }) => ({
+  overflow: 'hidden',
+  color: theme.hugoUIColorRoles.text.primary,
+  fontSize: 14,
+  lineHeight: 1.25,
+  textOverflow: 'ellipsis',
+  whiteSpace: 'nowrap',
+}));
+
+export const AdminEmail = styled('span')(({ theme }) => ({
+  overflow: 'hidden',
+  color: theme.hugoUIColorRoles.text.subtle,
+  fontSize: 12,
+  lineHeight: 1.35,
+  textOverflow: 'ellipsis',
+  whiteSpace: 'nowrap',
+}));
+
+export const AdminModalBody = styled('div')(({ theme }) => ({
+  display: 'grid',
+  gap: theme.hugoUISpacer.SPACER_MD,
+}));
+
+export const AdminOptionList = styled('div')(({ theme }) => ({
+  display: 'grid',
+  gap: theme.hugoUISpacer.SPACER_SM,
+}));
+
+export const AdminOption = styled('label')(({ theme }) => ({
+  display: 'grid',
+  gridTemplateColumns: 'auto minmax(0, 1fr)',
+  alignItems: 'start',
+  gap: theme.hugoUISpacer.SPACER_SM,
+  padding: theme.hugoUISpacer.SPACER_MD,
+  border: `1px solid ${theme.hugoUIColorRoles.border.default}`,
+  borderRadius: 8,
+  background: theme.hugoUIColorRoles.surface.default,
+  color: theme.hugoUIColorRoles.text.default,
+  cursor: 'pointer',
+
+  '&:hover': {
+    background: theme.hugoUIColorRoles.surface.tinted,
+  },
+
+  '&:focus-within': {
+    borderColor: theme.hugoUIColorRoles.border.strong,
+    boxShadow: `0 0 0 2px ${theme.hugoUIColorRoles.focus.ring}`,
+  },
+
+  '&[data-selected="true"]': {
+    borderColor: theme.hugoUIColorRoles.border.strong,
+    background: theme.hugoUIColorRoles.surface.tinted,
+  },
+
+  '&[data-disabled="true"]': {
+    cursor: 'not-allowed',
+    opacity: 0.7,
+  },
+}));
+
+export const AdminOptionCheckbox = styled('input')(() => ({
+  height: 18,
+  margin: '2px 0 0',
+  width: 18,
+}));
+
+export const AdminOptionContent = styled('span')(() => ({
+  display: 'grid',
+  gap: 4,
+  minWidth: 0,
+}));
+
+export const AdminOptionName = styled('span')(({ theme }) => ({
+  overflow: 'hidden',
+  color: theme.hugoUIColorRoles.text.primary,
+  fontSize: 14,
+  fontWeight: 800,
+  lineHeight: 1.25,
+  textOverflow: 'ellipsis',
+  whiteSpace: 'nowrap',
+}));
+
+export const AdminOptionEmail = styled('span')(({ theme }) => ({
+  overflow: 'hidden',
+  color: theme.hugoUIColorRoles.text.subtle,
+  fontSize: 12,
+  lineHeight: 1.45,
+  textOverflow: 'ellipsis',
+  whiteSpace: 'nowrap',
+}));
+
 export const ActivityPageRoot = styled('div')(({ theme }) => ({
   display: 'grid',
   gap: theme.hugoUISpacer.SPACER_MD,

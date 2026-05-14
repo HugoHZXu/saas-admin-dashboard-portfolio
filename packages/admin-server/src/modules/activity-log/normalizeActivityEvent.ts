@@ -21,10 +21,21 @@ const activityDefinitions: Record<string, ActivityDefinition> = {
     actionDefaultMessage: 'Added user to organization',
     summaryDefaultMessage: '{actorName} added {targetName} to {organizationName}.',
   },
+  ADD_ORGANIZATION_ADMIN: {
+    action: 'ADD_ORGANIZATION_ADMIN',
+    actionDefaultMessage: 'Added organization administrator',
+    summaryDefaultMessage: '{actorName} made {targetName} an administrator in {organizationName}.',
+  },
   CHANGE_USER_ROLES: {
     action: 'CHANGE_USER_ROLES',
     actionDefaultMessage: 'Changed user roles',
     summaryDefaultMessage: '{actorName} changed roles for {targetName} in {organizationName}.',
+  },
+  REMOVE_ORGANIZATION_ADMIN: {
+    action: 'REMOVE_ORGANIZATION_ADMIN',
+    actionDefaultMessage: 'Removed organization administrator',
+    summaryDefaultMessage:
+      '{actorName} removed administrator access for {targetName} in {organizationName}.',
   },
   REMOVE_USER_FROM_ORGANIZATION: {
     action: 'REMOVE_USER_FROM_ORGANIZATION',

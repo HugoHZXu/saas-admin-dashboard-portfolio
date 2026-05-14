@@ -13,12 +13,15 @@ import {
   AddUserToOrganizationByEmailInput,
   ChangeUserRolesInput,
   RemoveUserFromOrganizationInput,
+  UpdateOrganizationAdminsInput,
 } from './membership.types';
 
 const createDisplayName = (firstName: string, lastName: string) =>
   `${firstName} ${lastName}`.trim();
 const metadata = (value: Record<string, unknown>) => JSON.stringify(value);
 const normalizeEmail = (email: string) => email.trim().toLowerCase();
+const normalizeUserIds = (userIds: string[]) =>
+  [...new Set(userIds.map((userId) => userId.trim()).filter(Boolean))];
 const compatibleRoleKeysByOrganizationKind: Record<string, string[]> = {
   [ORGANIZATION_KINDS.internal]: [
     ROLE_KEYS.platformAdmin,
@@ -128,6 +131,7 @@ export type MembershipService = {
   ) => Promise<MutationResult>;
   changeUserRoles: (input: ChangeUserRolesInput) => Promise<MutationResult>;
   removeUserFromOrganization: (input: RemoveUserFromOrganizationInput) => Promise<MutationResult>;
+  updateOrganizationAdmins: (input: UpdateOrganizationAdminsInput) => Promise<MutationResult>;
 };
 
 type AddUserToOrganizationWithRolesInput = {
@@ -194,6 +198,13 @@ const addUserToOrganizationWithRoles = async (
 
   return mutationSuccess('User was added to organization.');
 };
+
+const hasOrganizationAdminRole = (membership: {
+  roleAssignments: { role: { key: string } }[];
+}) =>
+  membership.roleAssignments.some(
+    (assignment) => assignment.role.key === ROLE_KEYS.organizationAdmin
+  );
 
 export const createMembershipService = (
   prisma: PrismaClient = defaultPrisma
@@ -360,6 +371,105 @@ export const createMembershipService = (
       });
 
       return mutationSuccess('User was removed from organization.');
+    });
+  },
+
+  async updateOrganizationAdmins(input) {
+    return prisma.$transaction(async (tx) => {
+      const addUserIds = normalizeUserIds(input.addUserIds);
+      const removeUserIds = normalizeUserIds(input.removeUserIds);
+      const removeUserIdSet = new Set(removeUserIds);
+      const conflictingUserId = addUserIds.find((userId) => removeUserIdSet.has(userId));
+
+      if (conflictingUserId) {
+        throw new DomainError(
+          'ORG_ADMIN_UPDATE_CONFLICT',
+          'A user cannot be added and removed as an organization administrator in the same request.'
+        );
+      }
+
+      const [organization, organizationAdminRole] = await Promise.all([
+        organizationRepository.findById(tx, input.organizationId),
+        roleService.getRequiredRoleByKey(tx, ROLE_KEYS.organizationAdmin),
+      ]);
+
+      if (!organization) {
+        throw createNotFoundError('Organization', input.organizationId);
+      }
+
+      if (organization.kind === ORGANIZATION_KINDS.public) {
+        throw new DomainError(
+          'PUBLIC_ORGANIZATION_ADMIN_UNSUPPORTED',
+          'Public organizations do not support organization administrators.'
+        );
+      }
+
+      const membershipByUserId = new Map(
+        organization.memberships.map((membership) => [membership.user.id, membership])
+      );
+      const targetUserIds = [...new Set([...addUserIds, ...removeUserIds])];
+      const missingUserId = targetUserIds.find((userId) => !membershipByUserId.has(userId));
+
+      if (missingUserId) {
+        throw new DomainError(
+          'MEMBERSHIP_NOT_FOUND',
+          'User is not a member of this organization.'
+        );
+      }
+
+      const isRemovingOwnOrganizationAdminRole = Boolean(
+        input.actorUserId &&
+          removeUserIdSet.has(input.actorUserId) &&
+          hasOrganizationAdminRole(membershipByUserId.get(input.actorUserId)!)
+      );
+
+      if (isRemovingOwnOrganizationAdminRole) {
+        throw new DomainError(
+          'SELF_ORGANIZATION_ADMIN_ROLE_REQUIRED',
+          'Organization administrators cannot remove their own Organization Administrator role.'
+        );
+      }
+
+      const membershipsToAdd = addUserIds
+        .map((userId) => membershipByUserId.get(userId)!)
+        .filter((membership) => !hasOrganizationAdminRole(membership));
+      const membershipsToRemove = removeUserIds
+        .map((userId) => membershipByUserId.get(userId)!)
+        .filter(hasOrganizationAdminRole);
+
+      for (const membership of membershipsToAdd) {
+        await membershipRepository.addRoleAssignment(tx, membership.id, organizationAdminRole.id);
+        await activityRepository.create(tx, {
+          actorUserId: input.actorUserId,
+          targetUserId: membership.user.id,
+          organizationId: organization.id,
+          action: 'ADD_ORGANIZATION_ADMIN',
+          message: `${createDisplayName(membership.user.firstName, membership.user.lastName)} was made an Organization Administrator in ${organization.name}.`,
+          metadataJson: metadata({
+            roleKey: ROLE_KEYS.organizationAdmin,
+            operation: 'add',
+            reason: input.reason ?? undefined,
+          }),
+        });
+      }
+
+      for (const membership of membershipsToRemove) {
+        await membershipRepository.removeRoleAssignment(tx, membership.id, organizationAdminRole.id);
+        await activityRepository.create(tx, {
+          actorUserId: input.actorUserId,
+          targetUserId: membership.user.id,
+          organizationId: organization.id,
+          action: 'REMOVE_ORGANIZATION_ADMIN',
+          message: `${createDisplayName(membership.user.firstName, membership.user.lastName)} was removed as an Organization Administrator in ${organization.name}.`,
+          metadataJson: metadata({
+            roleKey: ROLE_KEYS.organizationAdmin,
+            operation: 'remove',
+            reason: input.reason ?? undefined,
+          }),
+        });
+      }
+
+      return mutationSuccess('Organization administrators were updated.');
     });
   },
 });
