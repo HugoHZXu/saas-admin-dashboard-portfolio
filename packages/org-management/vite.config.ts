@@ -1,42 +1,117 @@
+import { federation } from '@module-federation/vite';
 import react from '@vitejs/plugin-react';
 import path from 'path';
 import { fileURLToPath } from 'url';
-import { defineConfig } from 'vite';
+import { defineConfig, loadEnv } from 'vite';
 
 const dirname = path.dirname(fileURLToPath(import.meta.url));
+const DEFAULT_DEV_HOST = '127.0.0.1';
+const DEFAULT_DEV_PORT = 5174;
+const DEFAULT_PREVIEW_PORT = 4174;
 
-export default defineConfig({
-  plugins: [react()],
-  define: {
-    'process.env': {},
-  },
-  resolve: {
-    dedupe: [
-      'react',
-      'react-dom',
-      'react-intl',
-      '@emotion/react',
-      '@emotion/styled',
-      '@mui/material',
-      '@mui/system',
+const sharedSingleton = {
+  singleton: true,
+  allowNodeModulesSuffixMatch: true,
+};
+
+const readPort = (value: string | undefined, fallback: number) => {
+  const parsed = Number(value);
+
+  return Number.isInteger(parsed) && parsed > 0 ? parsed : fallback;
+};
+
+export default defineConfig(({ mode }) => {
+  const env = loadEnv(mode, dirname, '');
+  const devHost = env.VITE_ORG_MANAGEMENT_HOST ?? env.VITE_DEV_HOST ?? DEFAULT_DEV_HOST;
+  const devPort = readPort(
+    env.VITE_ORG_MANAGEMENT_PORT ?? env.VITE_DEV_PORT ?? env.PORT,
+    DEFAULT_DEV_PORT
+  );
+  const previewPort = readPort(
+    env.VITE_ORG_MANAGEMENT_PREVIEW_PORT ?? env.VITE_PREVIEW_PORT,
+    DEFAULT_PREVIEW_PORT
+  );
+  const devOrigin =
+    env.VITE_ORG_MANAGEMENT_DEV_ORIGIN ??
+    env.VITE_DEV_ORIGIN ??
+    `http://${devHost}:${devPort}`;
+
+  return {
+    plugins: [
+      react(),
+      federation({
+        name: 'orgManagement',
+        filename: 'remoteEntry.js',
+        dts: false,
+        exposes: {
+          './Routes': './src/remote/Routes.tsx',
+        },
+        shared: {
+          react: sharedSingleton,
+          'react-dom': sharedSingleton,
+          'react-dom/client': sharedSingleton,
+          'react/jsx-runtime': sharedSingleton,
+          'react-router-dom': sharedSingleton,
+          '@apollo/client': sharedSingleton,
+          '@apollo/client/react': sharedSingleton,
+          'react-intl': sharedSingleton,
+          '@emotion/react': sharedSingleton,
+          '@emotion/styled': sharedSingleton,
+          '@mui/material': sharedSingleton,
+          '@mui/material/styles': sharedSingleton,
+          '@mui/system': sharedSingleton,
+          '@mui/utils': sharedSingleton,
+          '@mui/icons-material': sharedSingleton,
+          'hugo-ui': {
+            ...sharedSingleton,
+            requiredVersion: '1.0.2',
+          },
+          'admin-shared': sharedSingleton,
+          zustand: sharedSingleton,
+        },
+      }),
     ],
-    alias: [
-      {
-        find: '@',
-        replacement: path.resolve(dirname, 'src'),
-      },
-      {
-        find: 'hugo-ui/styles/theme',
-        replacement: path.resolve(dirname, '../hugo-ui/src/styles/theme.ts'),
-      },
-      {
-        find: 'hugo-ui/utils/wcagUtils',
-        replacement: path.resolve(dirname, '../hugo-ui/src/utils/wcagUtils.ts'),
-      },
-      {
-        find: /^hugo-ui$/,
-        replacement: path.resolve(dirname, '../hugo-ui/src/index.ts'),
-      },
-    ],
-  },
+    define: {
+      'process.env': {},
+    },
+    server: {
+      host: devHost,
+      port: devPort,
+      origin: devOrigin,
+    },
+    preview: {
+      host: devHost,
+      port: previewPort,
+    },
+    resolve: {
+      dedupe: [
+        'react',
+        'react-dom',
+        'react-intl',
+        '@emotion/react',
+        '@emotion/styled',
+        '@mui/material',
+        '@mui/system',
+        'admin-shared',
+      ],
+      alias: [
+        {
+          find: '@',
+          replacement: path.resolve(dirname, 'src'),
+        },
+        {
+          find: 'hugo-ui/styles/theme',
+          replacement: path.resolve(dirname, '../hugo-ui/src/styles/theme.ts'),
+        },
+        {
+          find: 'hugo-ui/utils/wcagUtils',
+          replacement: path.resolve(dirname, '../hugo-ui/src/utils/wcagUtils.ts'),
+        },
+        {
+          find: /^hugo-ui$/,
+          replacement: path.resolve(dirname, '../hugo-ui/src/index.ts'),
+        },
+      ],
+    },
+  };
 });

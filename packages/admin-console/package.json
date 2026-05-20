@@ -1,5 +1,5 @@
 {
-  "name": "user-management",
+  "name": "admin-console",
   "version": "0.0.0",
   "private": true,
   "type": "module",
@@ -16,6 +16,7 @@
     "hugo-ui": "workspace:*",
     "react": "^19.2.6",
     "react-dom": "^19.2.6",
+    "react-error-boundary": "^6.1.2",
     "react-intl": "10.1.9",
     "react-router-dom": "7.15.1",
     "zustand": "^5.0.14"

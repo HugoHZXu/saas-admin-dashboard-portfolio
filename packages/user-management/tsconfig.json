@@ -4,6 +4,8 @@
     "baseUrl": ".",
     "paths": {
       "@/*": ["src/*"],
+      "admin-shared": ["../admin-shared/src/index.ts"],
+      "admin-shared/*": ["../admin-shared/src/*"],
       "hugo-ui": ["../hugo-ui/src/index.ts"],
       "hugo-ui/styles/theme": ["../hugo-ui/src/styles/theme.ts"],
       "hugo-ui/utils/wcagUtils": ["../hugo-ui/src/utils/wcagUtils.ts"],

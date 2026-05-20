@@ -11,6 +11,7 @@
     "@mui/material": "9.0.1",
     "@mui/system": "9.0.1",
     "@mui/utils": "9.0.1",
+    "admin-shared": "workspace:*",
     "graphql": "16.14.0",
     "hugo-ui": "workspace:*",
     "react": "^19.2.6",
@@ -20,13 +21,14 @@
     "zustand": "^5.0.14"
   },
   "devDependencies": {
+    "@module-federation/vite": "1.16.2",
     "@vitejs/plugin-react": "6.0.2",
     "vite": "8.0.14"
   },
   "scripts": {
-    "dev": "vite --host 127.0.0.1 --port 5174",
+    "dev": "vite",
     "build": "tsc -p tsconfig.json --noEmit && vite build",
-    "preview": "vite preview --host 127.0.0.1 --port 4174",
+    "preview": "vite preview",
     "lint": "eslint \"src/**/*.{ts,tsx}\" \"vite.config.ts\"",
     "typecheck": "tsc -p tsconfig.json --noEmit"
   }

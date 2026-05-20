@@ -11,7 +11,7 @@ import { useDemoSessionQuery } from './demoSessionApi';
 import { DemoAccount, DemoSession } from './demoSessionTypes';
 import { readStoredAccountId, writeStoredAccountId } from './demoSessionStorage';
 
-type DemoSessionContextValue = {
+export type DemoSessionContextValue = {
   session: DemoSession | null;
   accounts: DemoAccount[];
   currentAccount: DemoAccount | null;
@@ -27,6 +27,15 @@ const DemoSessionContext = createContext<DemoSessionContextValue | null>(null);
 type DemoSessionProviderProps = {
   children: ReactNode;
 };
+
+type DemoSessionValueProviderProps = {
+  children: ReactNode;
+  value: DemoSessionContextValue;
+};
+
+export function DemoSessionValueProvider({ children, value }: DemoSessionValueProviderProps) {
+  return <DemoSessionContext.Provider value={value}>{children}</DemoSessionContext.Provider>;
+}
 
 export function DemoSessionProvider({ children }: DemoSessionProviderProps) {
   const [selectedUserId, setSelectedUserId] = useState<string | null>(() => readStoredAccountId());
@@ -68,7 +77,7 @@ export function DemoSessionProvider({ children }: DemoSessionProviderProps) {
     [error, loading, refetch, selectAccount, selectedUserId, session]
   );
 
-  return <DemoSessionContext.Provider value={value}>{children}</DemoSessionContext.Provider>;
+  return <DemoSessionValueProvider value={value}>{children}</DemoSessionValueProvider>;
 }
 
 export function useDemoSession() {

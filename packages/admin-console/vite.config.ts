@@ -5,9 +5,12 @@ import { fileURLToPath } from 'url';
 import { defineConfig, loadEnv } from 'vite';
 
 const dirname = path.dirname(fileURLToPath(import.meta.url));
+
+const DEFAULT_USER_MANAGEMENT_REMOTE_ENTRY = 'http://127.0.0.1:5175/remoteEntry.js';
+const DEFAULT_ORG_MANAGEMENT_REMOTE_ENTRY = 'http://127.0.0.1:5174/remoteEntry.js';
 const DEFAULT_DEV_HOST = '127.0.0.1';
-const DEFAULT_DEV_PORT = 5175;
-const DEFAULT_PREVIEW_PORT = 4175;
+const DEFAULT_DEV_PORT = 5173;
+const DEFAULT_PREVIEW_PORT = 4173;
 
 const sharedSingleton = {
   singleton: true,
@@ -22,29 +25,45 @@ const readPort = (value: string | undefined, fallback: number) => {
 
 export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, dirname, '');
-  const devHost = env.VITE_USER_MANAGEMENT_HOST ?? env.VITE_DEV_HOST ?? DEFAULT_DEV_HOST;
+  const devHost = env.VITE_ADMIN_CONSOLE_HOST ?? env.VITE_DEV_HOST ?? DEFAULT_DEV_HOST;
   const devPort = readPort(
-    env.VITE_USER_MANAGEMENT_PORT ?? env.VITE_DEV_PORT ?? env.PORT,
+    env.VITE_ADMIN_CONSOLE_PORT ?? env.VITE_DEV_PORT ?? env.PORT,
     DEFAULT_DEV_PORT
   );
   const previewPort = readPort(
-    env.VITE_USER_MANAGEMENT_PREVIEW_PORT ?? env.VITE_PREVIEW_PORT,
+    env.VITE_ADMIN_CONSOLE_PREVIEW_PORT ?? env.VITE_PREVIEW_PORT,
     DEFAULT_PREVIEW_PORT
   );
-  const devOrigin =
-    env.VITE_USER_MANAGEMENT_DEV_ORIGIN ??
-    env.VITE_DEV_ORIGIN ??
-    `http://${devHost}:${devPort}`;
+  const userManagementRemoteEntryUrl =
+    env.VITE_USER_MANAGEMENT_REMOTE_ENTRY ??
+    env.VITE_USER_MANAGEMENT_REMOTE_ENTRY_URL ??
+    DEFAULT_USER_MANAGEMENT_REMOTE_ENTRY;
+  const orgManagementRemoteEntryUrl =
+    env.VITE_ORG_MANAGEMENT_REMOTE_ENTRY ??
+    env.VITE_ORG_MANAGEMENT_REMOTE_ENTRY_URL ??
+    DEFAULT_ORG_MANAGEMENT_REMOTE_ENTRY;
 
   return {
     plugins: [
       react(),
       federation({
-        name: 'userManagement',
-        filename: 'remoteEntry.js',
+        name: 'adminConsole',
         dts: false,
-        exposes: {
-          './Routes': './src/remote/Routes.tsx',
+        remotes: {
+          userManagement: {
+            type: 'module',
+            name: 'userManagement',
+            entry: userManagementRemoteEntryUrl,
+            entryGlobalName: 'userManagement',
+            shareScope: 'default',
+          },
+          orgManagement: {
+            type: 'module',
+            name: 'orgManagement',
+            entry: orgManagementRemoteEntryUrl,
+            entryGlobalName: 'orgManagement',
+            shareScope: 'default',
+          },
         },
         shared: {
           react: sharedSingleton,
@@ -52,9 +71,9 @@ export default defineConfig(({ mode }) => {
           'react-dom/client': sharedSingleton,
           'react/jsx-runtime': sharedSingleton,
           'react-router-dom': sharedSingleton,
+          'react-intl': sharedSingleton,
           '@apollo/client': sharedSingleton,
           '@apollo/client/react': sharedSingleton,
-          'react-intl': sharedSingleton,
           '@emotion/react': sharedSingleton,
           '@emotion/styled': sharedSingleton,
           '@mui/material': sharedSingleton,
@@ -71,17 +90,19 @@ export default defineConfig(({ mode }) => {
         },
       }),
     ],
-    define: {
-      'process.env': {},
-    },
     server: {
       host: devHost,
       port: devPort,
-      origin: devOrigin,
     },
     preview: {
       host: devHost,
       port: previewPort,
+    },
+    build: {
+      target: 'esnext',
+    },
+    define: {
+      'process.env': {},
     },
     resolve: {
       dedupe: [

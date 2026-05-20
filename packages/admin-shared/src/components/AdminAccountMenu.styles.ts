@@ -12,39 +12,32 @@ export const MenuSummary = styled('div')(({ theme }) => ({
   padding: `${theme.hugoUISpacer.SPACER_SM} ${theme.hugoUISpacer.SPACER_MD}`,
 }));
 
-export const MenuSummaryName = styled('div')(({ theme }) => ({
+export const MenuSummaryName = styled('strong')(({ theme }) => ({
   color: theme.hugoUIColorRoles.text.primary,
   fontSize: 14,
-  fontWeight: 800,
+  lineHeight: 1.3,
 }));
 
-export const MenuSummaryMeta = styled('div')(({ theme }) => ({
+export const MenuSummaryMeta = styled('span')(({ theme }) => ({
   color: theme.hugoUIColorRoles.text.subtle,
   fontSize: 12,
-  lineHeight: 1.35,
+  lineHeight: 1.4,
 }));
 
 export const MenuSectionTitle = styled('div')(({ theme }) => ({
+  padding: `${theme.hugoUISpacer.SPACER_SM} ${theme.hugoUISpacer.SPACER_MD} ${theme.hugoUISpacer.SPACER_XS}`,
   color: theme.hugoUIColorRoles.text.subtle,
   fontSize: 11,
-  fontWeight: 800,
+  fontWeight: 700,
   letterSpacing: 0,
-  padding: `${theme.hugoUISpacer.SPACER_SM} ${theme.hugoUISpacer.SPACER_MD} ${theme.hugoUISpacer.SPACER_XS}`,
   textTransform: 'uppercase',
 }));
 
 export const MenuItemIcon = styled('span')(() => ({
-  alignSelf: 'flex-start',
-  display: 'grid',
-  flex: '0 0 auto',
-  height: 20,
-  marginTop: 1,
-  placeItems: 'center',
+  display: 'inline-flex',
+  alignItems: 'center',
+  justifyContent: 'center',
   width: 24,
-
-  '& svg': {
-    fontSize: 20,
-  },
 }));
 
 export const MenuItemText = styled('span')(() => ({
@@ -53,27 +46,28 @@ export const MenuItemText = styled('span')(() => ({
 }));
 
 export const MenuItemLabel = styled('span')(({ theme }) => ({
-  color: theme.hugoUIColorRoles.text.primary,
-  fontSize: 13,
-  fontWeight: 700,
+  color: theme.hugoUIColorRoles.text.default,
+  fontSize: 14,
+  lineHeight: 1.3,
 }));
 
 export const MenuItemMeta = styled('span')(({ theme }) => ({
   color: theme.hugoUIColorRoles.text.subtle,
   fontSize: 12,
+  lineHeight: 1.35,
 }));
 
-export const AccountList = styled('div')(({ theme }) => ({
+export const AccountList = styled('div')(() => ({
   display: 'grid',
-  gap: theme.hugoUISpacer.SPACER_SM,
+  gap: 10,
 }));
 
 export const AccountOption = styled('button')(({ theme }) => ({
-  width: '100%',
   display: 'grid',
   gridTemplateColumns: 'minmax(0, 1fr) auto',
   alignItems: 'center',
-  gap: theme.hugoUISpacer.SPACER_MD,
+  gap: theme.hugoUISpacer.SPACER_SM,
+  width: '100%',
   padding: theme.hugoUISpacer.SPACER_MD,
   border: `1px solid ${theme.hugoUIColorRoles.border.default}`,
   borderRadius: 8,
@@ -87,8 +81,9 @@ export const AccountOption = styled('button')(({ theme }) => ({
   },
 
   '&:focus-visible': {
+    borderColor: theme.hugoUIColorRoles.border.strong,
     outline: `2px solid ${theme.hugoUIColorRoles.focus.ring}`,
-    outlineOffset: 2,
+    outlineOffset: 1,
   },
 
   '&[aria-pressed="true"]': {
@@ -98,40 +93,39 @@ export const AccountOption = styled('button')(({ theme }) => ({
 }));
 
 export const AccountOptionContent = styled('span')(() => ({
-  minWidth: 0,
   display: 'grid',
   gap: 4,
+  minWidth: 0,
 }));
 
 export const AccountOptionName = styled('span')(({ theme }) => ({
   color: theme.hugoUIColorRoles.text.primary,
   fontSize: 14,
-  fontWeight: 800,
+  fontWeight: 700,
+  lineHeight: 1.3,
 }));
 
 export const AccountOptionMeta = styled('span')(({ theme }) => ({
+  overflow: 'hidden',
   color: theme.hugoUIColorRoles.text.subtle,
   fontSize: 12,
-  lineHeight: 1.4,
+  lineHeight: 1.35,
+  textOverflow: 'ellipsis',
+  whiteSpace: 'nowrap',
 }));
 
 export const SelectedMark = styled('span')(({ theme }) => ({
-  alignItems: 'center',
-  color: theme.hugoUIColorRoles.status.success,
   display: 'inline-flex',
-  gap: theme.hugoUISpacer.SPACER_XS,
+  alignItems: 'center',
+  gap: 4,
+  color: theme.hugoUIColorRoles.text.primary,
   fontSize: 12,
-  fontWeight: 800,
-  lineHeight: 1,
-
-  '& svg': {
-    flex: '0 0 auto',
-  },
+  fontWeight: 700,
 }));
 
 export const EmptyStateText = styled('p')(({ theme }) => ({
   margin: 0,
   color: theme.hugoUIColorRoles.text.subtle,
   fontSize: 14,
-  lineHeight: 1.5,
+  lineHeight: 1.45,
 }));

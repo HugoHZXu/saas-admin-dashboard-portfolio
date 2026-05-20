@@ -7,7 +7,7 @@ import {
   writeStoredAccountId,
 } from './demoSessionStorage';
 
-type DemoSessionContextValue = {
+export type DemoSessionContextValue = {
   accounts: DemoAccount[];
   currentAccount?: DemoAccount;
   capabilities: DemoCapabilities;
@@ -24,6 +24,15 @@ const emptyCapabilities: DemoCapabilities = {
 };
 
 const DemoSessionContext = createContext<DemoSessionContextValue | null>(null);
+
+type DemoSessionValueProviderProps = {
+  children: React.ReactNode;
+  value: DemoSessionContextValue;
+};
+
+export function DemoSessionValueProvider({ children, value }: DemoSessionValueProviderProps) {
+  return <DemoSessionContext.Provider value={value}>{children}</DemoSessionContext.Provider>;
+}
 
 const createValue = (
   session: DemoSession | undefined,
@@ -101,7 +110,7 @@ export function DemoSessionProvider({ children }: { children: React.ReactNode })
     [error?.message, loading, refetch, session, switchAccount]
   );
 
-  return <DemoSessionContext.Provider value={value}>{children}</DemoSessionContext.Provider>;
+  return <DemoSessionValueProvider value={value}>{children}</DemoSessionValueProvider>;
 }
 
 export const useDemoSession = () => {
