@@ -4,6 +4,9 @@
 
 This document is a lightweight operating guide for AI-assisted work in this repository. It explains when to use the project-specific Skills and how they relate to the broader dashboard architecture.
 
+The workflow itself is intentionally public and part of the portfolio: it shows how agent-assisted
+development is constrained, routed, reviewed, and validated in a desensitized codebase.
+
 Keep this document short. Detailed step-by-step instructions live in `AGENTS.md` and `.codex/skills/*/SKILL.md`.
 
 ## Core Principles
@@ -30,7 +33,7 @@ Use these Skills when the task matches the scenario. Do not use all Skills for e
 | --- | --- | --- |
 | `$portfolio-desensitization-review` | Adding mock data, business copy, docs, README content, Storybook examples, BFF examples, or code adapted from prior experience. | Keep the portfolio public-safe and synthetic. |
 | `$hugo-ui-component-change` | Adding or changing `hugo-ui` components, props, exports, component tokens, tests, or stories. | Keep shared UI generic, tested, documented, and design-system aligned. |
-| `$admin-dashboard-feature-slice` | Implementing Organization Table, Organization Detail, Activity Log, BFF mock work, or future User Management features. | Keep business features in the right app/BFF/shared-type/component layer. |
+| `$admin-dashboard-feature-slice` | Implementing Organization Table, Organization Detail, Activity Log, BFF mock work, or User Management feature work. | Keep business features in the right app/BFF/shared-type/component layer. |
 | `$design-token-audit` | Changing color roles, raw palette usage, hover/selected states, status colors, headers, surfaces, or `alpha(...)` usage. | Keep colors semantic, reusable, and consistent with the design system. |
 | `$activity-log-normalization` | Designing raw audit events, normalized Activity Log records, global Activity Log pages, or object-local logs. | Keep event translation in the BFF/mock layer and preserve a structured audit trail. |
 
@@ -46,8 +49,9 @@ Use these Skills when the task matches the scenario. Do not use all Skills for e
 
 - `packages/hugo-ui` owns generic components, design-system tokens, theme roles, and component-level tests.
 - `packages/storybook-demo` owns component demos and visual state coverage.
-- `packages/org-management` owns standalone app routing, page composition, navigation, and temporary UI skeletons.
-- The future BFF/mock service owns data aggregation, Organization/User contracts, list query behavior, pagination/filter/sort execution, and Activity Log normalization.
+- `packages/org-management` owns Organization Management routing, page composition, navigation, and dashboard workflow state.
+- `packages/user-management` owns User Management routing, page composition, organization-scoped user workflows, and dashboard workflow state.
+- `packages/admin-server` owns local BFF behavior: data aggregation, Organization/User contracts, list query behavior, pagination/filter/sort execution, and Activity Log normalization.
 - Shared types should be introduced only when they clarify the app-to-BFF/mock contract.
 
 ## Validation Expectations

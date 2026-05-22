@@ -2,11 +2,13 @@
 
 React component library for the HugoUI design system.
 
-## Install
+## Package shape
 
-```bash
-npm install hugo-ui
-```
+This package is structured like a publishable npm package, but this portfolio consumes it through
+`pnpm` workspace links. External npm publication is intentionally out of scope for this repository,
+so the package remains `private: true`.
+
+Consumer-facing imports intentionally keep npm-style package names, as shown below.
 
 ## Usage
 

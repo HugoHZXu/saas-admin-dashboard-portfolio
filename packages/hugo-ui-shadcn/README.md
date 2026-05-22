@@ -3,11 +3,13 @@
 React component library scaffolded from the `hugo-ui` package infrastructure, but built around
 Tailwind CSS and shadcn-style primitives instead of MUI.
 
-## Install
+## Package shape
 
-```bash
-npm install hugo-ui-shadcn
-```
+This package is structured like a publishable npm package, but this portfolio consumes it through
+`pnpm` workspace links. External npm publication is intentionally out of scope for this repository,
+so the package remains `private: true`.
+
+Consumer-facing imports intentionally keep npm-style package names, as shown below.
 
 ## Usage
 

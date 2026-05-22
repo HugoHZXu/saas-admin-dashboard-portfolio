@@ -2,117 +2,66 @@
 
 ## Current Phase
 
-The project is currently in the component-library foundation phase.
+The project is in public-release polish after the core portfolio architecture has been
+implemented.
 
 Completed:
 
-- workspace dependency upgrade
-- current React/MUI/Storybook/TypeScript/Jest/Vite baseline
-- `Table` public component in `hugo-ui`
-- `StatusTag` public component in `hugo-ui`
-- Storybook coverage for `Table` and `StatusTag`
-- tests for `Table` and `StatusTag`
+- workspace dependency and tooling baseline
+- MUI-based `hugo-ui` component package with tests and Storybook coverage
+- Tailwind/shadcn-style `hugo-ui-shadcn` component package
+- local GraphQL BFF in `admin-server`
+- Prisma SQLite schema, migrations, reset script, and synthetic seed data
+- Activity Log event normalization
+- federated `admin-console` shell
+- `org-management` and `user-management` remotes
+- Organization/User list, detail, and Activity Log portfolio surfaces
+- public AI-assisted workflow instructions and project-specific Skills
 
-## Next Phase: Mock Domain And BFF
-
-Build the data foundation before adding dashboard pages.
+## Public Release Polish
 
 Tasks:
 
-- Define shared Organization, User, Domain, Admin, Status, Role, and Activity Log types.
-- Create fully synthetic mock data.
-- Model multiple source shapes internally to simulate separate organization/user and activity-event sources.
-- Expose a single frontend-facing API shape.
-- Normalize low-level activity events into readable activity records.
-- Keep raw event complexity inside the BFF/mock service layer.
+- Keep the root README focused on the B2B SaaS admin dashboard portfolio audience.
+- Document local setup across the BFF, shell, remotes, and Storybook.
+- Add public repository basics such as license, contribution guidance, and security reporting.
+- Keep `hugo-ui` and `hugo-ui-shadcn` described as publish-shaped packages consumed through
+  workspace links in this portfolio.
+- Keep the desensitization statement visible in the README and supporting docs.
+- Run tracked-file and git-history secret checks before publishing the GitHub repository.
 
 Expected outcome:
 
-- Frontend page code consumes one stable API.
-- Activity Log rendering does not need to understand raw event source details.
-- Organization data and activity records can be queried together for detail pages.
+- Visitors can understand the project purpose from the README first screen.
+- The package map and local run commands match the actual workspace.
+- Public docs do not imply this is an extracted production system or an already-published npm
+  package suite.
 
-## Next Phase: Organization Table Page
-
-Build the first real dashboard workflow around the shared `Table`.
-
-Tasks:
-
-- Add a dashboard app surface or page route.
-- Add page-level toolbar with search and filters.
-- Use controlled sort state from `Table`.
-- Use controlled pagination state from `Table`.
-- Fetch or derive rows from the mock BFF layer.
-- Render status with `StatusTag`.
-- Navigate from a row to Organization detail.
-
-Keep inside page code:
-
-- search state
-- filter state
-- query params
-- sorting data behavior
-- pagination data behavior
-- navigation
-
-Keep inside `Table`:
-
-- structure
-- display states
-- sortable header UI
-- pagination UI
-- row activation
-
-## Next Phase: Organization And User Detail
+## Dashboard Workflow Polish
 
 Tasks:
 
-- Organization detail layout
-- basic information section
-- status and plan summary
-- domains section
-- associated users section
-- admins section
-- object-scoped Activity Log section
-- small set of key actions such as archive, restore, edit, enable, and disable
+- Keep Organization and User workflows focused on the portfolio story.
+- Preserve BFF ownership of data aggregation, query behavior, and Activity Log normalization.
+- Keep page-level search, filters, sort state, pagination state, and navigation out of shared
+  generic components.
+- Use `StatusTag`, `SearchBox`, `Toggle`, and `Table` through their public package APIs.
+- Add screenshots or architecture diagrams only when they represent the implemented flows.
 
-Avoid building a complete tenant-management system. Mock only enough relationships to support realistic admin flows.
-
-## Next Phase: Activity Log
+## Component Package Polish
 
 Tasks:
 
-- global Activity Log page
-- object-scoped Activity Log section
-- event-to-display normalization
-- actor, target, action, result, and timestamp rendering
-- basic filters that support the portfolio story
-
-Activity records should answer:
-
-- who acted
-- when it happened
-- what object changed
-- what action happened
-- whether the result succeeded or failed
-
-## Final Phase: Public Narrative
-
-Do this after the dashboard workflows are implemented.
-
-Tasks:
-
-- rewrite README for the portfolio audience
-- add architecture explanation
-- add BFF rationale
-- add component-library rationale
-- add desensitization statement
-- add AI-assisted development workflow statement
-- add screenshots or Storybook references if useful
+- Keep `hugo-ui` component changes generic, tested, exported, and covered in Storybook.
+- Keep `hugo-ui-shadcn` experiments separate from `hugo-ui` unless explicitly promoted.
+- Preserve publish-shaped package metadata and npm-style imports while keeping actual publication
+  out of scope for this portfolio.
+- Continue using semantic theme roles and component-local tokens for public component styling.
 
 ## Not In Scope For Now
 
 - complete user-management platform
+- complete tenant-management platform
 - advanced access-control modeling
 - column resizing
 - column configuration

@@ -89,3 +89,16 @@ Before considering a change public-safe, check:
 - Business concepts are generic B2B SaaS admin concepts.
 - Shared UI uses local `hugo-ui` theme roles and component tokens.
 - README or docs do not imply this is an extracted production system.
+
+## Public Release Checklist
+
+Before making the GitHub repository public, check:
+
+- Root README states that all organizations, users, emails, domains, and activity records are
+  synthetic demo data.
+- Tracked files do not include `.env`, SQLite databases, screenshots, logs, HAR files, certificates,
+  private keys, or other local artifacts.
+- Git history has been scanned for secrets or private data, not just the current working tree.
+- Package README files do not imply unpublished workspace packages are already available from npm.
+- `AGENTS.md` and `.codex/skills/*` remain public-safe because they are part of the portfolio
+  workflow narrative.
