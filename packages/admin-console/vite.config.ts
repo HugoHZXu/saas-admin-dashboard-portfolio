@@ -67,6 +67,7 @@ export default defineConfig(({ mode }) => {
         },
         shared: {
           react: sharedSingleton,
+          'react/compiler-runtime': sharedSingleton,
           'react-dom': sharedSingleton,
           'react-dom/client': sharedSingleton,
           'react/jsx-runtime': sharedSingleton,
@@ -107,6 +108,7 @@ export default defineConfig(({ mode }) => {
     resolve: {
       dedupe: [
         'react',
+        'react/compiler-runtime',
         'react-dom',
         'react-intl',
         '@emotion/react',

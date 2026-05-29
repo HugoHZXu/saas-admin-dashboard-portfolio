@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useState } from 'react';
 import { ContentTemplate, SearchBox, Table, TableSort } from 'hugo-ui';
 import { useActivityLogsQuery } from '@/api/orgManagementApi';
 import { ActivityLogListInput } from '@/api/types';
@@ -11,22 +11,21 @@ import {
 } from './pageStyles';
 
 export function ActivityLogPage() {
+  'use memo';
+
   const activityColumns = useActivityColumns();
   const [search, setSearch] = useState('');
   const [sort, setSort] = useState<TableSort>({ columnId: 'eventTime', direction: 'desc' });
   const [page, setPage] = useState(0);
   const [pageSize, setPageSize] = useState(10);
 
-  const queryInput = useMemo<ActivityLogListInput>(
-    () => ({
-      pageNumber: page,
-      pageSize,
-      sortField: sort?.columnId ?? undefined,
-      sortDirection: sort?.direction ?? undefined,
-      searchString: search.trim() || undefined,
-    }),
-    [page, pageSize, search, sort]
-  );
+  const queryInput: ActivityLogListInput = {
+    pageNumber: page,
+    pageSize,
+    sortField: sort?.columnId ?? undefined,
+    sortDirection: sort?.direction ?? undefined,
+    searchString: search.trim() || undefined,
+  };
 
   const activityLogsQuery = useActivityLogsQuery(queryInput);
   const activityPage = activityLogsQuery.data?.activityLogs ?? null;

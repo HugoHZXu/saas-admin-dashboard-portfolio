@@ -1,5 +1,6 @@
 import { federation } from '@module-federation/vite';
-import react from '@vitejs/plugin-react';
+import babel from '@rolldown/plugin-babel';
+import react, { reactCompilerPreset } from '@vitejs/plugin-react';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import { defineConfig, loadEnv } from 'vite';
@@ -8,6 +9,11 @@ const dirname = path.dirname(fileURLToPath(import.meta.url));
 const DEFAULT_DEV_HOST = '127.0.0.1';
 const DEFAULT_DEV_PORT = 5175;
 const DEFAULT_PREVIEW_PORT = 4175;
+const reactCompilerConfig = {
+  target: '19',
+  compilationMode: 'annotation',
+  panicThreshold: 'none',
+} as const;
 
 const sharedSingleton = {
   singleton: true,
@@ -32,13 +38,14 @@ export default defineConfig(({ mode }) => {
     DEFAULT_PREVIEW_PORT
   );
   const devOrigin =
-    env.VITE_USER_MANAGEMENT_DEV_ORIGIN ??
-    env.VITE_DEV_ORIGIN ??
-    `http://${devHost}:${devPort}`;
+    env.VITE_USER_MANAGEMENT_DEV_ORIGIN ?? env.VITE_DEV_ORIGIN ?? `http://${devHost}:${devPort}`;
 
   return {
     plugins: [
       react(),
+      babel({
+        presets: [reactCompilerPreset(reactCompilerConfig)],
+      }),
       federation({
         name: 'userManagement',
         filename: 'remoteEntry.js',
@@ -48,6 +55,7 @@ export default defineConfig(({ mode }) => {
         },
         shared: {
           react: sharedSingleton,
+          'react/compiler-runtime': sharedSingleton,
           'react-dom': sharedSingleton,
           'react-dom/client': sharedSingleton,
           'react/jsx-runtime': sharedSingleton,
@@ -86,6 +94,7 @@ export default defineConfig(({ mode }) => {
     resolve: {
       dedupe: [
         'react',
+        'react/compiler-runtime',
         'react-dom',
         'react-intl',
         '@emotion/react',

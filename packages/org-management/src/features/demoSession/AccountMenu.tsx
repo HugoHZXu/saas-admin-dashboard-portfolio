@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useState } from 'react';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import SwapHorizIcon from '@mui/icons-material/SwapHoriz';
 import Divider from '@mui/material/Divider';
@@ -59,6 +59,8 @@ const formatScopeLabel = (account: DemoAccount) => {
 };
 
 export function AccountMenu() {
+  'use memo';
+
   const { accounts, currentAccount, errorMessage, loading, selectAccount } = useDemoSession();
   const [menuAnchor, setMenuAnchor] = useState<HTMLElement | null>(null);
   const [accountModalOpen, setAccountModalOpen] = useState(false);
@@ -68,10 +70,8 @@ export function AccountMenu() {
   const accountMeta =
     currentAccount?.persona ?? (loading ? 'Loading account' : 'No account loaded');
 
-  const sortedAccounts = useMemo(
-    () =>
-      [...accounts].sort((first, second) => first.displayName.localeCompare(second.displayName)),
-    [accounts]
+  const sortedAccounts = [...accounts].sort((first, second) =>
+    first.displayName.localeCompare(second.displayName)
   );
 
   const closeMenu = () => setMenuAnchor(null);

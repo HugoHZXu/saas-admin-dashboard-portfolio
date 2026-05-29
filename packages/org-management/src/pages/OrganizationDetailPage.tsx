@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useState } from 'react';
+import { useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import {
   ContentTemplate,
@@ -80,6 +80,8 @@ const getOrganizationAdminIds = (admins: OrganizationAdmin[]) =>
   sortIds(admins.map(getAdminId).filter((id): id is string => Boolean(id)));
 
 export function OrganizationDetailPage() {
+  'use memo';
+
   const navigate = useNavigate();
   const { organizationId } = useParams();
   const { currentAccount, refetch: refetchDemoSession } = useDemoSession();
@@ -93,80 +95,63 @@ export function OrganizationDetailPage() {
   const [draftAdminUserIds, setDraftAdminUserIds] = useState<string[]>([]);
   const [feedback, setFeedback] = useState<OrganizationDetailFeedback | null>(null);
 
-  const activityInput = useMemo<ActivityLogListInput>(
-    () => ({
-      pageNumber: activityPageNumber,
-      pageSize: 5,
-      sortField: activitySort?.columnId ?? undefined,
-      sortDirection: activitySort?.direction ?? undefined,
-    }),
-    [activityPageNumber, activitySort]
-  );
+  const activityInput: ActivityLogListInput = {
+    pageNumber: activityPageNumber,
+    pageSize: 5,
+    sortField: activitySort?.columnId ?? undefined,
+    sortDirection: activitySort?.direction ?? undefined,
+  };
   const organizationQuery = useOrganizationQuery(organizationId);
   const activityQuery = useOrganizationActivityLogsQuery(organizationId, activityInput);
   const [updateOrganizationAdmins, updateAdminsMutation] = useUpdateOrganizationAdminsMutation();
   const organization = organizationQuery.data?.organization ?? null;
   const activityPage = activityQuery.data?.organizationActivityLogs ?? null;
   const currentAccountId = currentAccount?.id ?? null;
-  const currentAdminUserIds = useMemo(
-    () => getOrganizationAdminIds(organization?.admins ?? []),
-    [organization?.admins]
+  const currentAdminUserIds = getOrganizationAdminIds(organization?.admins ?? []);
+  const organizationMembers = [...(organization?.memberships ?? [])].sort((first, second) =>
+    first.user.name.localeCompare(second.user.name)
   );
-  const organizationMembers = useMemo(
-    () =>
-      [...(organization?.memberships ?? [])].sort((first, second) =>
-        first.user.name.localeCompare(second.user.name)
-      ),
-    [organization?.memberships]
-  );
-  const adminDraftChanged = useMemo(
-    () => !idsEqual(draftAdminUserIds, currentAdminUserIds),
-    [currentAdminUserIds, draftAdminUserIds]
-  );
+  const adminDraftChanged = !idsEqual(draftAdminUserIds, currentAdminUserIds);
   const canSaveAdminChanges = Boolean(
     organization?.id &&
-      adminDraftChanged &&
-      !updateAdminsMutation.loading &&
-      organizationMembers.length > 0
+    adminDraftChanged &&
+    !updateAdminsMutation.loading &&
+    organizationMembers.length > 0
   );
-  const feedbackMessages = useMemo<FeedbackMessageType[]>(
-    () =>
-      feedback
-        ? [
-            {
-              type: feedback.type,
-              message: feedback.message,
-              description: feedback.description,
-            },
-          ]
-        : [],
-    [feedback]
-  );
+  const feedbackMessages: FeedbackMessageType[] = feedback
+    ? [
+        {
+          type: feedback.type,
+          message: feedback.message,
+          description: feedback.description,
+        },
+      ]
+    : [];
   const detailError = !organizationId
     ? 'The selected organization route is missing an id.'
     : (organizationQuery.error?.message ?? null);
 
-  const openAdminModal = useCallback(() => {
+  const openAdminModal = () => {
     setDraftAdminUserIds(currentAdminUserIds);
     setAdminModalOpen(true);
-  }, [currentAdminUserIds]);
+  };
 
-  const closeAdminModal = useCallback(() => {
+  const closeAdminModal = () => {
     if (updateAdminsMutation.loading) {
       return;
     }
 
     setAdminModalOpen(false);
     setDraftAdminUserIds([]);
-  }, [updateAdminsMutation.loading]);
+  };
 
-  const toggleDraftAdmin = useCallback((userId: string) => {
+  const toggleDraftAdmin = (userId: string) => {
     setDraftAdminUserIds((currentIds) =>
       currentIds.includes(userId)
         ? currentIds.filter((currentId) => currentId !== userId)
         : [...currentIds, userId]
     );
-  }, []);
+  };
 
   const handleAdminSave = async () => {
     if (!organization?.id || !canSaveAdminChanges) {

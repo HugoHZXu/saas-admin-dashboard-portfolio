@@ -18,21 +18,38 @@ synthetic demo data.
 - Reusable admin UI components in `hugo-ui` and Tailwind/shadcn-style variants in
   `hugo-ui-shadcn`.
 - Storybook coverage for shared UI components and visual states.
+- Targeted React Compiler adoption in the Organization and User Management remotes.
 - Public AI-assisted engineering workflow through `AGENTS.md`, `.codex/skills/*`, and
   `docs/agent-workflow.md`.
 
+## Screenshots
+
+Captured from the local demo shell with synthetic `.example` data.
+
+### Organization Management
+
+| List                                                       | Detail                                                                    | Activity Log                                                               |
+| ---------------------------------------------------------- | ------------------------------------------------------------------------- | -------------------------------------------------------------------------- |
+| ![Organization list](docs/assets/screenshots/org-list.jpg) | ![Organization detail](docs/assets/screenshots/org-detail-acme-cloud.jpg) | ![Organization Activity Log](docs/assets/screenshots/org-activity-log.jpg) |
+
+### User Management
+
+| List                                                           | Detail                                                             | Activity Log                                                                   |
+| -------------------------------------------------------------- | ------------------------------------------------------------------ | ------------------------------------------------------------------------------ |
+| ![User list](docs/assets/screenshots/user-list-acme-cloud.jpg) | ![User detail](docs/assets/screenshots/user-detail-mina-patel.jpg) | ![User Activity Log](docs/assets/screenshots/user-activity-log-acme-cloud.jpg) |
+
 ## Packages
 
-| Package | Purpose |
-| --- | --- |
-| `packages/admin-console` | Browser shell and Module Federation host for the admin portfolio. |
-| `packages/admin-server` | Local GraphQL BFF with Prisma, SQLite, synthetic seed data, and Activity Log normalization. |
-| `packages/admin-shared` | Shared session and admin-shell UI utilities used by feature remotes. |
-| `packages/org-management` | Organization Management remote, routes, list/detail views, and object-scoped activity surface. |
-| `packages/user-management` | User Management remote, organization-scoped user workflows, and user activity surface. |
-| `packages/hugo-ui` | MUI-based publish-shaped design-system package for shared admin components. |
-| `packages/hugo-ui-shadcn` | Tailwind/shadcn-style publish-shaped component package. |
-| `packages/storybook-demo` | Storybook verification surface for shared UI packages. |
+| Package                    | Purpose                                                                                        |
+| -------------------------- | ---------------------------------------------------------------------------------------------- |
+| `packages/admin-console`   | Browser shell and Module Federation host for the admin portfolio.                              |
+| `packages/admin-server`    | Local GraphQL BFF with Prisma, SQLite, synthetic seed data, and Activity Log normalization.    |
+| `packages/admin-shared`    | Shared session and admin-shell UI utilities used by feature remotes.                           |
+| `packages/org-management`  | Organization Management remote, routes, list/detail views, and object-scoped activity surface. |
+| `packages/user-management` | User Management remote, organization-scoped user workflows, and user activity surface.         |
+| `packages/hugo-ui`         | MUI-based publish-shaped design-system package for shared admin components.                    |
+| `packages/hugo-ui-shadcn`  | Tailwind/shadcn-style publish-shaped component package.                                        |
+| `packages/storybook-demo`  | Storybook verification surface for shared UI packages.                                         |
 
 ## Local Development
 
@@ -90,6 +107,31 @@ import { Button } from 'hugo-ui-shadcn';
 Inside this portfolio, those packages are consumed through `pnpm` workspace links such as
 `"hugo-ui": "workspace:*"`. Actual npm publication is intentionally out of scope for this
 repository, so package manifests remain `private: true`.
+
+## React Compiler Adoption
+
+`packages/org-management` and `packages/user-management` opt into React Compiler with
+`compilationMode: "annotation"`. Only components and custom hooks marked with `"use memo"` are
+compiled, which keeps the portfolio example explicit and limits the rollout surface.
+
+This adoption is intentionally scoped to feature remotes. The shared component libraries,
+Storybook, and admin shell are not compiler-enabled by default, so publish-shaped packages and
+federated host behavior remain easier to reason about independently.
+
+The compiler-enabled code removes low-risk manual `useMemo` and `useCallback` wrappers from list,
+detail, and Activity Log surfaces while keeping provider, context, and external-store boundaries
+manually stabilized.
+
+Useful checks:
+
+```bash
+pnpm run build-org-management
+pnpm run build-user-management
+pnpm run build-admin-console
+```
+
+React DevTools can also confirm compiled components through its compiler memo badge. See
+`docs/react-compiler-adoption.md` for the scope and guardrails.
 
 ## AI-Assisted Workflow
 

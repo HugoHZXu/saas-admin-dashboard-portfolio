@@ -1,4 +1,3 @@
-import { useMemo } from 'react';
 import { IntlShape, useIntl } from 'react-intl';
 import { StatusTag, StatusTagTone, TableColumn } from 'hugo-ui';
 import { ActivityRecord, ActivityResult, LocalizedMessage } from '@/api/types';
@@ -45,84 +44,83 @@ export const formatDateTime = (value: string) =>
   }).format(new Date(value));
 
 export const useActivityColumns = (): TableColumn<ActivityRecord>[] => {
+  'use memo';
+
   const intl = useIntl();
 
-  return useMemo(
-    () => [
-      {
-        id: 'actor',
-        header: intl.formatMessage({
-          id: 'orgManagement.activity.column.actor',
-          defaultMessage: 'Actor',
+  return [
+    {
+      id: 'actor',
+      header: intl.formatMessage({
+        id: 'orgManagement.activity.column.actor',
+        defaultMessage: 'Actor',
+      }),
+      sortable: true,
+      minWidth: 180,
+      render: (row) => (
+        <ActivityActorCell>
+          <ActivitySummaryText>{row.actor.displayName}</ActivitySummaryText>
+          <ActivityMetaText>{row.actor.email}</ActivityMetaText>
+        </ActivityActorCell>
+      ),
+    },
+    {
+      id: 'summary',
+      header: intl.formatMessage({
+        id: 'orgManagement.activity.column.activity',
+        defaultMessage: 'Activity',
+      }),
+      minWidth: 280,
+      render: (row) => (
+        <ActivityCell>
+          <ActivitySummaryText>
+            {formatLocalizedMessage(intl, row.summaryMessage)}
+          </ActivitySummaryText>
+          <ActivityMetaText>{formatLocalizedMessage(intl, row.actionLabel)}</ActivityMetaText>
+        </ActivityCell>
+      ),
+    },
+    {
+      id: 'organization',
+      header: intl.formatMessage({
+        id: 'orgManagement.activity.column.organization',
+        defaultMessage: 'Organization',
+      }),
+      sortable: true,
+      minWidth: 180,
+      render: (row) =>
+        row.organization?.name ??
+        intl.formatMessage({
+          id: 'orgManagement.activity.emptyOrganization',
+          defaultMessage: 'No organization',
         }),
-        sortable: true,
-        minWidth: 180,
-        render: (row) => (
-          <ActivityActorCell>
-            <ActivitySummaryText>{row.actor.displayName}</ActivitySummaryText>
-            <ActivityMetaText>{row.actor.email}</ActivityMetaText>
-          </ActivityActorCell>
-        ),
-      },
-      {
-        id: 'summary',
-        header: intl.formatMessage({
-          id: 'orgManagement.activity.column.activity',
-          defaultMessage: 'Activity',
-        }),
-        minWidth: 280,
-        render: (row) => (
-          <ActivityCell>
-            <ActivitySummaryText>
-              {formatLocalizedMessage(intl, row.summaryMessage)}
-            </ActivitySummaryText>
-            <ActivityMetaText>{formatLocalizedMessage(intl, row.actionLabel)}</ActivityMetaText>
-          </ActivityCell>
-        ),
-      },
-      {
-        id: 'organization',
-        header: intl.formatMessage({
-          id: 'orgManagement.activity.column.organization',
-          defaultMessage: 'Organization',
-        }),
-        sortable: true,
-        minWidth: 180,
-        render: (row) =>
-          row.organization?.name ??
-          intl.formatMessage({
-            id: 'orgManagement.activity.emptyOrganization',
-            defaultMessage: 'No organization',
-          }),
-      },
-      {
-        id: 'result',
-        header: intl.formatMessage({
-          id: 'orgManagement.activity.column.result',
-          defaultMessage: 'Result',
-        }),
-        sortable: true,
-        minWidth: 120,
-        render: (row) => (
-          <StatusTag tone={activityResultToneMap[row.result]}>
-            {intl.formatMessage({
-              id: `orgManagement.activity.result.${row.result}`,
-              defaultMessage: formatStatusLabel(row.result),
-            })}
-          </StatusTag>
-        ),
-      },
-      {
-        id: 'eventTime',
-        header: intl.formatMessage({
-          id: 'orgManagement.activity.column.eventTime',
-          defaultMessage: 'Event time',
-        }),
-        sortable: true,
-        minWidth: 180,
-        render: (row) => formatDateTime(row.eventTime),
-      },
-    ],
-    [intl]
-  );
+    },
+    {
+      id: 'result',
+      header: intl.formatMessage({
+        id: 'orgManagement.activity.column.result',
+        defaultMessage: 'Result',
+      }),
+      sortable: true,
+      minWidth: 120,
+      render: (row) => (
+        <StatusTag tone={activityResultToneMap[row.result]}>
+          {intl.formatMessage({
+            id: `orgManagement.activity.result.${row.result}`,
+            defaultMessage: formatStatusLabel(row.result),
+          })}
+        </StatusTag>
+      ),
+    },
+    {
+      id: 'eventTime',
+      header: intl.formatMessage({
+        id: 'orgManagement.activity.column.eventTime',
+        defaultMessage: 'Event time',
+      }),
+      sortable: true,
+      minWidth: 180,
+      render: (row) => formatDateTime(row.eventTime),
+    },
+  ];
 };

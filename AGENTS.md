@@ -98,6 +98,16 @@ For high-risk changes:
 - If a story or docs page relies on locale, keep `preview.tsx` provider setup working for `en`, `zh`, and `ar`.
 - Do not let `hugo-ui-shadcn` utility patterns or styling decisions silently leak into `hugo-ui`.
 
+## React Compiler Guardrails
+
+- React Compiler is intentionally enabled only for `packages/org-management` and `packages/user-management`.
+- The current rollout uses `compilationMode: "annotation"`. Add `"use memo"` only to components or custom hooks that are meant to be compiled.
+- Do not enable React Compiler for `hugo-ui`, `hugo-ui-shadcn`, `storybook-demo`, or `admin-console` unless the user explicitly asks for that broader rollout.
+- Do not delete `useMemo` or `useCallback` from provider, context, `useSyncExternalStore`, module-federation session, or cross-package API boundaries just because Compiler is available.
+- Good candidates for Compiler-managed memoization are page-local derived objects, table rows, summary calculations, column definitions, and local modal handlers inside annotated feature components.
+- When changing Compiler config or `"use memo"` coverage, verify the affected remote builds and the `admin-console` host build.
+- For public documentation about Compiler adoption, keep the positioning generic and portfolio-safe. Do not imply private production benchmarking or private system history.
+
 ## Definition Of Done
 
 - Component behavior changes in `packages/hugo-ui` or `packages/hugo-ui-shadcn` must include tests when behavior changed.
@@ -142,6 +152,12 @@ Follow the default validation ladder and expand only when risk or scope requires
 - If you changed files under `packages/storybook-demo/src/stories/`, run the local validation that proves the story still compiles.
 - If you changed `.storybook/main.ts`, `.storybook/preview.tsx`, decorators, aliases, or provider wiring, treat it as high risk and run Storybook build validation.
 - If you changed story-only docs content with no runtime impact, typecheck may be enough.
+
+### React Compiler Changes
+
+- If you changed `babel-plugin-react-compiler`, `@rolldown/plugin-babel`, `reactCompilerPreset`, or Compiler options, run typecheck, lint, and build for both `org-management` and `user-management`.
+- If a Compiler change affects either remote, also run `./scripts/codex-node.sh pnpm run build-admin-console` to verify the Module Federation host still consumes the remotes.
+- If you add `"use memo"` to a new component or hook, check that manual memo removal did not cross provider, context, external-store, or package API boundaries.
 
 ### Shared Styling And Provider Changes
 

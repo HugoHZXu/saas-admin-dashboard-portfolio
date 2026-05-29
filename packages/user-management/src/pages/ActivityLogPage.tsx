@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { ContentTemplate, SearchBox, Table, TableSort } from 'hugo-ui';
 import { ActivityLogListInput } from '@/api/types';
 import { useActivityLogsQuery } from '@/api/userManagementApi';
@@ -12,9 +12,14 @@ import {
 } from './pageStyles';
 
 export function ActivityLogPage() {
+  'use memo';
+
   const activityColumns = useActivityColumns();
-  const { selectedOrganization, selectedOrganizationId, loading: scopeLoading } =
-    useOrganizationScope();
+  const {
+    selectedOrganization,
+    selectedOrganizationId,
+    loading: scopeLoading,
+  } = useOrganizationScope();
   const [search, setSearch] = useState('');
   const [sort, setSort] = useState<TableSort>({ columnId: 'eventTime', direction: 'desc' });
   const [page, setPage] = useState(0);
@@ -24,20 +29,16 @@ export function ActivityLogPage() {
     setPage(0);
   }, [selectedOrganizationId]);
 
-  const queryInput = useMemo<ActivityLogListInput | null>(() => {
-    if (!selectedOrganizationId) {
-      return null;
-    }
-
-    return {
-      organizationId: selectedOrganizationId,
-      pageNumber: page,
-      pageSize,
-      sortField: sort?.columnId ?? undefined,
-      sortDirection: sort?.direction ?? undefined,
-      searchString: search.trim() || undefined,
-    };
-  }, [page, pageSize, search, selectedOrganizationId, sort]);
+  const queryInput: ActivityLogListInput | null = selectedOrganizationId
+    ? {
+        organizationId: selectedOrganizationId,
+        pageNumber: page,
+        pageSize,
+        sortField: sort?.columnId ?? undefined,
+        sortDirection: sort?.direction ?? undefined,
+        searchString: search.trim() || undefined,
+      }
+    : null;
 
   const activityLogsQuery = useActivityLogsQuery(queryInput);
   const activityPage = activityLogsQuery.data?.activityLogs ?? null;

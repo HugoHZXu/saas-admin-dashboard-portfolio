@@ -24,18 +24,19 @@ Keep this document short. Detailed step-by-step instructions live in `AGENTS.md`
 - `docs/desensitization-rules.md`: public-safety and synthetic-data rules.
 - `docs/implementation-roadmap.md`: current implementation sequence.
 - `docs/project-brief.md`: portfolio positioning and product scope.
+- `docs/react-compiler-adoption.md`: scoped React Compiler rollout and validation notes.
 
 ## Skill Usage
 
 Use these Skills when the task matches the scenario. Do not use all Skills for every task.
 
-| Skill | Use When | Primary Goal |
-| --- | --- | --- |
-| `$portfolio-desensitization-review` | Adding mock data, business copy, docs, README content, Storybook examples, BFF examples, or code adapted from prior experience. | Keep the portfolio public-safe and synthetic. |
-| `$hugo-ui-component-change` | Adding or changing `hugo-ui` components, props, exports, component tokens, tests, or stories. | Keep shared UI generic, tested, documented, and design-system aligned. |
-| `$admin-dashboard-feature-slice` | Implementing Organization Table, Organization Detail, Activity Log, BFF mock work, or User Management feature work. | Keep business features in the right app/BFF/shared-type/component layer. |
-| `$design-token-audit` | Changing color roles, raw palette usage, hover/selected states, status colors, headers, surfaces, or `alpha(...)` usage. | Keep colors semantic, reusable, and consistent with the design system. |
-| `$activity-log-normalization` | Designing raw audit events, normalized Activity Log records, global Activity Log pages, or object-local logs. | Keep event translation in the BFF/mock layer and preserve a structured audit trail. |
+| Skill                               | Use When                                                                                                                        | Primary Goal                                                                        |
+| ----------------------------------- | ------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------- |
+| `$portfolio-desensitization-review` | Adding mock data, business copy, docs, README content, Storybook examples, BFF examples, or code adapted from prior experience. | Keep the portfolio public-safe and synthetic.                                       |
+| `$hugo-ui-component-change`         | Adding or changing `hugo-ui` components, props, exports, component tokens, tests, or stories.                                   | Keep shared UI generic, tested, documented, and design-system aligned.              |
+| `$admin-dashboard-feature-slice`    | Implementing Organization Table, Organization Detail, Activity Log, BFF mock work, or User Management feature work.             | Keep business features in the right app/BFF/shared-type/component layer.            |
+| `$design-token-audit`               | Changing color roles, raw palette usage, hover/selected states, status colors, headers, surfaces, or `alpha(...)` usage.        | Keep colors semantic, reusable, and consistent with the design system.              |
+| `$activity-log-normalization`       | Designing raw audit events, normalized Activity Log records, global Activity Log pages, or object-local logs.                   | Keep event translation in the BFF/mock layer and preserve a structured audit trail. |
 
 ## Practical Routing
 
@@ -44,6 +45,20 @@ Use these Skills when the task matches the scenario. Do not use all Skills for e
 - If the work adds public-facing examples or synthetic records, include `$portfolio-desensitization-review`.
 - If the work changes colors or state styling, include `$design-token-audit`.
 - If the work touches Activity Log data shape or rendering semantics, include `$activity-log-normalization`.
+
+## React Compiler Work
+
+React Compiler is a scoped portfolio capability in this repository. It is enabled only in
+`packages/org-management` and `packages/user-management` with annotation mode.
+
+For Compiler-related work:
+
+- Check the official React Compiler docs before changing configuration.
+- Add `"use memo"` only to components or custom hooks that should be compiled.
+- Prefer removing page-local manual `useMemo` and `useCallback` wrappers after a component opts in.
+- Keep manual memoization at provider, context, external-store, and module-federation session boundaries.
+- Do not enable Compiler in shared component libraries, Storybook, or the admin shell unless explicitly requested.
+- Validate both feature remotes and the `admin-console` host build.
 
 ## Architecture Boundaries
 
@@ -61,6 +76,7 @@ Choose validation based on the changed surface:
 - Documentation-only changes: run formatting/sanity checks such as `git diff --check`.
 - `hugo-ui` component changes: run the nearest tests, package typecheck/lint, build, and Storybook checks when stories or public UI changed.
 - `org-management` feature changes: run package typecheck/lint/build.
+- React Compiler changes in feature remotes: run both affected remote builds and the admin shell build.
 - Shared token/provider/export changes: expand validation to affected consumers.
 
 Use Node.js `22.12.0` or newer for validation. Codex command sessions should use the repository wrapper so `.nvmrc` is loaded before Node.js or pnpm commands run:

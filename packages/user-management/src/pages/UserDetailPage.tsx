@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useState } from 'react';
+import { useState } from 'react';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import {
   Button,
@@ -134,6 +134,8 @@ const roleIdsEqual = (first: string[], second: string[]) =>
   first.length === second.length && first.every((roleId) => second.includes(roleId));
 
 export function UserDetailPage() {
+  'use memo';
+
   const navigate = useNavigate();
   const location = useLocation();
   const { userId } = useParams();
@@ -160,31 +162,23 @@ export function UserDetailPage() {
   const [changeUserRoles, changeRolesMutation] = useChangeUserRolesMutation();
   const [suspendUser, suspendUserMutation] = useSuspendUserMutation();
   const [activateUser, activateUserMutation] = useActivateUserMutation();
-  const [removeUserFromOrganization, removeUserMutation] =
-    useRemoveUserFromOrganizationMutation();
+  const [removeUserFromOrganization, removeUserMutation] = useRemoveUserFromOrganizationMutation();
   const user = userQuery.data?.user ?? null;
-  const scopedMembership = useMemo(
-    () =>
-      user?.memberships.find(
-        (membership) => membership.organization.id === selectedOrganizationId
-      ) ?? null,
-    [selectedOrganizationId, user?.memberships]
-  );
+  const scopedMembership =
+    user?.memberships.find((membership) => membership.organization.id === selectedOrganizationId) ??
+    null;
 
-  const activityInput = useMemo<ActivityLogListInput | null>(() => {
-    if (!userId || !selectedOrganizationId || !scopedMembership) {
-      return null;
-    }
-
-    return {
-      targetUserId: userId,
-      organizationId: selectedOrganizationId,
-      pageNumber: activityPageNumber,
-      pageSize: 5,
-      sortField: activitySort?.columnId ?? undefined,
-      sortDirection: activitySort?.direction ?? undefined,
-    };
-  }, [activityPageNumber, activitySort, scopedMembership, selectedOrganizationId, userId]);
+  const activityInput: ActivityLogListInput | null =
+    userId && selectedOrganizationId && scopedMembership
+      ? {
+          targetUserId: userId,
+          organizationId: selectedOrganizationId,
+          pageNumber: activityPageNumber,
+          pageSize: 5,
+          sortField: activitySort?.columnId ?? undefined,
+          sortDirection: activitySort?.direction ?? undefined,
+        }
+      : null;
 
   const activityQuery = useActivityLogsQuery(activityInput);
   const activityPage = activityQuery.data?.activityLogs ?? null;
@@ -192,25 +186,16 @@ export function UserDetailPage() {
   const currentAccountId = currentAccount?.id ?? null;
   const accountStatusMutationLoading = suspendUserMutation.loading || activateUserMutation.loading;
   const removeUserMutationLoading = removeUserMutation.loading;
-  const assignableRoles = useMemo(
-    () => getAssignableRoles(scopedMembership?.roles ?? []),
-    [scopedMembership?.roles]
-  );
-  const currentRoleIds = useMemo(() => assignableRoles.map((role) => role.id), [assignableRoles]);
-  const displayRoles = useMemo(
-    () => getDisplayRoles(scopedMembership?.roles ?? []),
-    [scopedMembership?.roles]
-  );
-  const roleDraftChanged = useMemo(
-    () => !roleIdsEqual(draftRoleIds, currentRoleIds),
-    [currentRoleIds, draftRoleIds]
-  );
+  const assignableRoles = getAssignableRoles(scopedMembership?.roles ?? []);
+  const currentRoleIds = assignableRoles.map((role) => role.id);
+  const displayRoles = getDisplayRoles(scopedMembership?.roles ?? []);
+  const roleDraftChanged = !roleIdsEqual(draftRoleIds, currentRoleIds);
   const isEditingCurrentAccount = Boolean(user?.id && currentAccountId === user.id);
   const canShowRemoveUserAction = Boolean(
     user?.id &&
-      selectedOrganization?.kind === 'TENANT' &&
-      selectedOrganizationId &&
-      currentAccountId !== user.id
+    selectedOrganization?.kind === 'TENANT' &&
+    selectedOrganizationId &&
+    currentAccountId !== user.id
   );
   const isSelfOrganizationAdminLocked = Boolean(
     isEditingCurrentAccount &&
@@ -244,50 +229,50 @@ export function UserDetailPage() {
     ? accountStatusActionConfigMap[accountStatusAction]
     : null;
 
-  const openAccountStatusModal = useCallback((action: AccountStatusAction) => {
+  const openAccountStatusModal = (action: AccountStatusAction) => {
     setAccountStatusAction(action);
-  }, []);
+  };
 
-  const closeAccountStatusModal = useCallback(() => {
+  const closeAccountStatusModal = () => {
     if (accountStatusMutationLoading) {
       return;
     }
 
     setAccountStatusAction(null);
-  }, [accountStatusMutationLoading]);
+  };
 
-  const openRemoveUserModal = useCallback(() => {
+  const openRemoveUserModal = () => {
     setRemoveUserModalOpen(true);
-  }, []);
+  };
 
-  const closeRemoveUserModal = useCallback(() => {
+  const closeRemoveUserModal = () => {
     if (removeUserMutationLoading) {
       return;
     }
 
     setRemoveUserModalOpen(false);
-  }, [removeUserMutationLoading]);
+  };
 
-  const openRoleModal = useCallback(() => {
+  const openRoleModal = () => {
     setDraftRoleIds(currentRoleIds);
     setRoleModalOpen(true);
-  }, [currentRoleIds]);
+  };
 
-  const closeRoleModal = useCallback(() => {
+  const closeRoleModal = () => {
     if (changeRolesMutation.loading) {
       return;
     }
 
     setRoleModalOpen(false);
-  }, [changeRolesMutation.loading]);
+  };
 
-  const toggleDraftRole = useCallback((roleId: string) => {
+  const toggleDraftRole = (roleId: string) => {
     setDraftRoleIds((currentIds) =>
       currentIds.includes(roleId)
         ? currentIds.filter((currentRoleId) => currentRoleId !== roleId)
         : [...currentIds, roleId]
     );
-  }, []);
+  };
 
   const handleRoleSave = async () => {
     if (!user?.id || !selectedOrganizationId || !canSaveRoleChanges) {
@@ -474,19 +459,15 @@ export function UserDetailPage() {
     },
   };
 
-  const feedbackMessages = useMemo<FeedbackMessageType[]>(
-    () =>
-      feedback
-        ? [
-            {
-              type: feedback.type,
-              message: feedback.message,
-              description: feedback.description,
-            },
-          ]
-        : [],
-    [feedback]
-  );
+  const feedbackMessages: FeedbackMessageType[] = feedback
+    ? [
+        {
+          type: feedback.type,
+          message: feedback.message,
+          description: feedback.description,
+        },
+      ]
+    : [];
 
   if (scopeLoading || !selectedOrganizationId || !selectedOrganization) {
     return (

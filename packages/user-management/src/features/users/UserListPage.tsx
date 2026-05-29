@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState, type ChangeEvent } from 'react';
+import { useEffect, useState, type ChangeEvent } from 'react';
 import AddIcon from '@mui/icons-material/Add';
 import FilterListIcon from '@mui/icons-material/FilterList';
 import SearchIcon from '@mui/icons-material/Search';
@@ -215,6 +215,8 @@ const userColumns: TableColumn<UserTableRow>[] = [
 ];
 
 export function UserListPage() {
+  'use memo';
+
   const navigate = useNavigate();
   const location = useLocation();
   const { currentAccount } = useDemoSession();
@@ -246,12 +248,10 @@ export function UserListPage() {
   const [addUserFeedback, setAddUserFeedback] = useState<AddUserFeedback | null>(null);
   const [addUserToOrganizationByEmail, addUserMutation] = useAddUserToOrganizationByEmailMutation();
   const currentAccountId = currentAccount?.id ?? null;
-  const selectedScopeIsPublic = selectedOrganization?.kind === 'PUBLIC';
+  const selectedOrganizationKind = selectedOrganization?.kind;
+  const selectedScopeIsPublic = selectedOrganizationKind === 'PUBLIC';
   const showAddUserAction = !selectedScopeIsPublic;
-  const visibleRoleOptions = useMemo(
-    () => getRoleOptionsForOrganizationKind(selectedOrganization?.kind),
-    [selectedOrganization?.kind]
-  );
+  const visibleRoleOptions = getRoleOptionsForOrganizationKind(selectedOrganizationKind);
   const tableStateReady = Boolean(
     selectedOrganizationId && activeOrganizationId === selectedOrganizationId
   );
@@ -261,7 +261,9 @@ export function UserListPage() {
   }, [selectedOrganizationId, setActiveOrganizationId]);
 
   useEffect(() => {
-    const visibleRoleKeys = new Set(visibleRoleOptions.map((option) => option.value));
+    const visibleRoleKeys = new Set(
+      getRoleOptionsForOrganizationKind(selectedOrganizationKind).map((option) => option.value)
+    );
     const nextRoleFilters = roleFilters.filter((roleKey) =>
       visibleRoleKeys.has(roleKey as RoleKey)
     );
@@ -269,55 +271,36 @@ export function UserListPage() {
     if (nextRoleFilters.length !== roleFilters.length) {
       setRoleFilters(nextRoleFilters);
     }
-  }, [roleFilters, setRoleFilters, visibleRoleOptions]);
+  }, [roleFilters, selectedOrganizationKind, setRoleFilters]);
 
-  const queryInput = useMemo<UserListInput | null>(() => {
-    if (!selectedOrganizationId || !tableStateReady) {
-      return null;
-    }
-
-    return {
-      organizationId: selectedOrganizationId,
-      pageNumber: page,
-      pageSize,
-      sortField: sort?.columnId ? sortFieldMap[sort.columnId] : undefined,
-      sortDirection: sort?.direction ?? undefined,
-      searchString: controlMode === 'search' ? search.trim() || undefined : undefined,
-      accountStatuses:
-        controlMode === 'filter' && statusFilters.length > 0 ? statusFilters : undefined,
-      roleKeys: controlMode === 'filter' && roleFilters.length > 0 ? roleFilters : undefined,
-    };
-  }, [
-    controlMode,
-    page,
-    pageSize,
-    roleFilters,
-    search,
-    selectedOrganizationId,
-    sort,
-    statusFilters,
-    tableStateReady,
-  ]);
+  const queryInput: UserListInput | null =
+    selectedOrganizationId && tableStateReady
+      ? {
+          organizationId: selectedOrganizationId,
+          pageNumber: page,
+          pageSize,
+          sortField: sort?.columnId ? sortFieldMap[sort.columnId] : undefined,
+          sortDirection: sort?.direction ?? undefined,
+          searchString: controlMode === 'search' ? search.trim() || undefined : undefined,
+          accountStatuses:
+            controlMode === 'filter' && statusFilters.length > 0 ? statusFilters : undefined,
+          roleKeys: controlMode === 'filter' && roleFilters.length > 0 ? roleFilters : undefined,
+        }
+      : null;
 
   const usersQuery = useUsersQuery(queryInput);
   const usersPage = tableStateReady ? (usersQuery.data?.users ?? null) : null;
   const awaitingTableState = Boolean(selectedOrganizationId) && !tableStateReady;
   const tableLoading = scopeLoading || awaitingTableState || (usersQuery.loading && !usersPage);
-  const visibleUsers = useMemo(
-    () => usersPage?.items.map(createTableRow) ?? [],
-    [usersPage?.items]
-  );
+  const visibleUsers = usersPage?.items.map(createTableRow) ?? [];
 
-  const summary = useMemo(
-    () => ({
-      matching: usersPage?.totalElements ?? 0,
-      activeOnPage: visibleUsers.filter((user) => user.accountStatus === 'Active').length,
-      adminsOnPage: visibleUsers.filter((user) =>
-        user.roles.some((role) => role.key === 'organization_admin')
-      ).length,
-    }),
-    [usersPage?.totalElements, visibleUsers]
-  );
+  const summary = {
+    matching: usersPage?.totalElements ?? 0,
+    activeOnPage: visibleUsers.filter((user) => user.accountStatus === 'Active').length,
+    adminsOnPage: visibleUsers.filter((user) =>
+      user.roles.some((role) => role.key === 'organization_admin')
+    ).length,
+  };
 
   const openUserDetail = (user: UserTableRow) => {
     navigate({ pathname: `/${getUserDetailPath(user.id)}`, search: location.search });
@@ -347,10 +330,10 @@ export function UserListPage() {
     toggleStoredRoleFilter(roleKey);
   };
 
-  const resetAddUserForm = useCallback(() => {
+  const resetAddUserForm = () => {
     setAddUserEmail('');
     setAddUserEmailError(null);
-  }, []);
+  };
 
   const openAddUserModal = () => {
     if (selectedScopeIsPublic) {
@@ -361,14 +344,14 @@ export function UserListPage() {
     setAddUserModalOpen(true);
   };
 
-  const closeAddUserModal = useCallback(() => {
+  const closeAddUserModal = () => {
     if (addUserMutation.loading) {
       return;
     }
 
     setAddUserModalOpen(false);
     resetAddUserForm();
-  }, [addUserMutation.loading, resetAddUserForm]);
+  };
 
   const handleAddUserEmailChange = (event: ChangeEvent<HTMLInputElement>) => {
     setAddUserEmail(event.target.value);
@@ -382,7 +365,7 @@ export function UserListPage() {
     setAddUserEmailError(getEmailValidationError(addUserEmail));
   };
 
-  const handleAddUserSubmit = useCallback(async () => {
+  const handleAddUserSubmit = async () => {
     const emailError = getEmailValidationError(addUserEmail);
     setAddUserEmailError(emailError);
 
@@ -447,46 +430,31 @@ export function UserListPage() {
         description: errorMessage,
       });
     }
-  }, [
-    addUserEmail,
-    addUserToOrganizationByEmail,
-    currentAccountId,
-    resetAddUserForm,
-    selectedOrganization,
-    selectedOrganizationId,
-    usersQuery,
-  ]);
+  };
 
-  const addUserModalButtons = useMemo<ModalButtonsType>(
-    () => ({
-      primary: {
-        label: 'Add user',
-        onClick: () => {
-          void handleAddUserSubmit();
+  const addUserModalButtons: ModalButtonsType = {
+    primary: {
+      label: 'Add user',
+      onClick: () => {
+        void handleAddUserSubmit();
+      },
+    },
+    secondary: {
+      level: 'secondary',
+      label: 'Cancel',
+      onClick: closeAddUserModal,
+    },
+  };
+
+  const addUserFeedbackMessages: FeedbackMessageType[] = addUserFeedback
+    ? [
+        {
+          type: addUserFeedback.type,
+          message: addUserFeedback.message,
+          description: addUserFeedback.description,
         },
-      },
-      secondary: {
-        level: 'secondary',
-        label: 'Cancel',
-        onClick: closeAddUserModal,
-      },
-    }),
-    [closeAddUserModal, handleAddUserSubmit]
-  );
-
-  const addUserFeedbackMessages = useMemo<FeedbackMessageType[]>(
-    () =>
-      addUserFeedback
-        ? [
-            {
-              type: addUserFeedback.type,
-              message: addUserFeedback.message,
-              description: addUserFeedback.description,
-            },
-          ]
-        : [],
-    [addUserFeedback]
-  );
+      ]
+    : [];
 
   return (
     <ContentTemplate

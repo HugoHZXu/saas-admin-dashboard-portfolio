@@ -1,4 +1,3 @@
-import { useMemo } from 'react';
 import FilterListIcon from '@mui/icons-material/FilterList';
 import SearchIcon from '@mui/icons-material/Search';
 import { useNavigate } from 'react-router-dom';
@@ -135,6 +134,8 @@ const tableControlOptions: ToggleOption<OrganizationTableControlMode>[] = [
 ];
 
 export function OrganizationListPage() {
+  'use memo';
+
   const navigate = useNavigate();
   const search = useOrganizationListTableStore((state) => state.search);
   const controlMode = useOrganizationListTableStore((state) => state.controlMode);
@@ -151,17 +152,14 @@ export function OrganizationListPage() {
     (state) => state.toggleStatusFilter
   );
 
-  const queryInput = useMemo<OrganizationListInput>(
-    () => ({
-      pageNumber: page,
-      pageSize,
-      sortField: sort?.columnId ? sortFieldMap[sort.columnId] : undefined,
-      sortDirection: sort?.direction ?? undefined,
-      searchString: controlMode === 'search' ? search.trim() || undefined : undefined,
-      statuses: controlMode === 'filter' && statusFilters.length > 0 ? statusFilters : undefined,
-    }),
-    [controlMode, page, pageSize, search, sort, statusFilters]
-  );
+  const queryInput: OrganizationListInput = {
+    pageNumber: page,
+    pageSize,
+    sortField: sort?.columnId ? sortFieldMap[sort.columnId] : undefined,
+    sortDirection: sort?.direction ?? undefined,
+    searchString: controlMode === 'search' ? search.trim() || undefined : undefined,
+    statuses: controlMode === 'filter' && statusFilters.length > 0 ? statusFilters : undefined,
+  };
 
   const organizationsQuery = useOrganizationsQuery(queryInput);
   const organizationPage = organizationsQuery.data?.organizations ?? null;
@@ -169,20 +167,14 @@ export function OrganizationListPage() {
 
   const visibleOrganizations = organizationPage?.items ?? [];
 
-  const summary = useMemo(
-    () => ({
-      matching: organizationPage?.totalElements ?? 0,
-      users: visibleOrganizations.reduce(
-        (total, organization) => total + organization.userCount,
-        0
-      ),
-      domains: visibleOrganizations.reduce(
-        (total, organization) => total + organization.domains.length,
-        0
-      ),
-    }),
-    [organizationPage?.totalElements, visibleOrganizations]
-  );
+  const summary = {
+    matching: organizationPage?.totalElements ?? 0,
+    users: visibleOrganizations.reduce((total, organization) => total + organization.userCount, 0),
+    domains: visibleOrganizations.reduce(
+      (total, organization) => total + organization.domains.length,
+      0
+    ),
+  };
 
   const openOrganizationDetail = (organization: Organization) => {
     if (organization.id) {
