@@ -1,4 +1,0 @@
-interface:
-  display_name: "Hugo UI Component Change"
-  short_description: "Implement and verify hugo-ui component changes."
-  default_prompt: "Use $hugo-ui-component-change for this hugo-ui component update, including tests, stories, tokens, exports, and validation."

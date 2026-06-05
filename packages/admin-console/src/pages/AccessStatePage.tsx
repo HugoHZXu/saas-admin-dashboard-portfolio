@@ -1,4 +1,4 @@
-import { Button, ContentTemplate, DetailCard } from 'hugo-ui';
+import { Button, ContentTemplate, DetailCard } from '@hugo-ui/mui';
 import {
   AccessStateActions,
   AccessStateHeading,
@@ -44,13 +44,7 @@ const copyByKind: Record<AccessStateKind, { pageTitle: string; heading: string; 
   },
 };
 
-export function AccessStatePage({
-  kind,
-  title,
-  message,
-  detail,
-  onRetry,
-}: AccessStatePageProps) {
+export function AccessStatePage({ kind, title, message, detail, onRetry }: AccessStatePageProps) {
   const copy = copyByKind[kind];
 
   return (

@@ -7,7 +7,7 @@ the portfolio scope, package boundaries, and public-safety rules.
 
 Good contributions include:
 
-- focused fixes to shared UI components, tests, or Storybook examples
+- focused fixes to dashboard pages, BFF behavior, shared admin utilities, or docs
 - documentation updates that clarify the portfolio architecture or local setup
 - synthetic demo data improvements that stay generic and public-safe
 - small dashboard workflow refinements that preserve the existing package boundaries
@@ -53,7 +53,6 @@ the repository wrapper from `AGENTS.md`, for example:
 Choose the smallest validation path that proves your change:
 
 - documentation-only changes: `git diff --check`
-- component changes: nearest tests, package build, and Storybook checks when stories changed
 - dashboard app changes: affected package typecheck/build
 - broad shared changes: `pnpm run verify`
 
@@ -63,7 +62,7 @@ databases, or `.env` files in the working tree.
 ## Pull Request Expectations
 
 - Keep changes package-scoped and avoid unrelated cleanup.
-- Preserve `hugo-ui` and `hugo-ui-shadcn` as separate package surfaces.
-- Keep `hugo-ui` and `hugo-ui-shadcn` publish-shaped but private in this portfolio.
+- Keep Hugo UI component, Storybook, changeset, and publishing work in the separate design-system
+  repository.
 - Mention which validation commands ran.
 - Call out any intentionally unverified area.

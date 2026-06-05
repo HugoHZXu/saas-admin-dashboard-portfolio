@@ -3,32 +3,31 @@
 ## Purpose
 
 This repository is a desensitized B2B SaaS admin dashboard portfolio. It demonstrates practical
-frontend, component-library, and BFF engineering for complex internal tools without exposing
+frontend, BFF, and external design-system consumption for complex internal tools without exposing
 private product code, company assets, customer data, endpoints, or business-specific rules.
 
 The project is not intended to become a complete SaaS platform. The goal is to build a focused,
 high-quality portfolio that supports discussion around:
 
-- reusable admin UI components
+- reusable admin UI composition through an external design-system package
 - dense table and detail-page workflows
 - Activity Log and audit-trail modeling
 - BFF-style data aggregation and field normalization
-- Module Federation and monorepo package boundaries
+- Module Federation and dashboard package boundaries
 - responsible AI-assisted development
 
 ## Current State
 
-The current implementation is a working portfolio monorepo with shared UI packages, a local
-GraphQL BFF, a federated admin shell, and Organization/User Management remotes.
+The current implementation is a working portfolio monorepo with a local GraphQL BFF, a federated
+admin shell, Organization/User Management remotes, and a local link to an external design-system
+repository.
 
 Implemented foundations:
 
-- workspace dependency and tooling baseline for React, MUI, Storybook, TypeScript, Jest, Vite,
-  GraphQL, Prisma, and pnpm workspaces
-- `hugo-ui` component-library baseline with reusable admin components such as `Table`,
-  `StatusTag`, `SearchBox`, `Toggle`, templates, modal, inputs, and supporting theme roles
-- `hugo-ui-shadcn` package for Tailwind/shadcn-style component experiments
-- Storybook examples for the shared component packages
+- workspace dependency and tooling baseline for React, MUI, TypeScript, Jest, Vite, GraphQL,
+  Prisma, and pnpm workspaces
+- `@hugo-ui/mui` consumption through npm-style imports, with a local symlink workflow for
+  unpublished design-system development
 - `admin-server` local GraphQL BFF backed by Prisma and SQLite
 - synthetic Organization, User, Role, Membership, and Activity Log seed data
 - Activity Log event normalization into UI-friendly records
@@ -42,7 +41,7 @@ Still intentionally lightweight:
 - authentication is represented through demo session state rather than a real identity provider
 - deployment notes are illustrative, not production infrastructure
 - user management supports the portfolio flows and is not a complete IAM product
-- screenshots and architecture diagrams can be added later after public release polish
+- additional architecture diagrams can be added later after public release polish
 - advanced table features such as resizing, sticky headers, bulk actions, and column
   configuration remain out of scope
 
@@ -59,7 +58,8 @@ into a full user-management platform unless explicitly requested.
 
 ## Component Boundary
 
-`Table` is a shared UI component. It should remain generic and composition-friendly.
+`Table` is provided by the external design system. It should remain generic and
+composition-friendly at the dashboard boundary.
 
 Table owns:
 
@@ -93,10 +93,10 @@ BFF layer.
 
 The next release-oriented work should be:
 
-1. Keep the public README aligned with the implemented shell, remotes, BFF, package map, and
-   desensitization boundary.
+1. Keep the public README aligned with the implemented shell, remotes, BFF, package map, external
+   design-system boundary, and desensitization boundary.
 2. Keep mock data obviously synthetic and documented as synthetic.
-3. Keep package README files clear that `hugo-ui` and `hugo-ui-shadcn` are publish-shaped but
-   consumed through workspace links in this portfolio.
-4. Add screenshots or architecture diagrams only after the core public narrative stays accurate.
+3. Keep docs clear that `@hugo-ui/mui` is consumed from the separate Hugo UI repository, not owned
+   by this dashboard repository.
+4. Add architecture diagrams only after the core public narrative stays accurate.
 5. Run validation and git-history secret review before making the GitHub repository public.

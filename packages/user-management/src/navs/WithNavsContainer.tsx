@@ -1,6 +1,6 @@
 import type { ReactNode } from 'react';
 import GroupIcon from '@mui/icons-material/Group';
-import { ContentTemplate, DetailCard, PageTemplate } from 'hugo-ui';
+import { ContentTemplate, DetailCard, PageTemplate } from '@hugo-ui/mui';
 import { useLocation } from 'react-router-dom';
 import { AccountMenu } from '@/features/demoSession/AccountMenu';
 import { useDemoSession } from '@/features/demoSession/DemoSessionContext';

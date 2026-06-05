@@ -82,7 +82,7 @@ export default defineConfig(({ mode }) => {
           '@mui/system': sharedSingleton,
           '@mui/utils': sharedSingleton,
           '@mui/icons-material': sharedSingleton,
-          'hugo-ui': {
+          '@hugo-ui/mui': {
             ...sharedSingleton,
             requiredVersion: '1.0.2',
           },
@@ -101,6 +101,9 @@ export default defineConfig(({ mode }) => {
     },
     build: {
       target: 'esnext',
+    },
+    optimizeDeps: {
+      exclude: ['@hugo-ui/mui'],
     },
     define: {
       'process.env': {},
@@ -123,16 +126,16 @@ export default defineConfig(({ mode }) => {
           replacement: path.resolve(dirname, 'src'),
         },
         {
-          find: 'hugo-ui/styles/theme',
-          replacement: path.resolve(dirname, '../hugo-ui/src/styles/theme.ts'),
+          find: '@hugo-ui/mui/styles/theme',
+          replacement: path.resolve(dirname, '../../hugo-ui/packages/mui/src/styles/theme.ts'),
         },
         {
-          find: 'hugo-ui/utils/wcagUtils',
-          replacement: path.resolve(dirname, '../hugo-ui/src/utils/wcagUtils.ts'),
+          find: '@hugo-ui/mui/utils/wcagUtils',
+          replacement: path.resolve(dirname, '../../hugo-ui/packages/mui/src/utils/wcagUtils.ts'),
         },
         {
-          find: /^hugo-ui$/,
-          replacement: path.resolve(dirname, '../hugo-ui/src/index.ts'),
+          find: /^@hugo-ui\/mui$/,
+          replacement: path.resolve(dirname, '../../hugo-ui/packages/mui/src/index.ts'),
         },
       ],
     },

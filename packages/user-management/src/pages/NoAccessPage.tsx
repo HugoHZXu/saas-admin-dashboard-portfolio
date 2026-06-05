@@ -1,4 +1,4 @@
-import { ContentTemplate, DetailCard } from 'hugo-ui';
+import { ContentTemplate, DetailCard } from '@hugo-ui/mui';
 import { PanelHeading, PanelText } from './pageStyles';
 
 type NoAccessPageProps = {

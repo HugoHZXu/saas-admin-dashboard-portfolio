@@ -1,6 +1,6 @@
 import GroupIcon from '@mui/icons-material/Group';
 import HistoryIcon from '@mui/icons-material/History';
-import { PageTemplateNavItem } from 'hugo-ui';
+import { PageTemplateNavItem } from '@hugo-ui/mui';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { PATH_PARAMS } from '@/routes/paths';
 

@@ -7,7 +7,7 @@ import IconButton from '@mui/material/IconButton';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import Tooltip from '@mui/material/Tooltip';
-import { Modal } from 'hugo-ui';
+import { Modal } from '@hugo-ui/mui';
 import type { DemoAccount, DemoCapabilities, DemoOrganizationScope } from '../session/types';
 import {
   selectAdminSessionAccounts,

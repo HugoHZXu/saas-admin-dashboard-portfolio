@@ -3,10 +3,10 @@
   "compilerOptions": {
     "baseUrl": ".",
     "paths": {
-      "hugo-ui": ["../hugo-ui/src/index.ts"],
-      "hugo-ui/styles/theme": ["../hugo-ui/src/styles/theme.ts"],
-      "hugo-ui/utils/wcagUtils": ["../hugo-ui/src/utils/wcagUtils.ts"],
-      "hugo-ui/*": ["../hugo-ui/src/*"]
+      "@hugo-ui/mui": ["../../hugo-ui/packages/mui/src/index.ts"],
+      "@hugo-ui/mui/styles/theme": ["../../hugo-ui/packages/mui/src/styles/theme.ts"],
+      "@hugo-ui/mui/utils/wcagUtils": ["../../hugo-ui/packages/mui/src/utils/wcagUtils.ts"],
+      "@hugo-ui/mui/*": ["../../hugo-ui/packages/mui/src/*"]
     }
   },
   "include": ["src"]

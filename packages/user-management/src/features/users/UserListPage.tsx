@@ -17,8 +17,8 @@ import {
   TableSort,
   Toggle,
   ToggleOption,
-} from 'hugo-ui';
-import type { FeedbackMessageType, ModalButtonsType } from 'hugo-ui';
+} from '@hugo-ui/mui';
+import type { FeedbackMessageType, ModalButtonsType } from '@hugo-ui/mui';
 import type {
   OrganizationKind,
   Role,

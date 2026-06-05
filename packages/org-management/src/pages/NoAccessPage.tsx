@@ -1,10 +1,5 @@
-import { ContentTemplate } from 'hugo-ui';
-import {
-  AccessStatePanel,
-  AccessStateRoot,
-  AccessStateText,
-  AccessStateTitle,
-} from './pageStyles';
+import { ContentTemplate } from '@hugo-ui/mui';
+import { AccessStatePanel, AccessStateRoot, AccessStateText, AccessStateTitle } from './pageStyles';
 
 type NoAccessPageState = 'loading' | 'error' | 'denied';
 

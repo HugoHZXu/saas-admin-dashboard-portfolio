@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { ContentTemplate, SearchBox, Table, TableSort } from 'hugo-ui';
+import { ContentTemplate, SearchBox, Table, TableSort } from '@hugo-ui/mui';
 import { ActivityLogListInput } from '@/api/types';
 import { useActivityLogsQuery } from '@/api/userManagementApi';
 import { useActivityColumns } from '@/features/activity/activityDisplay';

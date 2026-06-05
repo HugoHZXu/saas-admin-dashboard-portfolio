@@ -10,6 +10,11 @@ storybook-static
 # Environment
 .env
 
+# Local-only cross-repo configuration
+.local/
+.codex/local-context.md
+/hugo-ui
+
 # Local SQLite databases
 packages/admin-server/prisma/*.db
 packages/admin-server/prisma/*.db-journal

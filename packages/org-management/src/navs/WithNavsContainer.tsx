@@ -1,6 +1,6 @@
 import type { ReactNode } from 'react';
 import BusinessIcon from '@mui/icons-material/Business';
-import { PageTemplate } from 'hugo-ui';
+import { PageTemplate } from '@hugo-ui/mui';
 import { useLocation } from 'react-router-dom';
 import { AccountMenu } from '@/features/demoSession/AccountMenu';
 import { useDemoSession } from '@/features/demoSession/DemoSessionContext';

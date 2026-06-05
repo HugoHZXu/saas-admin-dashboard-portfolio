@@ -11,7 +11,7 @@ import {
   TableSort,
   Toggle,
   ToggleOption,
-} from 'hugo-ui';
+} from '@hugo-ui/mui';
 import { useOrganizationsQuery } from '@/api/orgManagementApi';
 import { Organization, OrganizationListInput, OrganizationStatus } from '@/api/types';
 import { getOrganizationDetailPath } from '@/routes/paths';

@@ -1,5 +1,5 @@
 import { IntlShape, useIntl } from 'react-intl';
-import { StatusTag, StatusTagTone, TableColumn } from 'hugo-ui';
+import { StatusTag, StatusTagTone, TableColumn } from '@hugo-ui/mui';
 import { ActivityRecord, ActivityResult, LocalizedMessage } from '@/api/types';
 import {
   ActivityActorCell,

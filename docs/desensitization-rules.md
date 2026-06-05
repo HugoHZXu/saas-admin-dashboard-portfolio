@@ -47,14 +47,14 @@ Synthetic data should be plausible enough to support UI behavior, but it must no
 
 ## Design-System Guidance
 
-Reusable components should use `hugo-ui` theme roles and component-local tokens.
+Reusable dashboard UI should use public `@hugo-ui/mui` theme roles and component APIs.
 
 Prefer:
 
 - `theme.hugoUIColorRoles`
 - `theme.hugoUITypography`
 - `theme.hugoUIColors` only when a semantic role is not specific enough
-- component-scoped token files such as `tableTokens.ts` and `statusTagTokens.ts`
+- documented design-system tokens exposed through the public Hugo UI package
 
 Avoid:
 
@@ -87,7 +87,7 @@ Before considering a change public-safe, check:
 - No endpoint, token, credential, or secret was introduced.
 - Mock data is synthetic and generic.
 - Business concepts are generic B2B SaaS admin concepts.
-- Shared UI uses local `hugo-ui` theme roles and component tokens.
+- Shared UI uses public `@hugo-ui/mui` theme roles and component APIs.
 - README or docs do not imply this is an extracted production system.
 
 ## Public Release Checklist
@@ -99,6 +99,6 @@ Before making the GitHub repository public, check:
 - Tracked files do not include `.env`, SQLite databases, screenshots, logs, HAR files, certificates,
   private keys, or other local artifacts.
 - Git history has been scanned for secrets or private data, not just the current working tree.
-- Package README files do not imply unpublished workspace packages are already available from npm.
+- Docs do not imply Hugo UI packages are owned or published from this dashboard repository.
 - `AGENTS.md` and `.codex/skills/*` remain public-safe because they are part of the portfolio
   workflow narrative.

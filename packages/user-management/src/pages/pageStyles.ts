@@ -1,5 +1,5 @@
 import { styled } from '@mui/material/styles';
-import { DetailCard } from 'hugo-ui';
+import { DetailCard } from '@hugo-ui/mui';
 
 export const PageRoot = styled('div')(({ theme }) => ({
   display: 'grid',

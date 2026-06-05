@@ -1,6 +1,6 @@
 import BusinessIcon from '@mui/icons-material/Business';
 import HistoryIcon from '@mui/icons-material/History';
-import { PageTemplateNavItem } from 'hugo-ui';
+import { PageTemplateNavItem } from '@hugo-ui/mui';
 import { useNavigate } from 'react-router-dom';
 import { PATH_PARAMS } from '@/routes/paths';
 

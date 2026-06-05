@@ -7,12 +7,8 @@ import {
   useNavigate,
   useSearchParams,
 } from 'react-router-dom';
-import {
-  AdminAccountMenu,
-  useAdminSessionStore,
-  type AdminSessionState,
-} from 'admin-shared';
-import { PageTemplate } from 'hugo-ui';
+import { AdminAccountMenu, useAdminSessionStore, type AdminSessionState } from 'admin-shared';
+import { PageTemplate } from '@hugo-ui/mui';
 import { AccessStatePage } from '@/pages/AccessStatePage';
 import { OrgManagementRemoteRoutes, UserManagementRemoteRoutes } from '@/remotes/RemoteRoutes';
 import {
@@ -34,9 +30,7 @@ export function App() {
   const loading = useAdminSessionStore((state: AdminSessionState) => state.loading);
   const errorMessage = useAdminSessionStore((state: AdminSessionState) => state.errorMessage);
   const refetch = useAdminSessionStore((state: AdminSessionState) => state.refetch);
-  const switchAccount = useAdminSessionStore(
-    (state: AdminSessionState) => state.switchAccount
-  );
+  const switchAccount = useAdminSessionStore((state: AdminSessionState) => state.switchAccount);
   const capabilities = session?.capabilities ?? emptyCapabilities;
   const accounts = session?.accounts ?? [];
   const currentAccount = session?.currentAccount ?? null;

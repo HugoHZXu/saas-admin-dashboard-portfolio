@@ -14,7 +14,7 @@ Check all changed or proposed files that contain:
 - mock data
 - endpoint names, API shapes, or service names
 - Activity Log events
-- README/docs/Storybook copy
+- README/docs copy
 - route names, permissions, roles, and business rules
 - visual tokens, class names, or component names adapted from reference projects
 

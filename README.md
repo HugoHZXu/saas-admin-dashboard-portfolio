@@ -1,7 +1,7 @@
 # SaaS Admin Dashboard Portfolio
 
 Desensitized B2B SaaS admin dashboard portfolio built with React, TypeScript, pnpm
-workspaces, Module Federation, GraphQL, Prisma, Storybook, and publish-shaped UI packages.
+workspaces, Module Federation, GraphQL, Prisma, and an external design-system dependency.
 
 This repository demonstrates practical frontend and BFF engineering for dense internal admin
 tools. It is not a production SaaS platform, a generic dashboard template, or a set of npm
@@ -15,9 +15,7 @@ synthetic demo data.
 - Admin shell composition with Module Federation remotes.
 - Organization and User Management workflows backed by a local GraphQL BFF.
 - Activity Log normalization from raw audit-style events into UI-ready records.
-- Reusable admin UI components in `hugo-ui` and Tailwind/shadcn-style variants in
-  `hugo-ui-shadcn`.
-- Storybook coverage for shared UI components and visual states.
+- Consumption of the external `@hugo-ui/mui` design-system package through npm-style imports.
 - Targeted React Compiler adoption in the Organization and User Management remotes.
 - Public AI-assisted engineering workflow through `AGENTS.md`, `.codex/skills/*`, and
   `docs/agent-workflow.md`.
@@ -47,9 +45,6 @@ Captured from the local demo shell with synthetic `.example` data.
 | `packages/admin-shared`    | Shared session and admin-shell UI utilities used by feature remotes.                           |
 | `packages/org-management`  | Organization Management remote, routes, list/detail views, and object-scoped activity surface. |
 | `packages/user-management` | User Management remote, organization-scoped user workflows, and user activity surface.         |
-| `packages/hugo-ui`         | MUI-based publish-shaped design-system package for shared admin components.                    |
-| `packages/hugo-ui-shadcn`  | Tailwind/shadcn-style publish-shaped component package.                                        |
-| `packages/storybook-demo`  | Storybook verification surface for shared UI packages.                                         |
 
 ## Local Development
 
@@ -86,27 +81,19 @@ Open `http://127.0.0.1:5173` for the admin shell. The default local endpoints ar
 - User Management remote: `http://127.0.0.1:5175`
 - GraphQL BFF: `http://127.0.0.1:4010/graphql`
 
-Run Storybook separately when reviewing shared UI components:
+## External Design System
 
-```bash
-pnpm run storybook
-```
-
-Open `http://localhost:6006` to view stories.
-
-## Publishable Package Design
-
-`hugo-ui` and `hugo-ui-shadcn` are structured like publishable npm packages: they have package
-entrypoints, exports, type declarations, build scripts, and npm-style import paths such as:
+This dashboard consumes shared UI through the external
+[HugoHZXu/hugo-ui](https://github.com/HugoHZXu/hugo-ui) repository. Application code keeps
+npm-style import paths such as:
 
 ```tsx
-import { HugoUIProvider, Table } from 'hugo-ui';
-import { Button } from 'hugo-ui-shadcn';
+import { HugoUIProvider, Table } from '@hugo-ui/mui';
 ```
 
-Inside this portfolio, those packages are consumed through `pnpm` workspace links such as
-`"hugo-ui": "workspace:*"`. Actual npm publication is intentionally out of scope for this
-repository, so package manifests remain `private: true`.
+For local development without publishing to npm, use the symlink workflow in
+[`docs/local-hugo-ui.md`](docs/local-hugo-ui.md). The local `hugo-ui/` path is ignored by Git and
+points at a separately cloned design-system repository.
 
 ## React Compiler Adoption
 
@@ -114,9 +101,9 @@ repository, so package manifests remain `private: true`.
 `compilationMode: "annotation"`. Only components and custom hooks marked with `"use memo"` are
 compiled, which keeps the portfolio example explicit and limits the rollout surface.
 
-This adoption is intentionally scoped to feature remotes. The shared component libraries,
-Storybook, and admin shell are not compiler-enabled by default, so publish-shaped packages and
-federated host behavior remain easier to reason about independently.
+This adoption is intentionally scoped to feature remotes. The external design system and admin
+shell are not compiler-enabled by this repository, so package consumption and federated host
+behavior remain easier to reason about independently.
 
 The compiler-enabled code removes low-risk manual `useMemo` and `useCallback` wrappers from list,
 detail, and Activity Log surfaces while keeping provider, context, and external-store boundaries
@@ -139,8 +126,8 @@ The agent workflow is intentionally part of the public portfolio. It documents h
 development is routed, constrained, and verified:
 
 - `AGENTS.md` defines repository-wide boundaries, validation routing, and implementation rules.
-- `.codex/skills/*` contains reusable task workflows for component changes, dashboard feature
-  slices, Activity Log normalization, token audits, and desensitization review.
+- `.codex/skills/*` contains reusable task workflows for dashboard feature slices, Activity Log
+  normalization, local design-system linking, and desensitization review.
 - `docs/agent-workflow.md` summarizes how those instructions fit into the engineering process.
 
 ## Desensitization
@@ -166,18 +153,4 @@ example:
 
 ```bash
 ./scripts/codex-node.sh pnpm run typecheck
-```
-
-## Chromatic
-
-Chromatic is optional. Copy `.env.example` to `.env` and provide your token:
-
-```bash
-CHROMATIC_PROJECT_TOKEN=your_token_here
-```
-
-Then run:
-
-```bash
-pnpm --filter storybook-demo run chromatic
 ```

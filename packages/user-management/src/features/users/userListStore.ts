@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import type { TableSort } from 'hugo-ui';
+import type { TableSort } from '@hugo-ui/mui';
 import type { UserAccountStatus } from '@/api/types';
 
 export type UserTableControlMode = 'search' | 'filter';

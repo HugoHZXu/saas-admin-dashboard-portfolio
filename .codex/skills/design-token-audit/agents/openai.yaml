@@ -1,4 +1,0 @@
-interface:
-  display_name: "Design Token Audit"
-  short_description: "Audit color roles, raw palette use, and alpha-based styling."
-  default_prompt: "Use $design-token-audit to review this color/token change before editing or before finalizing the patch."

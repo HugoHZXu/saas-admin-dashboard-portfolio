@@ -2,7 +2,7 @@ import React from 'react';
 import { ApolloProvider } from '@apollo/client/react';
 import { createRoot } from 'react-dom/client';
 import { BrowserRouter } from 'react-router-dom';
-import { HugoUIProvider, hugoUITheme } from 'hugo-ui';
+import { HugoUIProvider, hugoUITheme } from '@hugo-ui/mui';
 import { userManagementApolloClient } from './api/apolloClient';
 import { App } from './app/App';
 import { UserManagementGlobalStyles } from './app/AppStyles';

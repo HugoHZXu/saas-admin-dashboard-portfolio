@@ -10,8 +10,8 @@ import {
   StatusTagTone,
   Table,
   TableSort,
-} from 'hugo-ui';
-import type { FeedbackMessageType, ModalButtonsType } from 'hugo-ui';
+} from '@hugo-ui/mui';
+import type { FeedbackMessageType, ModalButtonsType } from '@hugo-ui/mui';
 import type { ActivityLogListInput, Role, RoleKey, UserAccountStatus } from '@/api/types';
 import {
   useActivateUserMutation,

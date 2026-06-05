@@ -1,5 +1,6 @@
 packages:
   - packages/*
+  - hugo-ui/packages/mui
 allowBuilds:
   esbuild: true
   msw: true

@@ -5,19 +5,21 @@ description: Plan and implement admin-dashboard feature slices while preserving 
 
 # Admin Dashboard Feature Slice
 
-Use this skill before building business features in `packages/org-management` or future dashboard apps.
+Use this skill before building business features in `packages/org-management`,
+`packages/user-management`, or future dashboard apps.
 
 ## Step 1: Identify The Layer
 
 Classify each part of the work:
 
-- `hugo-ui`: generic reusable component or design-system token
-- `storybook-demo`: component demos only
+- external `@hugo-ui/mui`: generic reusable component API consumed by the dashboard
 - `org-management`: routing, page layout, toolbar state, navigation, UI composition
+- `user-management`: routing, page layout, organization-scoped user workflows, UI composition
 - BFF/mock service: data contracts, aggregation, filtering, sorting, pagination, Activity Log normalization
 - shared type: contract used by both app and BFF/mock service
 
-Do not put business behavior into `hugo-ui` for convenience.
+Do not put business behavior into `@hugo-ui/mui` for convenience. If the feature requires a
+component API change, call out that the implementation belongs in the external Hugo UI repository.
 
 ## Step 2: Respect Current Dashboard Decisions
 
@@ -45,7 +47,7 @@ For each feature slice, state:
 - owner of data transformation
 - user actions
 - empty/loading/error source
-- tests and Storybook impact
+- tests and external design-system impact
 
 For Activity Log, use `$activity-log-normalization`.
 For mock data or public copy, use `$portfolio-desensitization-review`.
@@ -55,11 +57,13 @@ For mock data or public copy, use `$portfolio-desensitization-review`.
 Typical validation:
 
 ```bash
-PATH="$HOME/.nvm/versions/node/v22.12.0/bin:$PATH" npm -w packages/org-management run typecheck
-PATH="$HOME/.nvm/versions/node/v22.12.0/bin:$PATH" npm -w packages/org-management run lint
-PATH="$HOME/.nvm/versions/node/v22.12.0/bin:$PATH" npm -w packages/org-management run build
+./scripts/codex-node.sh pnpm --filter org-management run typecheck
+./scripts/codex-node.sh pnpm --filter org-management run lint
+./scripts/codex-node.sh pnpm run build-org-management
 ```
 
-Run `hugo-ui` and Storybook checks when shared components or stories changed.
+Run the matching `user-management`, `admin-server`, or `admin-console` checks when the slice
+touches those packages. Run Hugo UI checks in the external design-system repository when a reusable
+component change is required.
 
 Do not start a local dev server unless the user explicitly asks.

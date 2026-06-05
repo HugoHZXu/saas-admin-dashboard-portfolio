@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { ContentTemplate, SearchBox, Table, TableSort } from 'hugo-ui';
+import { ContentTemplate, SearchBox, Table, TableSort } from '@hugo-ui/mui';
 import { useActivityLogsQuery } from '@/api/orgManagementApi';
 import { ActivityLogListInput } from '@/api/types';
 import { useActivityColumns } from '@/features/activity/activityDisplay';

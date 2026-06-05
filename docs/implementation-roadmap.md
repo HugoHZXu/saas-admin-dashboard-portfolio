@@ -8,8 +8,7 @@ implemented.
 Completed:
 
 - workspace dependency and tooling baseline
-- MUI-based `hugo-ui` component package with tests and Storybook coverage
-- Tailwind/shadcn-style `hugo-ui-shadcn` component package
+- external `@hugo-ui/mui` consumption through npm-style imports and local symlink setup
 - local GraphQL BFF in `admin-server`
 - Prisma SQLite schema, migrations, reset script, and synthetic seed data
 - Activity Log event normalization
@@ -23,10 +22,10 @@ Completed:
 Tasks:
 
 - Keep the root README focused on the B2B SaaS admin dashboard portfolio audience.
-- Document local setup across the BFF, shell, remotes, and Storybook.
+- Document local setup across the BFF, shell, remotes, and external design-system link.
 - Add public repository basics such as license, contribution guidance, and security reporting.
-- Keep `hugo-ui` and `hugo-ui-shadcn` described as publish-shaped packages consumed through
-  workspace links in this portfolio.
+- Keep `@hugo-ui/mui` described as an external design-system dependency consumed through npm-style
+  imports and a local-only symlink workflow.
 - Keep the desensitization statement visible in the README and supporting docs.
 - Run tracked-file and git-history secret checks before publishing the GitHub repository.
 
@@ -48,15 +47,16 @@ Tasks:
 - Use `StatusTag`, `SearchBox`, `Toggle`, and `Table` through their public package APIs.
 - Add screenshots or architecture diagrams only when they represent the implemented flows.
 
-## Component Package Polish
+## External Design-System Consumption
 
 Tasks:
 
-- Keep `hugo-ui` component changes generic, tested, exported, and covered in Storybook.
-- Keep `hugo-ui-shadcn` experiments separate from `hugo-ui` unless explicitly promoted.
-- Preserve publish-shaped package metadata and npm-style imports while keeping actual publication
-  out of scope for this portfolio.
-- Continue using semantic theme roles and component-local tokens for public component styling.
+- Keep dashboard code on public `@hugo-ui/mui` imports instead of reaching into private component
+  internals.
+- Keep local symlink setup documented and ignored by Git.
+- Move reusable component API, token, Storybook, changeset, and publishing work to the external
+  Hugo UI repository.
+- Continue using public theme roles and component APIs for dashboard styling.
 
 ## Not In Scope For Now
 

@@ -1,0 +1,4 @@
+interface:
+  display_name: 'Local Hugo UI Link'
+  short_description: 'Set up local symlink-based Hugo UI linking.'
+  default_prompt: 'Set up admin-dashboard to consume a local hugo-ui clone through the reusable symlink workflow.'

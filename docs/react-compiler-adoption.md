@@ -15,9 +15,7 @@ Enabled packages:
 
 Not enabled by default:
 
-- `packages/hugo-ui`
-- `packages/hugo-ui-shadcn`
-- `packages/storybook-demo`
+- external `@hugo-ui/mui` design-system source
 - `packages/admin-console`
 
 The feature remotes use `compilationMode: "annotation"`, so only functions marked with

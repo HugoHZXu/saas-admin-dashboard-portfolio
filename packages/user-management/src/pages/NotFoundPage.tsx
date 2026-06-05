@@ -1,5 +1,5 @@
 import { useNavigate } from 'react-router-dom';
-import { ContentTemplate } from 'hugo-ui';
+import { ContentTemplate } from '@hugo-ui/mui';
 
 export function NotFoundPage() {
   const navigate = useNavigate();

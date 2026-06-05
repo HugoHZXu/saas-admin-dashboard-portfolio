@@ -3,7 +3,7 @@ import BusinessIcon from '@mui/icons-material/Business';
 import GroupIcon from '@mui/icons-material/Group';
 import HistoryIcon from '@mui/icons-material/History';
 import type { DemoCapabilities } from 'admin-shared';
-import type { PageTemplateNavItem } from 'hugo-ui';
+import type { PageTemplateNavItem } from '@hugo-ui/mui';
 
 export const ADMIN_CONSOLE_PATHS = {
   orgManagement: '/org-management',
