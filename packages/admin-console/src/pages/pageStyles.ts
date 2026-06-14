@@ -1,4 +1,4 @@
-import { styled } from '@mui/material/styles';
+import { styled } from 'admin-shared';
 
 export const AccessStatePanel = styled('div')(({ theme }) => ({
   display: 'grid',

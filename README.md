@@ -4,8 +4,13 @@ Desensitized B2B SaaS admin dashboard portfolio built with React, TypeScript, pn
 workspaces, Module Federation, GraphQL, Prisma, and an external design-system dependency.
 
 This repository demonstrates practical frontend and BFF engineering for dense internal admin
-tools. It is not a production SaaS platform, a generic dashboard template, or a set of npm
-packages that are currently published from this portfolio.
+tools. It is not a production SaaS platform, a generic dashboard template, or a set of publishable
+npm packages owned by this portfolio.
+
+The monorepo is a portfolio modeling choice, not the proposed end-state for a real product family.
+In a production organization, different admin dashboards would likely be developed, deployed, and
+maintained independently by different teams. Here, the workspace simulates independently owned apps
+and business npm packages while keeping the demo runnable from one repository.
 
 All organizations, users, emails, domains, roles, activity events, and audit records are
 synthetic demo data.
@@ -15,7 +20,7 @@ synthetic demo data.
 - Admin shell composition with Module Federation remotes.
 - Organization and User Management workflows backed by a local GraphQL BFF.
 - Activity Log normalization from raw audit-style events into UI-ready records.
-- Consumption of the external `@hugo-ui/mui` design-system package through npm-style imports.
+- Consumption of the external `@hugo-ui/mui` design-system package through package-style imports.
 - Targeted React Compiler adoption in the Organization and User Management remotes.
 - Public AI-assisted engineering workflow through `AGENTS.md`, `.codex/skills/*`, and
   `docs/agent-workflow.md`.
@@ -85,15 +90,19 @@ Open `http://127.0.0.1:5173` for the admin shell. The default local endpoints ar
 
 This dashboard consumes shared UI through the external
 [HugoHZXu/hugo-ui](https://github.com/HugoHZXu/hugo-ui) repository. Application code keeps
-npm-style import paths such as:
+package-style import paths such as:
 
 ```tsx
 import { HugoUIProvider, Table } from '@hugo-ui/mui';
 ```
 
-For local development without publishing to npm, use the symlink workflow in
-[`docs/local-hugo-ui.md`](docs/local-hugo-ui.md). The local `hugo-ui/` path is ignored by Git and
-points at a separately cloned design-system repository.
+This repository uses local file mode for that package. Dashboard packages point at
+`file:../../hugo-ui/packages/mui`, while `config/hugo-ui.json` records the expected Hugo UI package
+version. Installs therefore resolve the separately cloned Hugo UI repository through the local
+`hugo-ui/` link instead of any npm registry package.
+
+Use the symlink workflow in [`docs/local-hugo-ui.md`](docs/local-hugo-ui.md). The local `hugo-ui/`
+path is ignored by Git and points at a separately cloned design-system repository.
 
 ## React Compiler Adoption
 

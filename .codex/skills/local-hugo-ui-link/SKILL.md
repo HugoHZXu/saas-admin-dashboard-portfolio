@@ -54,12 +54,15 @@ packages. Keep the reusable script generic; put machine-specific paths only in i
 ```bash
 readlink hugo-ui
 git check-ignore -v hugo-ui .local/hugo-ui.json
+./scripts/codex-node.sh pnpm run verify:hugo-ui
 ./scripts/codex-node.sh pnpm --filter admin-console list @hugo-ui/mui --depth 0
 ./scripts/codex-node.sh pnpm --filter org-management list @hugo-ui/mui --depth 0
 ./scripts/codex-node.sh pnpm --filter user-management list @hugo-ui/mui --depth 0
 ```
 
-The expected dependency output should show `@hugo-ui/mui` as a local `link:` dependency.
+The committed package manifests should keep `@hugo-ui/mui` on the npm version recorded in
+`config/hugo-ui.json`. The local `hugo-ui/` symlink and `.local/hugo-ui.json` are ignored by Git and
+only enable version-matched Vite/Vitest source aliases.
 
 ## Repair Notes
 

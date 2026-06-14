@@ -18,13 +18,14 @@
     "@emotion/styled": "11.14.1",
     "@mui/icons-material": "9.0.1",
     "@mui/material": "9.0.1",
-    "@hugo-ui/mui": "workspace:*",
+    "@hugo-ui/mui": "1.0.2",
     "react": "^19.2.6",
     "react-dom": "^19.2.6",
     "zustand": "^5.0.14"
   },
   "scripts": {
     "build": "tsc -p tsconfig.json --noEmit",
+    "test": "vitest run --config vitest.config.ts",
     "typecheck": "tsc -p tsconfig.json --noEmit"
   }
 }

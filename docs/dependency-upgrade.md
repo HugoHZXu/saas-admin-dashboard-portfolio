@@ -6,7 +6,7 @@ Date: 2026-04-05
 
 This upgrade modernizes the `admin-dashboard` workspace baseline before portfolio feature work.
 It covers the root tooling and dashboard-owned packages. Design-system package, Storybook,
-changeset, and publishing upgrades belong to the separate Hugo UI repository.
+changeset, and release/versioning upgrades belong to the separate Hugo UI repository.
 
 ## Environment
 
@@ -62,5 +62,5 @@ Latest successful dashboard-owned results after the pnpm migration:
 - `admin-server`: Jest suites passed.
 - dashboard package builds passed for the BFF, feature remotes, shared utilities, and admin shell.
 
-Design-system test, Storybook, and publishing validation should be tracked in the Hugo UI
+Design-system test, Storybook, and release validation should be tracked in the Hugo UI
 repository.

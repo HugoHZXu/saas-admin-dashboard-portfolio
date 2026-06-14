@@ -19,6 +19,9 @@ export {
   writeStoredAccountId,
 } from './session/storage';
 
+export { asHugoTheme, styled } from './theme/styled';
+export type { HugoDashboardTheme } from './theme/styled';
+
 export {
   configureAdminSessionStore,
   resetAdminSessionStore,

@@ -1,4 +1,4 @@
-import { styled } from '@mui/material/styles';
+import { styled } from 'admin-shared';
 import { DetailCard } from '@hugo-ui/mui';
 
 export const DetailGrid = styled('div')(({ theme }) => ({

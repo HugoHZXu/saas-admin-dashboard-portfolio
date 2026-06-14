@@ -4,9 +4,27 @@ The design system is maintained as a separate repository:
 
 - GitHub: [HugoHZXu/hugo-ui](https://github.com/HugoHZXu/hugo-ui)
 
-This dashboard keeps npm-style imports such as `@hugo-ui/mui`. During local development, the
-dashboard can consume the `mui` package from a local clone of `hugo-ui` directly through a
-filesystem symlink instead of waiting for an npm publish.
+This dashboard keeps package-style imports such as `@hugo-ui/mui` and commits the dependency as an
+npm package version. The optional local link is only a development convenience for using a sibling
+Hugo UI checkout through Vite/Vitest source aliases.
+
+For clean installs, CI, and deployment validation, pnpm resolves `@hugo-ui/mui` from the npm
+registry. For local design-system development, prepare a separate `hugo-ui` clone and expose it to
+this repository through the documented ignored `hugo-ui/` symlink.
+
+## Version Model
+
+- Dashboard package manifests use the committed npm version for `@hugo-ui/mui`.
+- `config/hugo-ui.json` sets `mode: "npm"`, `expectedVersion`, and an optional local package path
+  used only when the ignored symlink exists.
+- A clean CI/deploy install does not need a local `hugo-ui` clone.
+- `pnpm run verify:hugo-ui` fails if a dashboard package does not use the expected npm version. If
+  the local symlink exists, it also checks the linked package name and version.
+- A local source link is enabled only when `.local/hugo-ui.json` exists, the linked package exists,
+  and the linked package version matches `config/hugo-ui.json`.
+- Vite development and Vitest can use the local source aliases when that version check passes.
+- Production builds intentionally use the package entry points instead of the local source aliases,
+  so they stay close to the CI/deploy path.
 
 ## Public Workflow
 
@@ -65,14 +83,17 @@ The setup script creates a local symlink at the dashboard repo root:
 admin-dashboard/hugo-ui -> ../hugo-ui
 ```
 
-Existing Vite, TypeScript, and pnpm workspace paths already resolve `@hugo-ui/mui` through that
-root-level `hugo-ui/packages/mui` path, so no published npm package is required for local
-development.
+Vite development and Vitest can then resolve `@hugo-ui/mui` source imports through that root-level
+`hugo-ui/packages/mui` path. If the linked package version does not match `config/hugo-ui.json`,
+the source alias is disabled, and `pnpm run verify:hugo-ui` reports the mismatch when the symlink is
+present.
 
 When `shareNodeModules` is enabled, the setup script also points the local `hugo-ui` clone at the
-dashboard repo's `node_modules`. This keeps React, MUI, Emotion, and other shared dependency types
-on a single dependency tree when dashboard packages import design-system source files directly. If
-the design-system clone already has a generated `packages/mui/node_modules` directory, the script
+dashboard repo's `node_modules`. This keeps React, MUI, Emotion, Hugo UI runtime dependencies, and
+shared dependency types on a single dependency tree when dashboard packages import design-system
+source files directly. The committed dashboard dependency remains the npm package version.
+
+If the design-system clone already has a generated `packages/mui/node_modules` directory, the script
 moves it into `.local/hugo-ui-node-modules-backup-*` before creating the shared link.
 
 ## What Is Committed

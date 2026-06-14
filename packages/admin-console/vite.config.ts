@@ -3,6 +3,7 @@ import react from '@vitejs/plugin-react';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import { defineConfig, loadEnv } from 'vite';
+import { getHugoUiSourceLink } from '../../config/vite/hugoUiSourceLink';
 
 const dirname = path.dirname(fileURLToPath(import.meta.url));
 
@@ -23,8 +24,10 @@ const readPort = (value: string | undefined, fallback: number) => {
   return Number.isInteger(parsed) && parsed > 0 ? parsed : fallback;
 };
 
-export default defineConfig(({ mode }) => {
+export default defineConfig(({ mode, command }) => {
   const env = loadEnv(mode, dirname, '');
+  const hugoUiSourceLink =
+    command === 'serve' ? getHugoUiSourceLink(dirname) : { enabled: false, aliases: [] };
   const devHost = env.VITE_ADMIN_CONSOLE_HOST ?? env.VITE_DEV_HOST ?? DEFAULT_DEV_HOST;
   const devPort = readPort(
     env.VITE_ADMIN_CONSOLE_PORT ?? env.VITE_DEV_PORT ?? env.PORT,
@@ -102,9 +105,13 @@ export default defineConfig(({ mode }) => {
     build: {
       target: 'esnext',
     },
-    optimizeDeps: {
-      exclude: ['@hugo-ui/mui'],
-    },
+    ...(hugoUiSourceLink.enabled
+      ? {
+          optimizeDeps: {
+            exclude: ['@hugo-ui/mui'],
+          },
+        }
+      : {}),
     define: {
       'process.env': {},
     },
@@ -125,18 +132,7 @@ export default defineConfig(({ mode }) => {
           find: '@',
           replacement: path.resolve(dirname, 'src'),
         },
-        {
-          find: '@hugo-ui/mui/styles/theme',
-          replacement: path.resolve(dirname, '../../hugo-ui/packages/mui/src/styles/theme.ts'),
-        },
-        {
-          find: '@hugo-ui/mui/utils/wcagUtils',
-          replacement: path.resolve(dirname, '../../hugo-ui/packages/mui/src/utils/wcagUtils.ts'),
-        },
-        {
-          find: /^@hugo-ui\/mui$/,
-          replacement: path.resolve(dirname, '../../hugo-ui/packages/mui/src/index.ts'),
-        },
+        ...hugoUiSourceLink.aliases,
       ],
     },
   };

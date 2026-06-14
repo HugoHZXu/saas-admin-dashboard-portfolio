@@ -35,7 +35,7 @@ Use these Skills when the task matches the scenario. Do not use all Skills for e
 | `$portfolio-desensitization-review` | Adding mock data, business copy, docs, README content, BFF examples, or code adapted from prior experience.         | Keep the portfolio public-safe and synthetic.                                       |
 | `$admin-dashboard-feature-slice`    | Implementing Organization Table, Organization Detail, Activity Log, BFF mock work, or User Management feature work. | Keep business features in the right app/BFF/shared-type/component layer.            |
 | `$activity-log-normalization`       | Designing raw audit events, normalized Activity Log records, global Activity Log pages, or object-local logs.       | Keep event translation in the BFF/mock layer and preserve a structured audit trail. |
-| `$local-hugo-ui-link`               | Setting up or repairing local symlink-based consumption of the external Hugo UI repository.                         | Keep local `@hugo-ui/mui` development repeatable without publishing npm packages.   |
+| `$local-hugo-ui-link`               | Setting up or repairing local symlink-based source aliases for the external Hugo UI repository.                     | Keep local `@hugo-ui/mui` development repeatable while committed deps use npm.      |
 
 ## Practical Routing
 
@@ -62,7 +62,7 @@ For Compiler-related work:
 ## Architecture Boundaries
 
 - The external Hugo UI repository owns generic components, design-system tokens, theme roles,
-  Storybook coverage, changesets, and publishing.
+  Storybook coverage, changesets, and release/versioning.
 - `packages/org-management` owns Organization Management routing, page composition, navigation, and dashboard workflow state.
 - `packages/user-management` owns User Management routing, page composition, organization-scoped user workflows, and dashboard workflow state.
 - `packages/admin-server` owns local BFF behavior: data aggregation, Organization/User contracts, list query behavior, pagination/filter/sort execution, and Activity Log normalization.

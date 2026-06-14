@@ -1,0 +1,5 @@
+{
+  "mode": "npm",
+  "expectedVersion": "1.0.2",
+  "localPackagePath": "hugo-ui/packages/mui"
+}

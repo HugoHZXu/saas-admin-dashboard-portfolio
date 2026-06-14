@@ -1,13 +1,7 @@
 {
   "extends": "../../tsconfig.base.json",
   "compilerOptions": {
-    "baseUrl": ".",
-    "paths": {
-      "@hugo-ui/mui": ["../../hugo-ui/packages/mui/src/index.ts"],
-      "@hugo-ui/mui/styles/theme": ["../../hugo-ui/packages/mui/src/styles/theme.ts"],
-      "@hugo-ui/mui/utils/wcagUtils": ["../../hugo-ui/packages/mui/src/utils/wcagUtils.ts"],
-      "@hugo-ui/mui/*": ["../../hugo-ui/packages/mui/src/*"]
-    }
+    "baseUrl": "."
   },
-  "include": ["src"]
+  "include": ["src", "vitest.config.ts", "../../config/**/*.ts"]
 }

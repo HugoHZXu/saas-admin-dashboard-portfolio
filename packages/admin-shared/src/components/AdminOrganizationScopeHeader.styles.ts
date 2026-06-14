@@ -1,4 +1,4 @@
-import { styled } from '@mui/material/styles';
+import { styled } from '../theme/styled';
 
 export const ScopeHeaderRoot = styled('div')(({ theme }) => ({
   display: 'grid',

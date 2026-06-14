@@ -18,7 +18,7 @@
     "@mui/utils": "9.0.1",
     "admin-shared": "workspace:*",
     "graphql": "16.14.0",
-    "@hugo-ui/mui": "workspace:*",
+    "@hugo-ui/mui": "1.0.2",
     "react": "^19.2.6",
     "react-dom": "^19.2.6",
     "react-intl": "10.1.9",
@@ -34,6 +34,7 @@
     "dev": "vite",
     "build": "tsc -p tsconfig.json --noEmit && vite build",
     "preview": "vite preview",
+    "test": "vitest run --config vitest.config.ts",
     "lint": "eslint \"src/**/*.{ts,tsx}\" \"vite.config.ts\"",
     "typecheck": "tsc -p tsconfig.json --noEmit"
   }

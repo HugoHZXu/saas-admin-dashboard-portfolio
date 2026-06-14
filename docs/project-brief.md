@@ -22,12 +22,17 @@ The current implementation is a working portfolio monorepo with a local GraphQL 
 admin shell, Organization/User Management remotes, and a local link to an external design-system
 repository.
 
+The monorepo is intentionally a portfolio modeling device rather than a claim about the final
+operating model for this product family. In a real organization, different admin dashboards would
+likely be developed, deployed, and maintained by separate teams; this workspace simulates those
+independent apps and business npm packages in one runnable repository.
+
 Implemented foundations:
 
 - workspace dependency and tooling baseline for React, MUI, TypeScript, Jest, Vite, GraphQL,
   Prisma, and pnpm workspaces
-- `@hugo-ui/mui` consumption through npm-style imports, with a local symlink workflow for
-  unpublished design-system development
+- `@hugo-ui/mui` consumption through a committed npm package version, with a local-only symlink
+  workflow for version-matched design-system source development
 - `admin-server` local GraphQL BFF backed by Prisma and SQLite
 - synthetic Organization, User, Role, Membership, and Activity Log seed data
 - Activity Log event normalization into UI-friendly records

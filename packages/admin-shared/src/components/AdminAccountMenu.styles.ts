@@ -1,4 +1,4 @@
-import { styled } from '@mui/material/styles';
+import { styled } from '../theme/styled';
 
 export const AccountMenuRoot = styled('div')(() => ({
   display: 'flex',

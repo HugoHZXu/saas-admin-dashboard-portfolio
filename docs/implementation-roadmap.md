@@ -8,7 +8,8 @@ implemented.
 Completed:
 
 - workspace dependency and tooling baseline
-- external `@hugo-ui/mui` consumption through npm-style imports and local symlink setup
+- external `@hugo-ui/mui` consumption through a committed npm package version, a version check, and
+  local-only symlink setup
 - local GraphQL BFF in `admin-server`
 - Prisma SQLite schema, migrations, reset script, and synthetic seed data
 - Activity Log event normalization
@@ -24,8 +25,8 @@ Tasks:
 - Keep the root README focused on the B2B SaaS admin dashboard portfolio audience.
 - Document local setup across the BFF, shell, remotes, and external design-system link.
 - Add public repository basics such as license, contribution guidance, and security reporting.
-- Keep `@hugo-ui/mui` described as an external design-system dependency consumed through npm-style
-  imports and a local-only symlink workflow.
+- Keep `@hugo-ui/mui` described as an external design-system dependency consumed through
+  package-style imports, an npm package version, and a local-only symlink workflow.
 - Keep the desensitization statement visible in the README and supporting docs.
 - Run tracked-file and git-history secret checks before publishing the GitHub repository.
 
@@ -33,8 +34,8 @@ Expected outcome:
 
 - Visitors can understand the project purpose from the README first screen.
 - The package map and local run commands match the actual workspace.
-- Public docs do not imply this is an extracted production system or an already-published npm
-  package suite.
+- Public docs do not imply this is an extracted production system or a dashboard-owned package
+  suite.
 
 ## Dashboard Workflow Polish
 
@@ -54,8 +55,8 @@ Tasks:
 - Keep dashboard code on public `@hugo-ui/mui` imports instead of reaching into private component
   internals.
 - Keep local symlink setup documented and ignored by Git.
-- Move reusable component API, token, Storybook, changeset, and publishing work to the external
-  Hugo UI repository.
+- Move reusable component API, token, Storybook, changeset, and release/versioning work to the
+  external Hugo UI repository.
 - Continue using public theme roles and component APIs for dashboard styling.
 
 ## Not In Scope For Now
