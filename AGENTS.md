@@ -2,7 +2,7 @@
 
 ## Repo Role
 
-- This repository is a pnpm workspaces monorepo for a desensitized B2B SaaS admin dashboard portfolio.
+- This repository is a pnpm workspaces monorepo for Hugo SaaS Console, a desensitized B2B SaaS management-console portfolio.
 - It contains the dashboard shell, feature remotes, shared admin utilities, local GraphQL BFF, synthetic data, docs, and AI workflow instructions.
 - The design system is maintained in the separate `HugoHZXu/hugo-ui` repository. This repository consumes `@hugo-ui/mui`; it does not own Hugo UI component source, Storybook, package publishing, or changesets.
 - Use `docs/project-brief.md`, `docs/desensitization-rules.md`, `docs/implementation-roadmap.md`, and `docs/agent-workflow.md` as working context before expanding dashboard features.
@@ -19,7 +19,7 @@
 
 ## Portfolio-Specific Guardrails
 
-- Treat this repository as a desensitized B2B SaaS admin dashboard portfolio, not an open-source copy of any prior product.
+- Treat Hugo SaaS Console as a desensitized B2B SaaS management-console portfolio, not an open-source copy of any prior product.
 - Preserve reusable capability patterns only. Do not copy private implementation assets, class names, token names, endpoint names, screenshots, customer data, permission rules, or product-specific wording from external/internal projects.
 - Keep `Table` behavior generic at the design-system boundary. Put Organization/User-specific search, filters, query state, sorting behavior, pagination behavior, and navigation in page-level code or the BFF/mock service layer.
 - `SearchBox` is the preferred search control for table search. Do not build search fields by composing generic inputs unless the user explicitly asks for an input-only prototype.
@@ -33,7 +33,7 @@
 
 - Dashboard packages may import `@hugo-ui/mui` through npm-style package imports.
 - Local source linking uses the ignored `hugo-ui/` symlink plus `docs/local-hugo-ui.md`; do not commit the symlink or `.local/hugo-ui.json`.
-- Keep admin-dashboard docs clear that Hugo UI is external. Do not list Hugo UI packages as packages owned by this repository.
+- Keep Hugo SaaS Console docs clear that Hugo UI is external. Do not list Hugo UI packages as packages owned by this repository.
 - Do not add component-library tests, stories, package exports, changesets, or publishing scripts to this repository.
 - If a dashboard task requires a reusable component API change, call out that the change belongs in the external design-system repository before editing.
 
@@ -71,7 +71,7 @@
 Treat these as high risk and call out the impact surface before making edits:
 
 - Changes to Module Federation config, remote exposure, shared singleton config, or host/remote URLs.
-- Changes to package exports, subpath exports, or root `index.ts` files in admin-dashboard packages.
+- Changes to package exports, subpath exports, or root `index.ts` files in dashboard packages.
 - Changes to providers, theme consumption, aliases, tokens, or shared style infrastructure.
 - Changes to public BFF contracts, GraphQL schema, seed data shape, Activity Log normalization, or route structure.
 - Changes to React Compiler config or `"use memo"` coverage.

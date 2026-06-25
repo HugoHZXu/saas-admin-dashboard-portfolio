@@ -4,9 +4,9 @@ The design system is maintained as a separate repository:
 
 - GitHub: [HugoHZXu/hugo-ui](https://github.com/HugoHZXu/hugo-ui)
 
-This dashboard keeps package-style imports such as `@hugo-ui/mui` and commits the dependency as an
-npm package version. The optional local link is only a development convenience for using a sibling
-Hugo UI checkout through Vite/Vitest source aliases.
+Hugo SaaS Console keeps package-style imports such as `@hugo-ui/mui` and commits the dependency as
+an npm package version. The optional local link is only a development convenience for using a
+sibling Hugo UI checkout through Vite/Vitest source aliases.
 
 For clean installs, CI, and deployment validation, pnpm resolves `@hugo-ui/mui` from the npm
 registry. For local design-system development, prepare a separate `hugo-ui` clone and expose it to

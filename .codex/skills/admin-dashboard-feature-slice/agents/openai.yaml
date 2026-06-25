@@ -1,4 +1,4 @@
 interface:
-  display_name: 'Admin Dashboard Feature Slice'
-  short_description: 'Keep dashboard feature work inside the right app/BFF/component boundaries.'
+  display_name: 'Hugo SaaS Console Feature Slice'
+  short_description: 'Keep Hugo SaaS Console feature work inside the right app/BFF/component boundaries.'
   default_prompt: 'Use $admin-dashboard-feature-slice to plan this dashboard feature across app, BFF/mock, shared types, and external design-system boundaries.'

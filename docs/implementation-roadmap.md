@@ -2,7 +2,7 @@
 
 ## Current Phase
 
-The project is in public-release polish after the core portfolio architecture has been
+The project is in public-release polish after the core Hugo SaaS Console architecture has been
 implemented.
 
 Completed:
@@ -15,14 +15,14 @@ Completed:
 - Activity Log event normalization
 - federated `admin-console` shell
 - `org-management` and `user-management` remotes
-- Organization/User list, detail, and Activity Log portfolio surfaces
+- Organization/User list, detail, and Activity Log surfaces for Hugo SaaS Console
 - public AI-assisted workflow instructions and project-specific Skills
 
 ## Public Release Polish
 
 Tasks:
 
-- Keep the root README focused on the B2B SaaS admin dashboard portfolio audience.
+- Keep the root README focused on the Hugo SaaS Console portfolio audience.
 - Document local setup across the BFF, shell, remotes, and external design-system link.
 - Add public repository basics such as license, contribution guidance, and security reporting.
 - Keep `@hugo-ui/mui` described as an external design-system dependency consumed through
@@ -41,7 +41,7 @@ Expected outcome:
 
 Tasks:
 
-- Keep Organization and User workflows focused on the portfolio story.
+- Keep Organization and User workflows focused on the Hugo SaaS Console product story.
 - Preserve BFF ownership of data aggregation, query behavior, and Activity Log normalization.
 - Keep page-level search, filters, sort state, pagination state, and navigation out of shared
   generic components.

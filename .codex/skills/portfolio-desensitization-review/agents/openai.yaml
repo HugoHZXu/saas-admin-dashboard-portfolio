@@ -1,4 +1,4 @@
 interface:
-  display_name: "Portfolio Desensitization Review"
-  short_description: "Check dashboard changes for public portfolio safety."
-  default_prompt: "Use $portfolio-desensitization-review to check this change for private data, copied assets, and desensitization risks."
+  display_name: 'Portfolio Desensitization Review'
+  short_description: 'Check Hugo SaaS Console changes for public portfolio safety.'
+  default_prompt: 'Use $portfolio-desensitization-review to check this change for private data, copied assets, and desensitization risks.'

@@ -2,9 +2,10 @@
 
 ## Purpose
 
-This repository is a desensitized B2B SaaS admin dashboard portfolio. It demonstrates practical
-frontend, BFF, and external design-system consumption for complex internal tools without exposing
-private product code, company assets, customer data, endpoints, or business-specific rules.
+Hugo SaaS Console is a desensitized B2B SaaS management-console portfolio. It demonstrates
+practical frontend, BFF, and external design-system consumption for tenant operations,
+organization/user administration, and audit-trail workflows without exposing private product code,
+company assets, customer data, endpoints, or business-specific rules.
 
 The project is not intended to become a complete SaaS platform. The goal is to build a focused,
 high-quality portfolio that supports discussion around:
@@ -18,9 +19,9 @@ high-quality portfolio that supports discussion around:
 
 ## Current State
 
-The current implementation is a working portfolio monorepo with a local GraphQL BFF, a federated
-admin shell, Organization/User Management remotes, and a local link to an external design-system
-repository.
+The current implementation is a working Hugo SaaS Console monorepo with a local GraphQL BFF, a
+federated admin shell, Organization/User Management remotes, and a local link to an external
+design-system repository.
 
 The monorepo is intentionally a portfolio modeling device rather than a claim about the final
 operating model for this product family. In a real organization, different admin dashboards would
@@ -45,7 +46,7 @@ Still intentionally lightweight:
 
 - authentication is represented through demo session state rather than a real identity provider
 - deployment notes are illustrative, not production infrastructure
-- user management supports the portfolio flows and is not a complete IAM product
+- user management supports the Hugo SaaS Console flows and is not a complete IAM product
 - additional architecture diagrams can be added later after public release polish
 - advanced table features such as resizing, sticky headers, bulk actions, and column
   configuration remain out of scope

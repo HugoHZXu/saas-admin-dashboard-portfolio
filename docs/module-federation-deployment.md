@@ -1,6 +1,6 @@
 # Module Federation Deployment Notes
 
-This project treats `admin-console` as the browser entry point for the admin dashboard shell.
+Hugo SaaS Console treats `admin-console` as the browser entry point for the admin dashboard shell.
 `user-management` and `org-management` can still run as standalone dev apps, but their production
 remote domains should be served as Module Federation remotes when loaded by the shell.
 

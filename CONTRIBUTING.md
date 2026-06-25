@@ -1,14 +1,14 @@
 # Contributing
 
-This repository is a desensitized B2B SaaS admin dashboard portfolio. Contributions should preserve
-the portfolio scope, package boundaries, and public-safety rules.
+Hugo SaaS Console is a desensitized B2B SaaS management-console portfolio. Contributions should
+preserve the portfolio scope, package boundaries, and public-safety rules.
 
 ## Contribution Scope
 
 Good contributions include:
 
 - focused fixes to dashboard pages, BFF behavior, shared admin utilities, or docs
-- documentation updates that clarify the portfolio architecture or local setup
+- documentation updates that clarify the Hugo SaaS Console architecture or local setup
 - synthetic demo data improvements that stay generic and public-safe
 - small dashboard workflow refinements that preserve the existing package boundaries
 
@@ -17,7 +17,7 @@ Out of scope:
 - real customer data, screenshots, logs, private endpoints, or production credentials
 - copied private implementation assets or internal business rules
 - broad rewrites that mix unrelated package responsibilities
-- turning the portfolio into a complete production SaaS platform
+- turning Hugo SaaS Console into a complete production SaaS platform
 
 ## Desensitization Rules
 

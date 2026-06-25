@@ -1,11 +1,12 @@
-# SaaS Admin Dashboard Portfolio
+# Hugo SaaS 管理控制台
 
-Desensitized B2B SaaS admin dashboard portfolio built with React, TypeScript, pnpm
-workspaces, Module Federation, GraphQL, Prisma, and an external design-system dependency.
+Hugo SaaS Console (`hugo-saas-console`) is a desensitized B2B SaaS management-console portfolio
+built with React, TypeScript, pnpm workspaces, Module Federation, GraphQL, Prisma, and an external
+design-system dependency.
 
-This repository demonstrates practical frontend and BFF engineering for dense internal admin
-tools. It is not a production SaaS platform, a generic dashboard template, or a set of publishable
-npm packages owned by this portfolio.
+This repository demonstrates practical frontend and BFF engineering for tenant operations,
+organization/user administration, and audit-trail workflows. It is not a production SaaS platform,
+a generic dashboard template, or a set of publishable npm packages owned by this portfolio.
 
 The monorepo is a portfolio modeling choice, not the proposed end-state for a real product family.
 In a production organization, different admin dashboards would likely be developed, deployed, and
@@ -45,7 +46,7 @@ Captured from the local demo shell with synthetic `.example` data.
 
 | Package                    | Purpose                                                                                        |
 | -------------------------- | ---------------------------------------------------------------------------------------------- |
-| `packages/admin-console`   | Browser shell and Module Federation host for the admin portfolio.                              |
+| `packages/admin-console`   | Browser shell and Module Federation host for Hugo SaaS Console.                                |
 | `packages/admin-server`    | Local GraphQL BFF with Prisma, SQLite, synthetic seed data, and Activity Log normalization.    |
 | `packages/admin-shared`    | Shared session and admin-shell UI utilities used by feature remotes.                           |
 | `packages/org-management`  | Organization Management remote, routes, list/detail views, and object-scoped activity surface. |
@@ -88,7 +89,7 @@ Open `http://127.0.0.1:5173` for the admin shell. The default local endpoints ar
 
 ## External Design System
 
-This dashboard consumes shared UI through the external
+Hugo SaaS Console consumes shared UI through the external
 [HugoHZXu/hugo-ui](https://github.com/HugoHZXu/hugo-ui) repository. Application code keeps
 package-style import paths such as:
 
@@ -131,8 +132,8 @@ React DevTools can also confirm compiled components through its compiler memo ba
 
 ## AI-Assisted Workflow
 
-The agent workflow is intentionally part of the public portfolio. It documents how AI-assisted
-development is routed, constrained, and verified:
+The agent workflow is intentionally part of the Hugo SaaS Console public portfolio narrative. It
+documents how AI-assisted development is routed, constrained, and verified:
 
 - `AGENTS.md` defines repository-wide boundaries, validation routing, and implementation rules.
 - `.codex/skills/*` contains reusable task workflows for dashboard feature slices, Activity Log

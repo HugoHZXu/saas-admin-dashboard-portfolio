@@ -4,8 +4,8 @@ Date: 2026-04-05
 
 ## Scope
 
-This upgrade modernizes the `admin-dashboard` workspace baseline before portfolio feature work.
-It covers the root tooling and dashboard-owned packages. Design-system package, Storybook,
+This upgrade modernizes the `hugo-saas-console` workspace baseline before Hugo SaaS Console feature
+work. It covers the root tooling and dashboard-owned packages. Design-system package, Storybook,
 changeset, and release/versioning upgrades belong to the separate Hugo UI repository.
 
 ## Environment

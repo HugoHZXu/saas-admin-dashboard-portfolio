@@ -1,6 +1,6 @@
 ---
 name: portfolio-desensitization-review
-description: Review admin-dashboard changes for public portfolio safety. Use before or after adding mock data, business copy, README/docs content, BFF examples, Activity Log examples, or code inspired by prior private projects.
+description: Review Hugo SaaS Console changes for public portfolio safety. Use before or after adding mock data, business copy, README/docs content, BFF examples, Activity Log examples, or code inspired by prior private projects.
 ---
 
 # Portfolio Desensitization Review

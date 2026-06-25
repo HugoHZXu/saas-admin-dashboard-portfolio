@@ -2,7 +2,7 @@
 
 ## Purpose
 
-This portfolio uses React Compiler to demonstrate modern React build-time optimization in a
+Hugo SaaS Console uses React Compiler to demonstrate modern React build-time optimization in a
 controlled way. The goal is to show practical knowledge of compiler adoption, not to claim a
 blanket performance win across the whole monorepo.
 

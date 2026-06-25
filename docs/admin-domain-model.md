@@ -1,6 +1,6 @@
 # Admin Domain Model
 
-This portfolio backend models three organization contexts in one admin BFF.
+The Hugo SaaS Console backend models three organization contexts in one admin BFF.
 
 - Org Management is platform-side customer organization management. Access is represented by
   `platform_admin` on the internal platform organization membership.

@@ -2,7 +2,7 @@
 
 ## Core Rule
 
-This repository must only contain public-safe, synthetic, portfolio-oriented code and data.
+Hugo SaaS Console must only contain public-safe, synthetic, portfolio-oriented code and data.
 
 Do not add private company code, product names, endpoints, customer data, access tokens, screenshots, logs, internal permission rules, or proprietary implementation details.
 

@@ -4,14 +4,15 @@
 
 This document is a lightweight operating guide for AI-assisted work in this repository. It explains when to use the project-specific Skills and how they relate to the broader dashboard architecture.
 
-The workflow itself is intentionally public and part of the portfolio: it shows how agent-assisted
-development is constrained, routed, reviewed, and validated in a desensitized codebase.
+The workflow itself is intentionally public and part of the Hugo SaaS Console portfolio narrative:
+it shows how agent-assisted development is constrained, routed, reviewed, and validated in a
+desensitized codebase.
 
 Keep this document short. Detailed step-by-step instructions live in `AGENTS.md` and `.codex/skills/*/SKILL.md`.
 
 ## Core Principles
 
-- This repository is a desensitized B2B SaaS admin dashboard portfolio, not an open-source copy of a private product.
+- Hugo SaaS Console is a desensitized B2B SaaS management-console portfolio, not an open-source copy of a private product.
 - AI may help with code reading, task breakdown, boilerplate, tests, event-case enumeration, and documentation drafts.
 - Engineers still own architecture boundaries, desensitization decisions, component APIs, code review, and validation.
 - Do not provide AI tools with private company code, customer data, production logs, credentials, private endpoints, or internal design-system documentation.
@@ -23,7 +24,7 @@ Keep this document short. Detailed step-by-step instructions live in `AGENTS.md`
 - `.codex/skills/*/SKILL.md`: reusable task workflows for common project work.
 - `docs/desensitization-rules.md`: public-safety and synthetic-data rules.
 - `docs/implementation-roadmap.md`: current implementation sequence.
-- `docs/project-brief.md`: portfolio positioning and product scope.
+- `docs/project-brief.md`: Hugo SaaS Console positioning and product scope.
 - `docs/react-compiler-adoption.md`: scoped React Compiler rollout and validation notes.
 
 ## Skill Usage
@@ -47,7 +48,7 @@ Use these Skills when the task matches the scenario. Do not use all Skills for e
 
 ## React Compiler Work
 
-React Compiler is a scoped portfolio capability in this repository. It is enabled only in
+React Compiler is a scoped Hugo SaaS Console capability in this repository. It is enabled only in
 `packages/org-management` and `packages/user-management` with annotation mode.
 
 For Compiler-related work:

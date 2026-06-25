@@ -1,9 +1,9 @@
 ---
 name: admin-dashboard-feature-slice
-description: Plan and implement admin-dashboard feature slices while preserving package and BFF boundaries. Use for Organization Table, Organization Detail, Activity Log, BFF mock, or future User Management work.
+description: Plan and implement Hugo SaaS Console feature slices while preserving package and BFF boundaries. Use for Organization Table, Organization Detail, Activity Log, BFF mock, or future User Management work.
 ---
 
-# Admin Dashboard Feature Slice
+# Hugo SaaS Console Feature Slice
 
 Use this skill before building business features in `packages/org-management`,
 `packages/user-management`, or future dashboard apps.

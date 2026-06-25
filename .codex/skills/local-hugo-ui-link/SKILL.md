@@ -1,12 +1,13 @@
 ---
 name: local-hugo-ui-link
-description: Set up or repair admin-dashboard local development against a separately cloned hugo-ui repository through the reusable symlink workflow. Use when the user asks to link admin-dashboard to local hugo-ui without npm publishing, configure cross-repo local UI imports, create .local/hugo-ui.json, troubleshoot the hugo-ui symlink, or verify @hugo-ui/mui resolves from a local clone.
+description: Set up or repair Hugo SaaS Console local development against a separately cloned hugo-ui repository through the reusable symlink workflow. Use when the user asks to link this dashboard repo to local hugo-ui without npm publishing, configure cross-repo local UI imports, create .local/hugo-ui.json, troubleshoot the hugo-ui symlink, or verify @hugo-ui/mui resolves from a local clone.
 ---
 
 # Local Hugo UI Link
 
-Use this skill to connect `admin-dashboard` to a local `hugo-ui` clone without publishing npm
-packages. Keep the reusable script generic; put machine-specific paths only in ignored local config.
+Use this skill to connect the Hugo SaaS Console workspace to a local `hugo-ui` clone without
+publishing npm packages. Keep the reusable script generic; put machine-specific paths only in
+ignored local config.
 
 ## Rules
 
@@ -26,7 +27,7 @@ packages. Keep the reusable script generic; put machine-specific paths only in i
 
 ## Workflow
 
-1. Confirm the current repo is `admin-dashboard`.
+1. Confirm the current workspace is the Hugo SaaS Console dashboard repository.
 2. Check whether `../hugo-ui` exists and contains `packages/mui/src/index.ts`.
 3. If no local `hugo-ui` clone can be found, ask the user for `<HUGO_UI_ROOT>` instead of guessing.
 4. Create `.local/hugo-ui.json` with this shape:
