@@ -12,13 +12,13 @@
     "@fontsource/noto-sans-arabic": "5.2.10",
     "@fontsource/noto-sans-jp": "5.2.9",
     "@fontsource/noto-sans-thai": "5.2.8",
+    "@hugo-ui/mui": "1.0.3",
     "@mui/icons-material": "9.0.1",
     "@mui/material": "9.0.1",
     "@mui/system": "9.0.1",
     "@mui/utils": "9.0.1",
     "admin-shared": "workspace:*",
     "graphql": "16.14.0",
-    "@hugo-ui/mui": "1.0.2",
     "react": "^19.2.6",
     "react-dom": "^19.2.6",
     "react-intl": "10.1.9",
@@ -26,7 +26,7 @@
     "zustand": "^5.0.14"
   },
   "devDependencies": {
-    "@module-federation/vite": "1.16.2",
+    "@module-federation/vite": "1.16.12",
     "@vitejs/plugin-react": "6.0.2",
     "vite": "8.0.14"
   },

@@ -1,6 +1,6 @@
 ---
 name: portfolio-desensitization-review
-description: Review Hugo SaaS Console changes for public portfolio safety. Use before or after adding mock data, business copy, README/docs content, BFF examples, Activity Log examples, or code inspired by prior private projects.
+description: Review Hugo SaaS Console changes for public portfolio safety. Use before or after adding mock UI data, business copy, README/docs content, Activity Log UI examples, or code inspired by prior private projects.
 ---
 
 # Portfolio Desensitization Review
@@ -12,8 +12,8 @@ Use this skill whenever a change could expose private implementation details or 
 Check all changed or proposed files that contain:
 
 - mock data
-- endpoint names, API shapes, or service names
-- Activity Log events
+- endpoint names, API client assumptions, or service names
+- Activity Log UI examples
 - README/docs copy
 - route names, permissions, roles, and business rules
 - visual tokens, class names, or component names adapted from reference projects

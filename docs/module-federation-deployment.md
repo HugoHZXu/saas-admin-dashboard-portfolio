@@ -9,7 +9,7 @@ remote domains should be served as Module Federation remotes when loaded by the 
 - `admin-console`: `http://127.0.0.1:5173`
 - `org-management`: `http://127.0.0.1:5174`
 - `user-management`: `http://127.0.0.1:5175`
-- Admin BFF GraphQL: `http://127.0.0.1:4010/graphql`
+- External Admin BFF GraphQL: `http://127.0.0.1:4010/graphql`
 
 Dev and preview ports can be overridden without editing package scripts:
 
@@ -26,6 +26,8 @@ The shell reads remote entry URLs from:
 - `VITE_ORG_MANAGEMENT_REMOTE_ENTRY_URL`
 
 The default values point to the local User Management and Organization Management dev servers.
+
+The GraphQL endpoint is served by the external backend repository at `/Users/xuhaoze/code-demo/hugo-saas-backend`. Dashboard packages can share `VITE_ADMIN_BFF_GRAPHQL_URL`, with per-app overrides available for local experiments.
 
 ## Production Routing
 

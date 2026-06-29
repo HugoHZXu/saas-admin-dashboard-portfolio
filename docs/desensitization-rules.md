@@ -89,6 +89,7 @@ Before considering a change public-safe, check:
 - Business concepts are generic B2B SaaS admin concepts.
 - Shared UI uses public `@hugo-ui/mui` theme roles and component APIs.
 - README or docs do not imply this is an extracted production system.
+- Backend seed, schema, and Activity Log normalization guidance points to `hugo-saas-backend`.
 
 ## Public Release Checklist
 
@@ -96,7 +97,7 @@ Before making the GitHub repository public, check:
 
 - Root README states that all organizations, users, emails, domains, and activity records are
   synthetic demo data.
-- Tracked files do not include `.env`, SQLite databases, screenshots, logs, HAR files, certificates,
+- Tracked files do not include `.env`, screenshots, logs, HAR files, certificates,
   private keys, or other local artifacts.
 - Git history has been scanned for secrets or private data, not just the current working tree.
 - Docs do not imply Hugo UI packages are owned or published from this dashboard repository.

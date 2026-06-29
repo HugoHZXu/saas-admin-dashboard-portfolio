@@ -1,60 +1,61 @@
 ---
 name: activity-log-normalization
-description: Design and review Activity Log BFF normalization. Use when implementing raw audit events, normalized activity view models, global Activity Log pages, or object-local Activity Log slices.
+description: Review dashboard consumption of normalized Activity Log records. Use when implementing Activity Log UI surfaces, filters, empty/loading/error states, or frontend assumptions about backend-normalized records.
 ---
 
-# Activity Log Normalization
+# Activity Log UI Consumption
 
-Use this skill before implementing Activity Log data contracts, normalization, or UI rendering.
+Use this skill before implementing or reviewing Activity Log UI rendering in the dashboard repository.
 
-## Step 1: Keep Raw Events Away From UI
+Backend-owned raw event storage, normalization, seed data, and GraphQL contract changes belong in `/Users/xuhaoze/code-demo/hugo-saas-backend`.
 
-The frontend should not understand raw audit-service shapes. The BFF/mock service owns translation from raw event data to a view model.
+## Step 1: Confirm The External Contract
 
-Use separate concepts:
+Before changing UI assumptions, inspect the GraphQL query and generated/client-side types already used by the page.
 
-- raw event: synthetic service-like audit record
-- normalized activity: frontend-friendly model
-- rendered row/detail: UI presentation
+Do not redefine:
 
-## Step 2: Normalize To Human Meaning
+- raw audit event shape
+- normalization rules
+- backend event taxonomy
+- seed data
+- Activity Log GraphQL schema
 
-Every normalized activity record should answer:
+## Step 2: Keep UI Rendering Structured
 
-- who performed the action
-- when it happened
-- what object was affected
-- what changed or what operation was attempted
-- whether it succeeded, failed, or is pending
+Every rendered activity row or detail view should clearly show:
 
-Do not collapse events into vague text-only strings if structured fields are needed for filtering, sorting, or detail pages.
+- actor
+- timestamp
+- affected object
+- action or operation
+- result status
 
-## Step 3: Preserve Desensitization
+Do not collapse structured backend fields into vague strings if the UI still needs filtering, sorting, badges, or detail layout.
 
-Use synthetic actors, object ids, object names, domains, and event names. Do not copy real audit event names, endpoint names, permission names, or production payload structure.
+## Step 3: Scope The Page Behavior
 
-Run `$portfolio-desensitization-review` when adding examples.
-
-## Step 4: Define Page Usage
-
-For each Activity Log slice, identify:
+For each Activity Log surface, identify:
 
 - global page or object-local panel
 - object filter source
 - event type filters
-- pagination and sorting owner
+- pagination and sorting state
 - empty/loading/error state source
-- drill-in or detail behavior, if any
+- navigation or detail behavior, if any
 
-## Step 5: Test Cases
+## Step 4: Escalate Backend Gaps
 
-Cover at least:
+If the UI requires a normalized field that the backend does not provide, stop and coordinate the backend repo first.
 
-- success event
-- failed event
-- event with actor
-- system event without normal user actor
-- object-local filtering
-- unknown event fallback
+Dashboard code may adapt display labels, layout, and query state, but should not locally reconstruct backend normalization logic.
 
-Keep tests on the normalization layer separate from UI rendering tests.
+## Step 5: Validate
+
+Run the affected frontend package checks. For Organization Activity Log work, typical validation is:
+
+```bash
+./scripts/codex-node.sh pnpm --filter org-management run typecheck
+./scripts/codex-node.sh pnpm --filter org-management run lint
+./scripts/codex-node.sh pnpm run build-org-management
+```

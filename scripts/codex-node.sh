@@ -7,20 +7,27 @@ repo_root="$(cd -- "$script_dir/.." && pwd)"
 
 if [ -s "$NVM_DIR/nvm.sh" ]; then
   # nvm is a shell function, so non-interactive Codex command sessions must source it explicitly.
+  # The repo does not pin .nvmrc; use the caller's active Node, or nvm default when available.
   # shellcheck source=/dev/null
   . "$NVM_DIR/nvm.sh"
-else
-  echo "nvm.sh not found at $NVM_DIR/nvm.sh" >&2
-  exit 1
+  if [ -z "${CODEX_SKIP_NVM_USE:-}" ]; then
+    nvm use "${CODEX_NODE_VERSION:-default}" >/dev/null
+  fi
 fi
 
-if [ -f "$repo_root/.nvmrc" ]; then
-  nvm use "$(cat "$repo_root/.nvmrc")" >/dev/null
-else
-  nvm use 22.12.0 >/dev/null
-fi
+if [ "${1:-}" = "pnpm" ]; then
+  shift
+  if command -v corepack >/dev/null 2>&1; then
+    shim_dir="$(mktemp -d "${TMPDIR:-/tmp}/codex-pnpm.XXXXXX")"
+    cat >"$shim_dir/pnpm" <<'EOF'
+#!/usr/bin/env bash
+exec corepack pnpm "$@"
+EOF
+    chmod +x "$shim_dir/pnpm"
+    export PATH="$shim_dir:$PATH"
+    exec corepack pnpm "$@"
+  fi
 
-if [ "${1:-}" = "pnpm" ] && ! command -v pnpm >/dev/null 2>&1; then
   package_manager="$(ROOT_PACKAGE_JSON="$repo_root/package.json" node -p "require(process.env.ROOT_PACKAGE_JSON).packageManager || ''")"
   pnpm_version="${package_manager#pnpm@}"
 
@@ -29,7 +36,6 @@ if [ "${1:-}" = "pnpm" ] && ! command -v pnpm >/dev/null 2>&1; then
     exit 1
   fi
 
-  shift
   exec npm exec --yes --package="pnpm@$pnpm_version" -- pnpm "$@"
 fi
 

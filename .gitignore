@@ -15,10 +15,6 @@ storybook-static
 .codex/local-context.md
 /hugo-ui
 
-# Local SQLite databases
-packages/admin-server/prisma/*.db
-packages/admin-server/prisma/*.db-journal
-
 # OS files
 .DS_Store
 

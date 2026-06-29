@@ -1,4 +1,4 @@
 interface:
-  display_name: "Activity Log Normalization"
-  short_description: "Design BFF-owned audit event normalization for Activity Log."
-  default_prompt: "Use $activity-log-normalization to design or review this Activity Log event normalization work."
+  display_name: "Activity Log UI Consumption"
+  short_description: "Review dashboard consumption of backend-normalized Activity Log records."
+  default_prompt: "Use $activity-log-normalization to review this Activity Log UI work against the external backend contract."

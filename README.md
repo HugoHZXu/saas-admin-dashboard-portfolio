@@ -1,12 +1,13 @@
 # Hugo SaaS 管理控制台
 
 Hugo SaaS Console (`hugo-saas-console`) is a desensitized B2B SaaS management-console portfolio
-built with React, TypeScript, pnpm workspaces, Module Federation, GraphQL, Prisma, and an external
+built with React, TypeScript, pnpm workspaces, Module Federation, GraphQL, and an external
 design-system dependency.
 
-This repository demonstrates practical frontend and BFF engineering for tenant operations,
-organization/user administration, and audit-trail workflows. It is not a production SaaS platform,
-a generic dashboard template, or a set of publishable npm packages owned by this portfolio.
+This repository demonstrates practical frontend engineering for tenant operations,
+organization/user administration, and audit-trail workflows while consuming an external local Admin
+BFF GraphQL service. It is not a production SaaS platform, a generic dashboard template, or a set
+of publishable npm packages owned by this portfolio.
 
 The monorepo is a portfolio modeling choice, not the proposed end-state for a real product family.
 In a production organization, different admin dashboards would likely be developed, deployed, and
@@ -19,8 +20,8 @@ synthetic demo data.
 ## What It Shows
 
 - Admin shell composition with Module Federation remotes.
-- Organization and User Management workflows backed by a local GraphQL BFF.
-- Activity Log normalization from raw audit-style events into UI-ready records.
+- Organization and User Management workflows consuming an external local Admin BFF GraphQL service.
+- Activity Log UI consumption of normalized records.
 - Consumption of the external `@hugo-ui/mui` design-system package through package-style imports.
 - Targeted React Compiler adoption in the Organization and User Management remotes.
 - Public AI-assisted engineering workflow through `AGENTS.md`, `.codex/skills/*`, and
@@ -47,7 +48,6 @@ Captured from the local demo shell with synthetic `.example` data.
 | Package                    | Purpose                                                                                        |
 | -------------------------- | ---------------------------------------------------------------------------------------------- |
 | `packages/admin-console`   | Browser shell and Module Federation host for Hugo SaaS Console.                                |
-| `packages/admin-server`    | Local GraphQL BFF with Prisma, SQLite, synthetic seed data, and Activity Log normalization.    |
 | `packages/admin-shared`    | Shared session and admin-shell UI utilities used by feature remotes.                           |
 | `packages/org-management`  | Organization Management remote, routes, list/detail views, and object-scoped activity surface. |
 | `packages/user-management` | User Management remote, organization-scoped user workflows, and user activity surface.         |
@@ -60,16 +60,12 @@ Install dependencies:
 pnpm install
 ```
 
-Reset and seed the local demo database:
+Start Hugo SaaS Backend separately:
 
 ```bash
-pnpm run db:reset-admin
-```
-
-Start the local GraphQL BFF:
-
-```bash
-pnpm run dev:admin-server
+cd /Users/xuhaoze/code-demo/hugo-saas-backend
+pnpm run db:reset
+pnpm run dev:admin-bff
 ```
 
 In separate terminals, start the feature remotes and shell:
@@ -85,7 +81,7 @@ Open `http://127.0.0.1:5173` for the admin shell. The default local endpoints ar
 - Admin shell: `http://127.0.0.1:5173`
 - Organization Management remote: `http://127.0.0.1:5174`
 - User Management remote: `http://127.0.0.1:5175`
-- GraphQL BFF: `http://127.0.0.1:4010/graphql`
+- External Admin BFF GraphQL: `http://127.0.0.1:4010/graphql`
 
 ## External Design System
 
@@ -136,9 +132,12 @@ The agent workflow is intentionally part of the Hugo SaaS Console public portfol
 documents how AI-assisted development is routed, constrained, and verified:
 
 - `AGENTS.md` defines repository-wide boundaries, validation routing, and implementation rules.
-- `.codex/skills/*` contains reusable task workflows for dashboard feature slices, Activity Log
-  normalization, local design-system linking, and desensitization review.
+- `.codex/skills/*` contains reusable task workflows for dashboard feature slices, Activity Log UI
+  consumption, local design-system linking, and desensitization review.
 - `docs/agent-workflow.md` summarizes how those instructions fit into the engineering process.
+
+Backend contract, seed, database, and Activity Log normalization instructions live in
+`/Users/xuhaoze/code-demo/hugo-saas-backend`.
 
 ## Desensitization
 
@@ -153,7 +152,7 @@ business copy, documentation, examples, or AI-assisted changes.
 
 ```bash
 pnpm run typecheck
-pnpm run test:all
+pnpm run test:frontend
 pnpm run build:all
 pnpm run verify
 ```

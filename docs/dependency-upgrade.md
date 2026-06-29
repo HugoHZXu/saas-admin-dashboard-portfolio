@@ -5,19 +5,16 @@ Date: 2026-04-05
 ## Scope
 
 This upgrade modernizes the `hugo-saas-console` workspace baseline before Hugo SaaS Console feature
-work. It covers the root tooling and dashboard-owned packages. Design-system package, Storybook,
-changeset, and release/versioning upgrades belong to the separate Hugo UI repository.
+work. It covers the root tooling and dashboard-owned frontend packages. Design-system package,
+Storybook, changeset, and release/versioning upgrades belong to the separate Hugo UI repository.
 
 ## Environment
 
-- Verified runtime: Node.js `22.12.0`, pnpm `10.34.1`.
-- Added `.nvmrc` with `22.12.0`.
-- Added root `engines` metadata for Node/pnpm.
+- Verified runtime: Node.js `26.4.0`, pnpm `11.7.0`.
+- Removed the repository `.nvmrc`; validation uses the active local Node runtime or nvm default through `scripts/codex-node.sh`.
+- Updated root `engines` metadata for Node/pnpm.
 
-Note: the latest ESLint/Changesets dependency tree can emit package-manager `EBADENGINE`
-warnings on Node `22.12.0` because some transitive packages request `22.13+` or newer.
-The workspace scripts pass on `22.12.0`; use Node `22.22.2+` or Node `24+` if you want a
-warning-free install with the latest dev tooling.
+Note: the workspace now targets the local Node 26.4 runtime, so the earlier Node 22.12 engine-warning workaround no longer applies.
 
 ## Major Version Targets
 
@@ -57,10 +54,10 @@ It runs:
 - `pnpm run test:all`
 - `pnpm run build:all`
 
-Latest successful dashboard-owned results after the pnpm migration:
+Latest successful dashboard-owned results after the pnpm migration and backend extraction:
 
-- `admin-server`: Jest suites passed.
-- dashboard package builds passed for the BFF, feature remotes, shared utilities, and admin shell.
+- frontend package tests passed through `test:frontend`.
+- dashboard package builds passed for the feature remotes, shared utilities, and admin shell.
 
 Design-system test, Storybook, and release validation should be tracked in the Hugo UI
 repository.

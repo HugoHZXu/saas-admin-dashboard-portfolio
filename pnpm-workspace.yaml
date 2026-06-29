@@ -1,5 +1,10 @@
 packages:
   - packages/*
+overrides:
+  '@hugo-ui/mui': file:./hugo-ui/packages/mui
+peerDependencyRules:
+  allowedVersions:
+    typescript: '6'
 allowBuilds:
   esbuild: true
   msw: true
