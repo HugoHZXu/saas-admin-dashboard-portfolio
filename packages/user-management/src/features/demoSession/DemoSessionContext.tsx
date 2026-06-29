@@ -1,11 +1,12 @@
-import React, { createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react';
-import { DemoAccount, DemoCapabilities, DemoOrganizationScope, DemoSession } from '@/api/types';
-import { useDemoSessionQuery } from './demoSessionApi';
+import React, { createContext, useCallback, useContext, useEffect, useMemo } from 'react';
+import { useApolloClient } from '@apollo/client/react';
 import {
-  DEMO_ACCOUNT_STORAGE_KEY,
-  readStoredAccountId,
-  writeStoredAccountId,
-} from './demoSessionStorage';
+  configureAdminSessionStore,
+  fetchIdentitySession,
+  useAdminSessionStore,
+  type AdminSessionState,
+} from 'admin-shared';
+import { DemoAccount, DemoCapabilities, DemoOrganizationScope, DemoSession } from '@/api/types';
 
 export type DemoSessionContextValue = {
   accounts: DemoAccount[];
@@ -34,80 +35,53 @@ export function DemoSessionValueProvider({ children, value }: DemoSessionValuePr
   return <DemoSessionContext.Provider value={value}>{children}</DemoSessionContext.Provider>;
 }
 
-const createValue = (
-  session: DemoSession | undefined,
-  loading: boolean,
-  errorMessage: string | null,
-  switchAccount: (accountId: string) => void,
-  refetch: () => Promise<DemoSession | undefined>
-): DemoSessionContextValue => ({
-  accounts: session?.accounts ?? [],
-  currentAccount: session?.currentAccount,
-  capabilities: session?.capabilities ?? emptyCapabilities,
-  userManagementOrganizations: session?.userManagementOrganizations ?? [],
-  loading,
-  errorMessage,
-  switchAccount,
-  refetch,
-});
-
 export function DemoSessionProvider({ children }: { children: React.ReactNode }) {
-  const [selectedAccountId, setSelectedAccountId] = useState<string | null>(readStoredAccountId);
-  const demoSessionQuery = useDemoSessionQuery(selectedAccountId);
-  const {
-    data,
-    loading,
-    error,
-    refetch: refetchDemoSessionQuery,
-  } = demoSessionQuery;
-  const session = data?.demoSession;
+  const apolloClient = useApolloClient();
+  const session = useAdminSessionStore((state: AdminSessionState) => state.session);
+  const loading = useAdminSessionStore((state: AdminSessionState) => state.loading);
+  const errorMessage = useAdminSessionStore((state: AdminSessionState) => state.errorMessage);
+  const switchSharedAccount = useAdminSessionStore(
+    (state: AdminSessionState) => state.switchAccount
+  );
+  const refetchSession = useAdminSessionStore((state: AdminSessionState) => state.refetch);
 
-  const switchAccount = useCallback((accountId: string) => {
-    writeStoredAccountId(accountId);
-    setSelectedAccountId(accountId);
+  useEffect(() => {
+    configureAdminSessionStore(fetchIdentitySession);
+    void useAdminSessionStore.getState().refetch();
+
+    return () => configureAdminSessionStore(null);
   }, []);
+
+  const switchAccount = useCallback(
+    (accountId: string) => {
+      const previousAccountId = useAdminSessionStore.getState().session?.currentAccount.id ?? null;
+
+      void switchSharedAccount(accountId).then((nextSession) => {
+        if (previousAccountId && nextSession?.currentAccount.id !== previousAccountId) {
+          void apolloClient.resetStore().catch(() => undefined);
+        }
+      });
+    },
+    [apolloClient, switchSharedAccount]
+  );
 
   const refetch = useCallback(async () => {
-    const result = await refetchDemoSessionQuery({ selectedUserId: selectedAccountId });
+    return (await refetchSession()) as DemoSession | undefined;
+  }, [refetchSession]);
 
-    return result.data?.demoSession;
-  }, [refetchDemoSessionQuery, selectedAccountId]);
-
-  useEffect(() => {
-    const currentAccountId = session?.currentAccount.id;
-
-    if (!currentAccountId || currentAccountId === selectedAccountId) {
-      return;
-    }
-
-    writeStoredAccountId(currentAccountId);
-    setSelectedAccountId(currentAccountId);
-  }, [selectedAccountId, session?.currentAccount.id]);
-
-  useEffect(() => {
-    const handleStorage = (event: StorageEvent) => {
-      if (event.key !== DEMO_ACCOUNT_STORAGE_KEY) {
-        return;
-      }
-
-      setSelectedAccountId(event.newValue);
-    };
-
-    window.addEventListener('storage', handleStorage);
-
-    return () => window.removeEventListener('storage', handleStorage);
-  }, []);
-
-  const value = useMemo(
-    () =>
-      createValue(
-        session,
-        loading,
-        error?.message ?? null,
-        switchAccount,
-        refetch
-      ),
-    [error?.message, loading, refetch, session, switchAccount]
+  const value = useMemo<DemoSessionContextValue>(
+    () => ({
+      accounts: (session?.accounts ?? []) as DemoAccount[],
+      currentAccount: session?.currentAccount as DemoAccount | undefined,
+      capabilities: session?.capabilities ?? emptyCapabilities,
+      userManagementOrganizations: (session?.userManagementOrganizations ??
+        []) as DemoOrganizationScope[],
+      loading,
+      errorMessage,
+      switchAccount,
+      refetch,
+    }),
+    [errorMessage, loading, refetch, session, switchAccount]
   );
 
   return <DemoSessionValueProvider value={value}>{children}</DemoSessionValueProvider>;

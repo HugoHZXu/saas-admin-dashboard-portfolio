@@ -1,6 +1,9 @@
 export const DEMO_ACCOUNT_STORAGE_KEY = 'adminDashboard.demoAccountUserId';
+export const IDENTITY_ACCESS_TOKEN_STORAGE_KEY = 'adminDashboard.identityAccessToken';
+export const IDENTITY_ACCESS_TOKEN_EXPIRES_AT_STORAGE_KEY =
+  'adminDashboard.identityAccessTokenExpiresAt';
 
-export type DemoOrganizationKind = 'INTERNAL' | 'TENANT' | 'PUBLIC';
+export type DemoOrganizationKind = 'internal' | 'tenant' | 'public';
 export type DemoOrganizationStatus = 'active' | 'inactive' | 'archived';
 
 export type OrganizationKind = DemoOrganizationKind;
@@ -26,6 +29,7 @@ export type DemoOrganizationScope = {
 
 export type DemoAccountMembership = {
   organization: DemoOrganizationScope;
+  membershipStatus: string;
   roles: DemoRole[];
 };
 
@@ -35,10 +39,12 @@ export type DemoAccount = {
   firstName: string;
   lastName: string;
   displayName: string;
+  accountStatus: string;
   persona: string;
   memberships: DemoAccountMembership[];
   capabilities: DemoCapabilities;
   userManagementOrganizations: DemoOrganizationScope[];
+  entitlementOrganizations: DemoOrganizationScope[];
 };
 
 export type DemoSession = {
@@ -46,4 +52,8 @@ export type DemoSession = {
   currentAccount: DemoAccount;
   capabilities: DemoCapabilities;
   userManagementOrganizations: DemoOrganizationScope[];
+  entitlementOrganizations: DemoOrganizationScope[];
+  accessToken: string;
+  tokenType: 'Bearer';
+  expiresAt: string;
 };

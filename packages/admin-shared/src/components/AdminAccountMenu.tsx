@@ -1,7 +1,6 @@
 import { useState, type ReactNode } from 'react';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import CheckIcon from '@mui/icons-material/Check';
-import SwapHorizIcon from '@mui/icons-material/SwapHoriz';
 import Divider from '@mui/material/Divider';
 import IconButton from '@mui/material/IconButton';
 import Menu from '@mui/material/Menu';
@@ -24,7 +23,6 @@ import {
   AccountOptionMeta,
   AccountOptionName,
   EmptyStateText,
-  MenuItemIcon,
   MenuItemLabel,
   MenuItemMeta,
   MenuItemText,
@@ -41,9 +39,9 @@ const emptyCapabilities: DemoCapabilities = {
 };
 
 const organizationKindLabels: Record<DemoOrganizationScope['kind'], string> = {
-  INTERNAL: 'Internal organization',
-  TENANT: 'Tenant organization',
-  PUBLIC: 'Public organization',
+  internal: 'Internal organization',
+  tenant: 'Tenant organization',
+  public: 'Public organization',
 };
 
 export const formatDemoCapabilities = (capabilities: DemoCapabilities) => {
@@ -149,9 +147,6 @@ export function AdminAccountMenu({
         <Divider />
 
         <MenuItem disabled={loading || accounts.length === 0} onClick={openAccountModal}>
-          <MenuItemIcon>
-            <SwapHorizIcon />
-          </MenuItemIcon>
           <MenuItemText>
             <MenuItemLabel>Switch account</MenuItemLabel>
             <MenuItemMeta>Choose a synthetic demo account</MenuItemMeta>
@@ -188,7 +183,7 @@ export function AdminAccountMenu({
       >
         <AccountList aria-label="Demo accounts">
           {accounts.length === 0 && (
-            <EmptyStateText>No demo accounts are available from the admin BFF.</EmptyStateText>
+            <EmptyStateText>No demo accounts are available from identity-service.</EmptyStateText>
           )}
           {accounts.map((account) => (
             <AccountOption

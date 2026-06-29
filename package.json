@@ -8,6 +8,7 @@
     "pnpm": ">=11.7.0 <12"
   },
   "scripts": {
+    "dev": "pnpm --parallel --filter org-management --filter user-management --filter admin-console run dev",
     "dev:org-management": "pnpm --filter org-management run dev",
     "dev:user-management": "pnpm --filter user-management run dev",
     "dev:admin-console": "pnpm --filter admin-console run dev",

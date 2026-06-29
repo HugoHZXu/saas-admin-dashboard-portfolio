@@ -2,8 +2,11 @@ import { create } from 'zustand';
 import type { DemoAccount, DemoCapabilities, DemoSession } from './types';
 import {
   clearStoredAccountId,
+  clearStoredIdentityToken,
+  readStoredIdentityAccessToken,
   readStoredAccountId,
   writeStoredAccountId,
+  writeStoredIdentityToken,
 } from './storage';
 
 export type AdminSessionFetchInput = {
@@ -69,6 +72,24 @@ const persistSelectedAccountId = (accountId: string | null) => {
   clearStoredAccountId();
 };
 
+const isTokenExpired = (expiresAt: string) => {
+  const expiresAtTime = Date.parse(expiresAt);
+
+  return Number.isNaN(expiresAtTime) || expiresAtTime <= Date.now();
+};
+
+const persistSessionToken = (session: DemoSession | null) => {
+  if (!session) {
+    clearStoredIdentityToken();
+    return;
+  }
+
+  writeStoredIdentityToken({
+    accessToken: session.accessToken,
+    expiresAt: session.expiresAt,
+  });
+};
+
 const toSnapshot = (state: AdminSessionStore): AdminSessionStoreSnapshot => ({
   session: state.session,
   loading: state.loading,
@@ -82,19 +103,22 @@ const createPatch = (
 ): Partial<AdminSessionStore> => {
   const patch = typeof nextState === 'function' ? nextState(toSnapshot(state)) : nextState;
   const hasSessionPatch = hasOwn(patch, 'session');
-  const session = hasSessionPatch ? patch.session ?? null : state.session;
+  const session = hasSessionPatch ? (patch.session ?? null) : state.session;
   const selectedAccountId = hasOwn(patch, 'selectedAccountId')
-    ? patch.selectedAccountId ?? null
+    ? (patch.selectedAccountId ?? null)
     : hasSessionPatch
-      ? session?.currentAccount.id ?? state.selectedAccountId
+      ? (session?.currentAccount.id ?? state.selectedAccountId)
       : state.selectedAccountId;
 
   persistSelectedAccountId(selectedAccountId);
+  if (hasSessionPatch) {
+    persistSessionToken(session);
+  }
 
   return {
     session,
-    loading: hasOwn(patch, 'loading') ? patch.loading ?? false : state.loading,
-    errorMessage: hasOwn(patch, 'errorMessage') ? patch.errorMessage ?? null : state.errorMessage,
+    loading: hasOwn(patch, 'loading') ? (patch.loading ?? false) : state.loading,
+    errorMessage: hasOwn(patch, 'errorMessage') ? (patch.errorMessage ?? null) : state.errorMessage,
     selectedAccountId,
     ...(patch.refetch ? { refetch: patch.refetch } : {}),
   };
@@ -108,6 +132,7 @@ const setResolvedSession = (
   const selectedAccountId = session?.currentAccount.id ?? fallbackAccountId;
 
   persistSelectedAccountId(selectedAccountId);
+  persistSessionToken(session);
   set({
     session,
     loading: false,
@@ -117,9 +142,7 @@ const setResolvedSession = (
 };
 
 type AdminSessionSet = (
-  patch:
-    | Partial<AdminSessionStore>
-    | ((state: AdminSessionStore) => Partial<AdminSessionStore>)
+  patch: Partial<AdminSessionStore> | ((state: AdminSessionStore) => Partial<AdminSessionStore>)
 ) => void;
 type AdminSessionGet = () => AdminSessionStore;
 
@@ -184,6 +207,7 @@ export const useAdminSessionStore = create<AdminSessionStore>((set, get) => {
       adminSessionFetcher = null;
       latestRefetchRequestId = 0;
       clearStoredAccountId();
+      clearStoredIdentityToken();
       set({
         session: null,
         loading: false,
@@ -211,3 +235,25 @@ export const selectAdminSessionCurrentAccount = (state: AdminSessionStore): Demo
 
 export const selectAdminSessionCapabilities = (state: AdminSessionStore): DemoCapabilities =>
   state.session?.capabilities ?? emptyCapabilities;
+
+export const readCurrentIdentityAccessToken = () => {
+  const session = useAdminSessionStore.getState().session;
+
+  if (session?.accessToken && !isTokenExpired(session.expiresAt)) {
+    return session.accessToken;
+  }
+
+  return readStoredIdentityAccessToken();
+};
+
+export const getCurrentOrRefreshIdentityAccessToken = async () => {
+  const accessToken = readCurrentIdentityAccessToken();
+
+  if (accessToken) {
+    return accessToken;
+  }
+
+  const session = await useAdminSessionStore.getState().refetch();
+
+  return session?.accessToken ?? readStoredIdentityAccessToken();
+};

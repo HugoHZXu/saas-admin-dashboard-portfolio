@@ -1,4 +1,5 @@
 import { useEffect } from 'react';
+import { clearStoredIdentityToken } from 'admin-shared';
 import { Outlet, Route, Routes, useNavigate } from 'react-router-dom';
 import { DemoSessionProvider } from '@/features/demoSession/DemoSessionContext';
 import { clearStoredAccountId } from '@/features/demoSession/demoSessionStorage';
@@ -14,6 +15,7 @@ function ResetDemoSessionRoute() {
 
   useEffect(() => {
     clearStoredAccountId();
+    clearStoredIdentityToken();
     navigate('/', { replace: true });
   }, [navigate]);
 

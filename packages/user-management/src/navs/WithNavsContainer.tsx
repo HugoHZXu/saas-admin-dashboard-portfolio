@@ -33,7 +33,7 @@ export function WithNavsContainer({ children }: WithNavsContainerProps) {
         <ContentTemplate type="card" pageTitle="Loading account">
           <DetailCard aria-label="Loading account context">
             <PanelHeading>Loading account</PanelHeading>
-            <PanelText>Loading demo account access from the admin BFF.</PanelText>
+            <PanelText>Loading demo account access from identity-service.</PanelText>
           </DetailCard>
         </ContentTemplate>
       );

@@ -1,15 +1,12 @@
+import { createContext, type ReactNode, useCallback, useContext, useEffect, useMemo } from 'react';
+import { useApolloClient } from '@apollo/client/react';
 import {
-  createContext,
-  type ReactNode,
-  useCallback,
-  useContext,
-  useEffect,
-  useMemo,
-  useState,
-} from 'react';
-import { useDemoSessionQuery } from './demoSessionApi';
+  configureAdminSessionStore,
+  fetchIdentitySession,
+  useAdminSessionStore,
+  type AdminSessionState,
+} from 'admin-shared';
 import { DemoAccount, DemoSession } from './demoSessionTypes';
-import { readStoredAccountId, writeStoredAccountId } from './demoSessionStorage';
 
 export type DemoSessionContextValue = {
   session: DemoSession | null;
@@ -38,43 +35,52 @@ export function DemoSessionValueProvider({ children, value }: DemoSessionValuePr
 }
 
 export function DemoSessionProvider({ children }: DemoSessionProviderProps) {
-  const [selectedUserId, setSelectedUserId] = useState<string | null>(() => readStoredAccountId());
-  const { data, loading, error, refetch: refetchDemoSessionQuery } =
-    useDemoSessionQuery(selectedUserId);
-  const session = data?.demoSession ?? null;
+  const apolloClient = useApolloClient();
+  const session = useAdminSessionStore((state: AdminSessionState) => state.session);
+  const selectedAccountId = useAdminSessionStore(
+    (state: AdminSessionState) => state.selectedAccountId
+  );
+  const loading = useAdminSessionStore((state: AdminSessionState) => state.loading);
+  const errorMessage = useAdminSessionStore((state: AdminSessionState) => state.errorMessage);
+  const switchAccount = useAdminSessionStore((state: AdminSessionState) => state.switchAccount);
+  const refetchSession = useAdminSessionStore((state: AdminSessionState) => state.refetch);
 
   useEffect(() => {
-    const resolvedAccountId = session?.currentAccount.id;
+    configureAdminSessionStore(fetchIdentitySession);
+    void useAdminSessionStore.getState().refetch();
 
-    if (resolvedAccountId && resolvedAccountId !== selectedUserId) {
-      writeStoredAccountId(resolvedAccountId);
-      setSelectedUserId(resolvedAccountId);
-    }
-  }, [selectedUserId, session?.currentAccount.id]);
-
-  const selectAccount = useCallback((accountId: string) => {
-    writeStoredAccountId(accountId);
-    setSelectedUserId(accountId);
+    return () => configureAdminSessionStore(null);
   }, []);
 
-  const refetch = useCallback(async () => {
-    const result = await refetchDemoSessionQuery({ selectedUserId: selectedUserId || null });
+  const selectAccount = useCallback(
+    (accountId: string) => {
+      const previousAccountId = useAdminSessionStore.getState().session?.currentAccount.id ?? null;
 
-    return result.data?.demoSession;
-  }, [refetchDemoSessionQuery, selectedUserId]);
+      void switchAccount(accountId).then((nextSession) => {
+        if (previousAccountId && nextSession?.currentAccount.id !== previousAccountId) {
+          void apolloClient.resetStore().catch(() => undefined);
+        }
+      });
+    },
+    [apolloClient, switchAccount]
+  );
+
+  const refetch = useCallback(async () => {
+    return (await refetchSession()) as DemoSession | undefined;
+  }, [refetchSession]);
 
   const value = useMemo<DemoSessionContextValue>(
     () => ({
-      session,
-      accounts: session?.accounts ?? [],
-      currentAccount: session?.currentAccount ?? null,
-      selectedUserId,
+      session: session as DemoSession | null,
+      accounts: (session?.accounts ?? []) as DemoAccount[],
+      currentAccount: (session?.currentAccount ?? null) as DemoAccount | null,
+      selectedUserId: selectedAccountId,
       loading,
-      errorMessage: error?.message ?? null,
+      errorMessage,
       selectAccount,
       refetch,
     }),
-    [error, loading, refetch, selectAccount, selectedUserId, session]
+    [errorMessage, loading, refetch, selectAccount, selectedAccountId, session]
   );
 
   return <DemoSessionValueProvider value={value}>{children}</DemoSessionValueProvider>;

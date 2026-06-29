@@ -17,6 +17,7 @@ export type MutationResult = {
 };
 
 export type OrganizationKind = 'INTERNAL' | 'TENANT' | 'PUBLIC';
+export type DemoOrganizationKind = 'internal' | 'tenant' | 'public';
 export type OrganizationStatus = 'active' | 'inactive' | 'archived';
 
 export type OrganizationScope = {
@@ -58,12 +59,13 @@ export type DemoCapabilities = {
 export type DemoOrganizationScope = {
   id: string;
   name: string;
-  kind: OrganizationKind;
+  kind: DemoOrganizationKind;
   status: OrganizationStatus;
 };
 
 export type DemoAccountMembership = {
   organization: DemoOrganizationScope;
+  membershipStatus: string;
   roles: Role[];
 };
 
@@ -73,10 +75,12 @@ export type DemoAccount = {
   firstName: string;
   lastName: string;
   displayName: string;
+  accountStatus: string;
   persona: string;
   memberships: DemoAccountMembership[];
   capabilities: DemoCapabilities;
   userManagementOrganizations: DemoOrganizationScope[];
+  entitlementOrganizations: DemoOrganizationScope[];
 };
 
 export type DemoSession = {
@@ -84,6 +88,10 @@ export type DemoSession = {
   currentAccount: DemoAccount;
   capabilities: DemoCapabilities;
   userManagementOrganizations: DemoOrganizationScope[];
+  entitlementOrganizations: DemoOrganizationScope[];
+  accessToken: string;
+  tokenType: 'Bearer';
+  expiresAt: string;
 };
 
 export type UserAccountStatus = 'Active' | 'Suspended' | 'Incomplete';

@@ -20,7 +20,7 @@ const copyByKind: Record<AccessStateKind, { pageTitle: string; heading: string; 
   loading: {
     pageTitle: 'Loading account',
     heading: 'Checking admin access',
-    body: 'Loading the selected demo account from the admin BFF.',
+    body: 'Loading the selected demo account from identity-service.',
   },
   error: {
     pageTitle: 'Account unavailable',

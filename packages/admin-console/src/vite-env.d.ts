@@ -3,6 +3,7 @@
 interface ImportMetaEnv {
   readonly VITE_ADMIN_CONSOLE_GRAPHQL_URL?: string;
   readonly VITE_ADMIN_BFF_GRAPHQL_URL?: string;
+  readonly VITE_IDENTITY_SERVICE_URL?: string;
   readonly VITE_USER_MANAGEMENT_REMOTE_ENTRY?: string;
   readonly VITE_ORG_MANAGEMENT_REMOTE_ENTRY?: string;
   readonly VITE_USER_MANAGEMENT_REMOTE_ENTRY_URL?: string;

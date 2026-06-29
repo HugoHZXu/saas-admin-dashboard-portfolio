@@ -20,7 +20,7 @@ import {
 } from '@hugo-ui/mui';
 import type { FeedbackMessageType, ModalButtonsType } from '@hugo-ui/mui';
 import type {
-  OrganizationKind,
+  DemoOrganizationKind,
   Role,
   RoleKey,
   UserAccountStatus,
@@ -80,20 +80,21 @@ const accountStatusOptions: { value: UserAccountStatus; label: string }[] = [
   { value: 'Incomplete', label: 'Incomplete' },
 ];
 
-const roleOptions: { value: RoleKey; label: string; organizationKinds: OrganizationKind[] }[] = [
-  { value: 'platform_admin', label: 'Platform Administrator', organizationKinds: ['INTERNAL'] },
-  {
-    value: 'organization_admin',
-    label: 'Organization Administrator',
-    organizationKinds: ['INTERNAL', 'TENANT'],
-  },
-  {
-    value: 'public_user_admin',
-    label: 'Public User Administrator',
-    organizationKinds: ['INTERNAL'],
-  },
-  { value: 'workspace_manager', label: 'Workspace Manager', organizationKinds: ['TENANT'] },
-];
+const roleOptions: { value: RoleKey; label: string; organizationKinds: DemoOrganizationKind[] }[] =
+  [
+    { value: 'platform_admin', label: 'Platform Administrator', organizationKinds: ['internal'] },
+    {
+      value: 'organization_admin',
+      label: 'Organization Administrator',
+      organizationKinds: ['internal', 'tenant'],
+    },
+    {
+      value: 'public_user_admin',
+      label: 'Public User Administrator',
+      organizationKinds: ['internal'],
+    },
+    { value: 'workspace_manager', label: 'Workspace Manager', organizationKinds: ['tenant'] },
+  ];
 
 const roleToneMap: Record<string, StatusTagTone> = {
   platform_admin: 'info',
@@ -135,7 +136,7 @@ const getEmailValidationError = (email: string) => {
 const formatStatusLabel = (status: UserAccountStatus) =>
   accountStatusOptions.find((option) => option.value === status)?.label ?? status;
 
-const getRoleOptionsForOrganizationKind = (organizationKind?: OrganizationKind) =>
+const getRoleOptionsForOrganizationKind = (organizationKind?: DemoOrganizationKind) =>
   organizationKind
     ? roleOptions.filter((option) => option.organizationKinds.includes(organizationKind))
     : roleOptions;
@@ -249,7 +250,7 @@ export function UserListPage() {
   const [addUserToOrganizationByEmail, addUserMutation] = useAddUserToOrganizationByEmailMutation();
   const currentAccountId = currentAccount?.id ?? null;
   const selectedOrganizationKind = selectedOrganization?.kind;
-  const selectedScopeIsPublic = selectedOrganizationKind === 'PUBLIC';
+  const selectedScopeIsPublic = selectedOrganizationKind === 'public';
   const showAddUserAction = !selectedScopeIsPublic;
   const visibleRoleOptions = getRoleOptionsForOrganizationKind(selectedOrganizationKind);
   const tableStateReady = Boolean(
@@ -383,7 +384,7 @@ export function UserListPage() {
       return;
     }
 
-    if (selectedOrganization.kind === 'PUBLIC') {
+    if (selectedOrganization.kind === 'public') {
       setAddUserModalOpen(false);
       setAddUserFeedback({
         type: 'error',

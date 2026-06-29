@@ -39,9 +39,9 @@ const formatRoleLabel = (account: DemoAccount) => {
 type UserManagementOrganizationKind = DemoAccount['userManagementOrganizations'][number]['kind'];
 
 const organizationKindLabels: Record<UserManagementOrganizationKind, string> = {
-  INTERNAL: 'Internal organization',
-  TENANT: 'Tenant organization',
-  PUBLIC: 'Public organization',
+  internal: 'Internal organization',
+  tenant: 'Tenant organization',
+  public: 'Public organization',
 };
 
 const formatScopeLabel = (account: DemoAccount) => {

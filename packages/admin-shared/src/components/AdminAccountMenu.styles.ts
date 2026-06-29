@@ -33,13 +33,6 @@ export const MenuSectionTitle = styled('div')(({ theme }) => ({
   textTransform: 'uppercase',
 }));
 
-export const MenuItemIcon = styled('span')(() => ({
-  display: 'inline-flex',
-  alignItems: 'center',
-  justifyContent: 'center',
-  width: 24,
-}));
-
 export const MenuItemText = styled('span')(() => ({
   display: 'grid',
   gap: 2,

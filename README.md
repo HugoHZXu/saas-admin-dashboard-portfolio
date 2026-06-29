@@ -68,13 +68,15 @@ pnpm run db:reset
 pnpm run dev:admin-bff
 ```
 
-In separate terminals, start the feature remotes and shell:
+Start the feature remotes and shell together:
 
 ```bash
-pnpm run dev:org-management
-pnpm run dev:user-management
-pnpm run dev:admin-console
+pnpm run dev
 ```
+
+The individual scripts remain available when you need to run one app in isolation:
+`pnpm run dev:org-management`, `pnpm run dev:user-management`, and
+`pnpm run dev:admin-console`.
 
 Open `http://127.0.0.1:5173` for the admin shell. The default local endpoints are:
 

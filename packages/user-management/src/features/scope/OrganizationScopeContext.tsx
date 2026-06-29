@@ -111,9 +111,9 @@ export const useOrganizationScope = () => {
 };
 
 const organizationKindLabels: Record<DemoOrganizationScope['kind'], string> = {
-  INTERNAL: 'Internal organization',
-  TENANT: 'Tenant organization',
-  PUBLIC: 'Public organization',
+  internal: 'Internal organization',
+  tenant: 'Tenant organization',
+  public: 'Public organization',
 };
 
 const formatKindLabel = (organization: DemoOrganizationScope) =>

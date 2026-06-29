@@ -193,7 +193,7 @@ export function UserDetailPage() {
   const isEditingCurrentAccount = Boolean(user?.id && currentAccountId === user.id);
   const canShowRemoveUserAction = Boolean(
     user?.id &&
-    selectedOrganization?.kind === 'TENANT' &&
+    selectedOrganization?.kind === 'tenant' &&
     selectedOrganizationId &&
     currentAccountId !== user.id
   );
