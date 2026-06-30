@@ -1,24 +1,17 @@
 # Security Policy
 
-This repository is a public portfolio with synthetic demo data. It should not contain real secrets,
-customer data, production logs, private endpoints, or internal business rules.
+This is a public portfolio project using synthetic demo data only. It should not contain real secrets, customer data, production endpoints, or private business logic.
 
-## Reporting Security Issues
+## Reporting a vulnerability
 
-Do not post secrets, credentials, private data, or exploitable details in a public issue.
+Do not post secrets, credentials, or exploitable details in public GitHub issues.
 
-Use GitHub private vulnerability reporting if it is enabled for this repository. If private
-reporting is not available, open a minimal public issue asking for a private contact path and avoid
-including sensitive details.
+If GitHub private vulnerability reporting is enabled for this repository, please use that channel. Otherwise, open a minimal public issue requesting a private contact method, and omit sensitive details from the issue description.
 
-## Public-Safety Expectations
+## Safe disclosure guidelines
 
-When reporting or fixing an issue:
+When reporting or fixing security-related issues:
 
-- use synthetic examples and `.example` domains
-- avoid screenshots that include private or identifying data
-- avoid production-looking IDs, tokens, logs, endpoints, or payloads
-- do not attach local `.env` files, SQLite databases, HAR files, certificates, private keys, or
-  other sensitive artifacts
-
-See `docs/desensitization-rules.md` for the repository's desensitization rules.
+- Use synthetic examples and `.example` domains only
+- Do not include screenshots with personally identifiable information
+- Do not attach `.env` files, databases, certificates, private keys, or HAR files

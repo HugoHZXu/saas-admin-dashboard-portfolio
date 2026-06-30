@@ -1,35 +1,21 @@
-# Hugo SaaS 管理控制台
+# Hugo SaaS Console
 
-Hugo SaaS Console (`hugo-saas-console`) is a desensitized B2B SaaS management-console portfolio
-built with React, TypeScript, pnpm workspaces, Module Federation, GraphQL, and an external
-design-system dependency.
+> Languages: English | [简体中文](README.zh-CN.md)
 
-This repository demonstrates practical frontend engineering for tenant operations,
-organization/user administration, and audit-trail workflows while consuming an external local Admin
-BFF GraphQL service. It is not a production SaaS platform, a generic dashboard template, or a set
-of publishable npm packages owned by this portfolio.
+A B2B SaaS admin dashboard frontend portfolio built with React, TypeScript, Module Federation, and GraphQL.
 
-The monorepo is a portfolio modeling choice, not the proposed end-state for a real product family.
-In a production organization, different admin dashboards would likely be developed, deployed, and
-maintained independently by different teams. Here, the workspace simulates independently owned apps
-and business npm packages while keeping the demo runnable from one repository.
+This project demonstrates a modern micro-frontend architecture for tenant operations, organization/user management, and audit logging. It uses synthetic demo data only — no real customer information, production endpoints, or private business logic.
 
-All organizations, users, emails, domains, roles, activity events, and audit records are
-synthetic demo data.
+## What's inside
 
-## What It Shows
-
-- Admin shell composition with Module Federation remotes.
-- Organization and User Management workflows consuming an external local Admin BFF GraphQL service.
-- Activity Log UI consumption of normalized records.
-- Consumption of the external `@hugo-ui/mui` design-system package through package-style imports.
-- Targeted React Compiler adoption in the Organization and User Management remotes.
-- Public AI-assisted engineering workflow through `AGENTS.md`, `.codex/skills/*`, and
-  `docs/agent-workflow.md`.
+- **Module Federation architecture** — A host shell (`admin-console`) loads independently deployed feature remotes for Organization and User Management
+- **B2B admin workflows** — Dense data tables, detail pages, and activity log views backed by a GraphQL BFF
+- **External design system** — UI components consumed via `@hugo-ui/mui` npm package
+- **pnpm workspaces monorepo** — Clean package boundaries between shell, shared utilities, and feature modules
 
 ## Screenshots
 
-Captured from the local demo shell with synthetic `.example` data.
+Captured from the local dev environment with synthetic demo data.
 
 ### Organization Management
 
@@ -43,125 +29,96 @@ Captured from the local demo shell with synthetic `.example` data.
 | -------------------------------------------------------------- | ------------------------------------------------------------------ | ------------------------------------------------------------------------------ |
 | ![User list](docs/assets/screenshots/user-list-acme-cloud.jpg) | ![User detail](docs/assets/screenshots/user-detail-mina-patel.jpg) | ![User Activity Log](docs/assets/screenshots/user-activity-log-acme-cloud.jpg) |
 
-## Packages
+## Repository structure
 
-| Package                    | Purpose                                                                                        |
-| -------------------------- | ---------------------------------------------------------------------------------------------- |
-| `packages/admin-console`   | Browser shell and Module Federation host for Hugo SaaS Console.                                |
-| `packages/admin-shared`    | Shared session and admin-shell UI utilities used by feature remotes.                           |
-| `packages/org-management`  | Organization Management remote, routes, list/detail views, and object-scoped activity surface. |
-| `packages/user-management` | User Management remote, organization-scoped user workflows, and user activity surface.         |
+```
+packages/
+├── admin-console/      # Host shell + Module Federation entry point
+├── admin-shared/       # Shared session, auth, and UI utilities
+├── org-management/     # Organization Management remote (list, detail, activity)
+└── user-management/    # User Management remote (list, detail, activity)
+```
 
-## Local Development
+This repository depends on two external companion projects:
 
-Install dependencies:
+| Dependency | Repository | Purpose |
+|------------|------------|---------|
+| Admin BFF | [HugoHZXu/hugo-saas-backend](https://github.com/HugoHZXu/hugo-saas-backend) | GraphQL API, database schema, seed data, activity log normalization |
+| Design System | [HugoHZXu/hugo-ui](https://github.com/HugoHZXu/hugo-ui) | Reusable UI components (`@hugo-ui/mui`), Storybook, tokens |
+
+## Getting started
+
+### Prerequisites
+
+- Node.js `>=26.4.0`
+- pnpm `>=11.7.0 <12`
+
+### 1. Install dependencies
 
 ```bash
 pnpm install
 ```
 
-Start Hugo SaaS Backend separately:
+### 2. Start the backend
+
+The dashboard requires a running Admin BFF. Clone and start the backend in a separate terminal:
 
 ```bash
-cd /Users/xuhaoze/code-demo/hugo-saas-backend
+git clone https://github.com/HugoHZXu/hugo-saas-backend.git ../hugo-saas-backend
+cd ../hugo-saas-backend
+pnpm install
 pnpm run db:reset
 pnpm run dev:admin-bff
 ```
 
-Start the feature remotes and shell together:
+### 3. Start the dashboard
+
+Back in this repository:
 
 ```bash
 pnpm run dev
 ```
 
-The individual scripts remain available when you need to run one app in isolation:
-`pnpm run dev:org-management`, `pnpm run dev:user-management`, and
-`pnpm run dev:admin-console`.
+This starts all three apps simultaneously:
 
-Open `http://127.0.0.1:5173` for the admin shell. The default local endpoints are:
+| Service | URL |
+|---------|-----|
+| Admin Shell (host) | http://127.0.0.1:5173 |
+| Organization Management (remote) | http://127.0.0.1:5174 |
+| User Management (remote) | http://127.0.0.1:5175 |
+| Admin BFF GraphQL | http://127.0.0.1:4010/graphql |
 
-- Admin shell: `http://127.0.0.1:5173`
-- Organization Management remote: `http://127.0.0.1:5174`
-- User Management remote: `http://127.0.0.1:5175`
-- External Admin BFF GraphQL: `http://127.0.0.1:4010/graphql`
+To run a single app in isolation, use `pnpm run dev:org-management`, `pnpm run dev:user-management`, or `pnpm run dev:admin-console`.
 
-## External Design System
+Open http://127.0.0.1:5173 to view the dashboard.
 
-Hugo SaaS Console consumes shared UI through the external
-[HugoHZXu/hugo-ui](https://github.com/HugoHZXu/hugo-ui) repository. Application code keeps
-package-style import paths such as:
+## Documentation
+
+| Topic | English | 简体中文 |
+|-------|---------|----------|
+| Project overview & scope | [`docs/project-brief.md`](docs/project-brief.md) | [`docs/project-brief.zh-CN.md`](docs/project-brief.zh-CN.md) |
+| Module Federation deployment | [`docs/module-federation-deployment.md`](docs/module-federation-deployment.md) | [`docs/module-federation-deployment.zh-CN.md`](docs/module-federation-deployment.zh-CN.md) |
+
+## Design system integration
+
+UI components are imported from the external `@hugo-ui/mui` npm package:
 
 ```tsx
 import { HugoUIProvider, Table } from '@hugo-ui/mui';
 ```
 
-This repository consumes Hugo UI as an npm package, not through `file:` dependencies or source
-aliases. Local unpublished Hugo UI builds are published to a local npm-compatible registry and
-installed as an exact package version. The current package is
-`@hugo-ui/mui@1.0.3-local.1782760446428` from `http://localhost:4873`.
+## Validation
 
-Use the local registry workflow in [`docs/local-hugo-ui.md`](docs/local-hugo-ui.md) when refreshing
-the dashboard dependency after a Hugo UI package build.
-
-## React Compiler Adoption
-
-`packages/org-management` and `packages/user-management` opt into React Compiler with
-`compilationMode: "annotation"`. Only components and custom hooks marked with `"use memo"` are
-compiled, which keeps the portfolio example explicit and limits the rollout surface.
-
-This adoption is intentionally scoped to feature remotes. The external design system and admin
-shell are not compiler-enabled by this repository, so package consumption and federated host
-behavior remain easier to reason about independently.
-
-The compiler-enabled code removes low-risk manual `useMemo` and `useCallback` wrappers from list,
-detail, and Activity Log surfaces while keeping provider, context, and external-store boundaries
-manually stabilized.
-
-Useful checks:
+Run the full verification suite:
 
 ```bash
-pnpm run build-org-management
-pnpm run build-user-management
-pnpm run build-admin-console
+pnpm run verify
 ```
 
-React DevTools can also confirm compiled components through its compiler memo badge. See
-`docs/react-compiler-adoption.md` for the scope and guardrails.
-
-## AI-Assisted Workflow
-
-The agent workflow is intentionally part of the Hugo SaaS Console public portfolio narrative. It
-documents how AI-assisted development is routed, constrained, and verified:
-
-- `AGENTS.md` defines repository-wide boundaries, validation routing, and implementation rules.
-- `.codex/skills/*` contains reusable task workflows for dashboard feature slices, Activity Log UI
-  consumption, and desensitization review.
-- `docs/agent-workflow.md` summarizes how those instructions fit into the engineering process.
-
-Backend contract, seed, database, and Activity Log normalization instructions live in
-`/Users/xuhaoze/code-demo/hugo-saas-backend`.
-
-## Desensitization
-
-This project preserves generic B2B SaaS admin patterns only. It does not include real customer
-data, private endpoints, production logs, private screenshots, private business rules, or copied
-private implementation assets.
-
-See `docs/desensitization-rules.md` for the public-safety rules used when adding mock data,
-business copy, documentation, examples, or AI-assisted changes.
-
-## Validation
+Individual checks:
 
 ```bash
 pnpm run typecheck
 pnpm run test:frontend
 pnpm run build:all
-pnpm run verify
-```
-
-Codex command sessions in this repository should use the wrapper documented in `AGENTS.md`, for
-example:
-
-```bash
-./scripts/codex-node.sh pnpm run typecheck
 ```

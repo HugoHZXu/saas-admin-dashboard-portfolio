@@ -3,7 +3,7 @@
 ## Repo Role
 
 - This repository is a pnpm workspaces monorepo for Hugo SaaS Console, a desensitized B2B SaaS management-console frontend portfolio.
-- It contains the dashboard shell, feature remotes, shared admin utilities, docs, and AI workflow instructions.
+- It contains the dashboard shell, feature remotes, shared admin utilities, docs, and workflow instructions.
 - It consumes an external local Admin BFF GraphQL service from `/Users/xuhaoze/code-demo/hugo-saas-backend`.
 - Backend contract, seed, database, Prisma, SQLite, and Activity Log normalization changes belong in `/Users/xuhaoze/code-demo/hugo-saas-backend`.
 - The design system is maintained in the separate `HugoHZXu/hugo-ui` repository. This repository consumes `@hugo-ui/mui`; it does not own Hugo UI component source, Storybook, package publishing, or changesets.
@@ -60,7 +60,7 @@ For high-risk changes:
 
 ## React Compiler Guardrails
 
-- React Compiler is intentionally enabled only for `packages/org-management` and `packages/user-management`.
+- React Compiler is currently enabled only for `packages/org-management` and `packages/user-management`.
 - The current rollout uses `compilationMode: "annotation"`. Add `"use memo"` only to components or custom hooks that are meant to be compiled.
 - Do not enable React Compiler for `admin-console` or the external Hugo UI design system unless the user explicitly asks for that broader rollout.
 - Do not delete `useMemo` or `useCallback` from provider, context, `useSyncExternalStore`, module-federation session, or cross-package API boundaries just because Compiler is available.
