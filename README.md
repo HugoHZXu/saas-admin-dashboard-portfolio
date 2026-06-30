@@ -95,13 +95,13 @@ package-style import paths such as:
 import { HugoUIProvider, Table } from '@hugo-ui/mui';
 ```
 
-This repository uses local file mode for that package. Dashboard packages point at
-`file:../../hugo-ui/packages/mui`, while `config/hugo-ui.json` records the expected Hugo UI package
-version. Installs therefore resolve the separately cloned Hugo UI repository through the local
-`hugo-ui/` link instead of any npm registry package.
+This repository consumes Hugo UI as an npm package, not through `file:` dependencies or source
+aliases. Local unpublished Hugo UI builds are published to a local npm-compatible registry and
+installed as an exact package version. The current package is
+`@hugo-ui/mui@1.0.3-local.1782760446428` from `http://localhost:4873`.
 
-Use the symlink workflow in [`docs/local-hugo-ui.md`](docs/local-hugo-ui.md). The local `hugo-ui/`
-path is ignored by Git and points at a separately cloned design-system repository.
+Use the local registry workflow in [`docs/local-hugo-ui.md`](docs/local-hugo-ui.md) when refreshing
+the dashboard dependency after a Hugo UI package build.
 
 ## React Compiler Adoption
 
@@ -135,7 +135,7 @@ documents how AI-assisted development is routed, constrained, and verified:
 
 - `AGENTS.md` defines repository-wide boundaries, validation routing, and implementation rules.
 - `.codex/skills/*` contains reusable task workflows for dashboard feature slices, Activity Log UI
-  consumption, local design-system linking, and desensitization review.
+  consumption, and desensitization review.
 - `docs/agent-workflow.md` summarizes how those instructions fit into the engineering process.
 
 Backend contract, seed, database, and Activity Log normalization instructions live in

@@ -7,7 +7,7 @@ The project is in public-release polish after the frontend console architecture 
 Completed:
 
 - workspace dependency and tooling baseline
-- external `@hugo-ui/mui` consumption through a committed npm package version, a version check, and local-only symlink setup
+- external `@hugo-ui/mui` consumption through an exact package version installed from a local npm registry
 - federated `admin-console` shell
 - `org-management` and `user-management` remotes
 - Organization/User list, detail, and Activity Log surfaces for Hugo SaaS Console
@@ -26,9 +26,9 @@ Backend completed in the external repository:
 Tasks:
 
 - Keep the root README focused on the Hugo SaaS Console frontend portfolio audience.
-- Document local setup across the external backend, shell, remotes, and external design-system link.
+- Document local setup across the external backend, shell, remotes, and external design-system package.
 - Add public repository basics such as license, contribution guidance, and security reporting.
-- Keep `@hugo-ui/mui` described as an external design-system dependency consumed through package-style imports, an npm package version, and a local-only symlink workflow.
+- Keep `@hugo-ui/mui` described as an external design-system dependency consumed through package-style imports and a local npm registry package workflow.
 - Keep the desensitization statement visible in the README and supporting docs.
 - Run tracked-file and git-history secret checks before publishing the GitHub repository.
 
@@ -53,7 +53,7 @@ Tasks:
 Tasks:
 
 - Keep dashboard code on public `@hugo-ui/mui` imports instead of reaching into private component internals.
-- Keep local symlink setup documented and ignored by Git.
+- Keep local registry installation documented without adding `file:` dependencies or source aliases.
 - Move reusable component API, token, Storybook, changeset, and release/versioning work to the external Hugo UI repository.
 - Continue using public theme roles and component APIs for dashboard styling.
 

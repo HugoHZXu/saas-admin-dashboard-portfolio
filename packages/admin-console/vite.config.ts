@@ -3,7 +3,6 @@ import react from '@vitejs/plugin-react';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import { defineConfig, loadEnv } from 'vite';
-import { getHugoUiSourceLink } from '../../config/vite/hugoUiSourceLink';
 
 const dirname = path.dirname(fileURLToPath(import.meta.url));
 
@@ -24,10 +23,8 @@ const readPort = (value: string | undefined, fallback: number) => {
   return Number.isInteger(parsed) && parsed > 0 ? parsed : fallback;
 };
 
-export default defineConfig(({ mode, command }) => {
+export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, dirname, '');
-  const hugoUiSourceLink =
-    command === 'serve' ? getHugoUiSourceLink(dirname) : { enabled: false, aliases: [] };
   const devHost = env.VITE_ADMIN_CONSOLE_HOST ?? env.VITE_DEV_HOST ?? DEFAULT_DEV_HOST;
   const devPort = readPort(
     env.VITE_ADMIN_CONSOLE_PORT ?? env.VITE_DEV_PORT ?? env.PORT,
@@ -87,7 +84,7 @@ export default defineConfig(({ mode, command }) => {
           '@mui/icons-material': sharedSingleton,
           '@hugo-ui/mui': {
             ...sharedSingleton,
-            requiredVersion: '1.0.2',
+            requiredVersion: '1.0.3-local.1782760446428',
           },
           'admin-shared': sharedSingleton,
           zustand: sharedSingleton,
@@ -105,13 +102,6 @@ export default defineConfig(({ mode, command }) => {
     build: {
       target: 'esnext',
     },
-    ...(hugoUiSourceLink.enabled
-      ? {
-          optimizeDeps: {
-            exclude: ['@hugo-ui/mui'],
-          },
-        }
-      : {}),
     define: {
       'process.env': {},
     },
@@ -132,7 +122,6 @@ export default defineConfig(({ mode, command }) => {
           find: '@',
           replacement: path.resolve(dirname, 'src'),
         },
-        ...hugoUiSourceLink.aliases,
       ],
     },
   };

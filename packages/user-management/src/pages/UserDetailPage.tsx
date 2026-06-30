@@ -66,15 +66,15 @@ const roleToneMap: Record<string, StatusTagTone> = {
   platform_admin: 'info',
   organization_admin: 'success',
   public_user_admin: 'warning',
-  workspace_manager: 'warning',
+  entitlement_manager: 'warning',
   workspace_member: 'neutral',
 };
 
 const roleDescriptionMap: Record<RoleKey, string> = {
   platform_admin: 'Access Organization Management for platform operations.',
   organization_admin: 'Manage users and organization-scoped administration.',
+  entitlement_manager: 'Access tenant entitlement management without User Management access.',
   public_user_admin: 'Manage public sign-up users from the internal scope.',
-  workspace_manager: 'Manage tenant workspace operations without User Management access.',
 };
 
 type UserDetailFeedback = {

@@ -1,140 +1,50 @@
-# Local Hugo UI Linking
+# Local Hugo UI Registry
 
 The design system is maintained as a separate repository:
 
 - GitHub: [HugoHZXu/hugo-ui](https://github.com/HugoHZXu/hugo-ui)
 
-Hugo SaaS Console keeps package-style imports such as `@hugo-ui/mui` and commits the dependency as
-an npm package version. The optional local link is only a development convenience for using a
-sibling Hugo UI checkout through Vite/Vitest source aliases.
-
-For clean installs, CI, and deployment validation, pnpm resolves `@hugo-ui/mui` from the npm
-registry. For local design-system development, prepare a separate `hugo-ui` clone and expose it to
-this repository through the documented ignored `hugo-ui/` symlink.
+Hugo SaaS Console keeps package-style imports such as `@hugo-ui/mui`. The dashboard does not
+consume Hugo UI through `file:` dependencies, a root-level `hugo-ui/` symlink, or Vite/Vitest source
+aliases.
 
 ## Version Model
 
-- Dashboard package manifests use the committed npm version for `@hugo-ui/mui`.
-- `config/hugo-ui.json` sets `mode: "npm"`, `expectedVersion`, and an optional local package path
-  used only when the ignored symlink exists.
-- A clean CI/deploy install does not need a local `hugo-ui` clone.
-- `pnpm run verify:hugo-ui` fails if a dashboard package does not use the expected npm version. If
-  the local symlink exists, it also checks the linked package name and version.
-- A local source link is enabled only when `.local/hugo-ui.json` exists, the linked package exists,
-  and the linked package version matches `config/hugo-ui.json`.
-- Vite development and Vitest can use the local source aliases when that version check passes.
-- Production builds intentionally use the package entry points instead of the local source aliases,
-  so they stay close to the CI/deploy path.
+- Dashboard package manifests install `@hugo-ui/mui` as an exact npm package version.
+- Local unpublished Hugo UI builds are published to a local npm-compatible registry.
+- The current local tag is `@hugo-ui/mui@local`.
+- The current resolved package version is `1.0.3-local.1782760446428`.
+- The current registry endpoint is `http://localhost:4873`.
+- The root `.npmrc` maps only the `@hugo-ui` scope to that local registry.
 
-## Public Workflow
+## Install Or Refresh
 
-Clone both repositories locally, preferably as sibling directories:
-
-```text
-workspace/
-  admin-dashboard/
-  hugo-ui/
-```
-
-Then create a local-only config file in `admin-dashboard`:
+After publishing a Hugo UI package build to the local registry, install the local tag into each
+dashboard package that consumes `@hugo-ui/mui`:
 
 ```bash
-mkdir -p .local
+./scripts/codex-node.sh pnpm --filter admin-console add @hugo-ui/mui@local --save-exact --registry http://localhost:4873
+./scripts/codex-node.sh pnpm --filter admin-shared add @hugo-ui/mui@local --save-exact --registry http://localhost:4873
+./scripts/codex-node.sh pnpm --filter org-management add @hugo-ui/mui@local --save-exact --registry http://localhost:4873
+./scripts/codex-node.sh pnpm --filter user-management add @hugo-ui/mui@local --save-exact --registry http://localhost:4873
 ```
 
-Add this content to `.local/hugo-ui.json`:
+The package manifests should contain the resolved exact version, not the `local` tag and not a
+`file:` specifier.
 
-```json
-{
-  "enabled": true,
-  "root": "../hugo-ui",
-  "linkPath": "hugo-ui",
-  "repository": "https://github.com/HugoHZXu/hugo-ui",
-  "shareNodeModules": true
-}
-```
+## Validation
 
-If the repositories are not siblings, set `root` to your own absolute or relative path:
-
-```json
-{
-  "enabled": true,
-  "root": "/absolute/path/to/hugo-ui",
-  "linkPath": "hugo-ui",
-  "repository": "https://github.com/HugoHZXu/hugo-ui",
-  "shareNodeModules": true
-}
-```
-
-`.local/` is ignored by Git. Do not commit `.local/hugo-ui.json` because it may contain a
-machine-specific path.
-
-Then run:
+Confirm the installed dependency no longer resolves to a file path:
 
 ```bash
-./scripts/codex-node.sh pnpm run setup:local-hugo-ui
-./scripts/codex-node.sh pnpm install
-./scripts/codex-node.sh pnpm run setup:local-hugo-ui
+./scripts/codex-node.sh pnpm list @hugo-ui/mui --depth 0 --recursive
 ```
 
-The setup script creates a local symlink at the dashboard repo root:
-
-```text
-admin-dashboard/hugo-ui -> ../hugo-ui
-```
-
-Vite development and Vitest can then resolve `@hugo-ui/mui` source imports through that root-level
-`hugo-ui/packages/mui` path. If the linked package version does not match `config/hugo-ui.json`,
-the source alias is disabled, and `pnpm run verify:hugo-ui` reports the mismatch when the symlink is
-present.
-
-When `shareNodeModules` is enabled, the setup script also points the local `hugo-ui` clone at the
-dashboard repo's `node_modules`. This keeps React, MUI, Emotion, Hugo UI runtime dependencies, and
-shared dependency types on a single dependency tree when dashboard packages import design-system
-source files directly. The committed dashboard dependency remains the npm package version.
-
-If the design-system clone already has a generated `packages/mui/node_modules` directory, the script
-moves it into `.local/hugo-ui-node-modules-backup-*` before creating the shared link.
-
-## What Is Committed
-
-Commit these files because they are reusable and do not contain machine-specific paths:
-
-- `docs/local-hugo-ui.md`
-- `scripts/setup-local-hugo-ui.mjs`
-- `.codex/skills/local-hugo-ui-link/SKILL.md`
-- `.codex/skills/local-hugo-ui-link/agents/openai.yaml`
-- `.gitignore` entries for `.local/`, `.codex/local-context.md`, and `/hugo-ui`
-
-Keep these files local-only:
-
-- `.local/hugo-ui.json`
-- `.codex/local-context.md`
-- the generated `hugo-ui` symlink
-- `.local/hugo-ui-node-modules-backup-*`
-
-## AI-Assisted Setup
-
-Agents should use `$local-hugo-ui-link` when setting up or repairing this workflow. The skill keeps
-the repeatable instructions in Git and directs agents to write personal paths only into
-`.local/hugo-ui.json`.
-
-## Standalone Hugo UI Work
-
-If you want to work in the `hugo-ui` repository as a standalone project again, remove the shared
-`node_modules` symlink in the `hugo-ui` clone and reinstall dependencies there:
+Then run the usual dashboard validation for the changed surface. Because Hugo UI is shared through
+Module Federation, dependency updates should include the remote builds and host build:
 
 ```bash
-cd ../hugo-ui
-rm node_modules
-pnpm install
+./scripts/codex-node.sh pnpm run build-org-management
+./scripts/codex-node.sh pnpm run build-user-management
+./scripts/codex-node.sh pnpm run build-admin-console
 ```
-
-If a real `hugo-ui/` directory still exists inside `admin-dashboard`, the setup script leaves it
-unchanged. Remove the in-repo copy only when the design-system split is complete, then rerun the
-setup script.
-
-## AI Context
-
-For local AI-assisted work, `.codex/local-context.md` may point agents to the local design-system
-clone and the public GitHub repository. That file is also ignored by Git.

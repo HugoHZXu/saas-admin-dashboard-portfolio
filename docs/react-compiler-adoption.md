@@ -15,7 +15,7 @@ Enabled packages:
 
 Not enabled by default:
 
-- external `@hugo-ui/mui` design-system source
+- external `@hugo-ui/mui` design-system package
 - `packages/admin-console`
 
 The feature remotes use `compilationMode: "annotation"`, so only functions marked with

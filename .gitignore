@@ -13,7 +13,6 @@ storybook-static
 # Local-only cross-repo configuration
 .local/
 .codex/local-context.md
-/hugo-ui
 
 # OS files
 .DS_Store

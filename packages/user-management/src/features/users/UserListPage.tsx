@@ -93,14 +93,14 @@ const roleOptions: { value: RoleKey; label: string; organizationKinds: DemoOrgan
       label: 'Public User Administrator',
       organizationKinds: ['internal'],
     },
-    { value: 'workspace_manager', label: 'Workspace Manager', organizationKinds: ['tenant'] },
+    { value: 'entitlement_manager', label: 'Entitlement Manager', organizationKinds: ['tenant'] },
   ];
 
 const roleToneMap: Record<string, StatusTagTone> = {
   platform_admin: 'info',
   organization_admin: 'success',
   public_user_admin: 'warning',
-  workspace_manager: 'warning',
+  entitlement_manager: 'warning',
   workspace_member: 'neutral',
 };
 

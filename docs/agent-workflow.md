@@ -33,14 +33,13 @@ Use these Skills when the task matches the scenario. Do not use all Skills for e
 | `$portfolio-desensitization-review` | Adding mock UI data, business copy, docs, README content, or code adapted from prior experience.              | Keep the portfolio public-safe and synthetic.                       |
 | `$admin-dashboard-feature-slice`    | Implementing Organization Table, Organization Detail, Activity Log UI, or User Management feature work.       | Keep business features in the right app/client/component layer.     |
 | `$activity-log-normalization`       | Reviewing dashboard consumption of already-normalized Activity Log records.                                   | Keep UI assumptions aligned with the external backend contract.     |
-| `$local-hugo-ui-link`               | Setting up or repairing local symlink-based source aliases for the external Hugo UI repository.               | Keep local `@hugo-ui/mui` development repeatable.                  |
 
 ## Practical Routing
 
 - If the work touches dashboard business pages, start with `$admin-dashboard-feature-slice`.
 - If the work adds public-facing examples or synthetic UI copy, include `$portfolio-desensitization-review`.
 - If the work touches Activity Log UI rendering semantics, include `$activity-log-normalization`.
-- If the work needs local unpublished `@hugo-ui/mui` changes, use `$local-hugo-ui-link` for the dashboard side and make component-library edits in the external Hugo UI repository.
+- If the work needs local unpublished `@hugo-ui/mui` changes, make component-library edits in the external Hugo UI repository, publish a local package, and install that package from the local npm registry.
 - If the work requires a backend contract, seed, or normalization change, coordinate `/Users/xuhaoze/code-demo/hugo-saas-backend` first.
 
 ## Architecture Boundaries

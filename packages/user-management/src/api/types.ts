@@ -42,7 +42,7 @@ export type OrganizationListInput = {
 export type RoleKey =
   | 'platform_admin'
   | 'organization_admin'
-  | 'workspace_manager'
+  | 'entitlement_manager'
   | 'public_user_admin';
 
 export type Role = {

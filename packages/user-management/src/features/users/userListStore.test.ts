@@ -51,14 +51,14 @@ describe('user list table store', () => {
   it('toggles status and role filters with paging reset', () => {
     useUserListTableStore.getState().setPage(3);
     useUserListTableStore.getState().toggleStatusFilter('Active');
-    useUserListTableStore.getState().toggleRoleFilter('workspace_manager');
+    useUserListTableStore.getState().toggleRoleFilter('entitlement_manager');
 
     expect(useUserListTableStore.getState().statusFilters).toEqual(['Active']);
-    expect(useUserListTableStore.getState().roleFilters).toEqual(['workspace_manager']);
+    expect(useUserListTableStore.getState().roleFilters).toEqual(['entitlement_manager']);
     expect(useUserListTableStore.getState().page).toBe(0);
 
     useUserListTableStore.getState().toggleStatusFilter('Active');
-    useUserListTableStore.getState().toggleRoleFilter('workspace_manager');
+    useUserListTableStore.getState().toggleRoleFilter('entitlement_manager');
 
     expect(useUserListTableStore.getState().statusFilters).toEqual([]);
     expect(useUserListTableStore.getState().roleFilters).toEqual([]);

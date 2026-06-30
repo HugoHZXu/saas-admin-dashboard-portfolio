@@ -1,7 +1,11 @@
 import path from 'node:path';
 import react from '@vitejs/plugin-react';
 import { defineConfig } from 'vitest/config';
-import { getHugoUiSourceLink, type ViteAliasEntry } from '../vite/hugoUiSourceLink';
+
+type ViteAliasEntry = {
+  find: string | RegExp;
+  replacement: string;
+};
 
 type ReactPackageVitestConfigOptions = {
   dirname: string;
@@ -24,8 +28,6 @@ export const createReactPackageVitestConfig = ({
   dirname,
   aliases = [],
 }: ReactPackageVitestConfigOptions) => {
-  const hugoUiSourceLink = getHugoUiSourceLink(dirname);
-
   return defineConfig({
     plugins: [react()],
     define: {
@@ -36,6 +38,11 @@ export const createReactPackageVitestConfig = ({
       setupFiles: [path.resolve(dirname, '../../test/vitest/setup.ts')],
       clearMocks: true,
       restoreMocks: true,
+      server: {
+        deps: {
+          inline: ['@hugo-ui/mui', 'lodash'],
+        },
+      },
     },
     resolve: {
       dedupe: sharedDedupe,
@@ -45,15 +52,7 @@ export const createReactPackageVitestConfig = ({
           replacement: path.resolve(dirname, 'src'),
         },
         ...aliases,
-        ...hugoUiSourceLink.aliases,
       ],
     },
-    ...(hugoUiSourceLink.enabled
-      ? {
-          optimizeDeps: {
-            exclude: ['@hugo-ui/mui'],
-          },
-        }
-      : {}),
   });
 };

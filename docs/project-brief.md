@@ -15,14 +15,14 @@ The project is not intended to become a complete SaaS platform. The goal is to b
 
 ## Current State
 
-The current implementation is a working Hugo SaaS Console frontend monorepo with a federated admin shell, Organization/User Management remotes, and a local link to an external design-system repository.
+The current implementation is a working Hugo SaaS Console frontend monorepo with a federated admin shell, Organization/User Management remotes, and an external design-system package installed from a local npm registry.
 
 The Admin BFF and shared SaaS database now live in `/Users/xuhaoze/code-demo/hugo-saas-backend`. This dashboard repository consumes that external backend through `VITE_ADMIN_BFF_GRAPHQL_URL`.
 
 Implemented foundations:
 
 - workspace dependency and tooling baseline for React, MUI, TypeScript, Vitest, Vite, GraphQL clients, and pnpm workspaces
-- `@hugo-ui/mui` consumption through a committed npm package version, with a local-only symlink workflow for version-matched design-system source development
+- `@hugo-ui/mui` consumption through an exact npm package version installed from a local registry
 - `admin-console` Module Federation shell
 - `org-management` and `user-management` feature remotes with list/detail/activity surfaces
 - frontend GraphQL clients pointed at the external Admin BFF

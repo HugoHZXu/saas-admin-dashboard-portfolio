@@ -23,7 +23,7 @@
 ## External Design System Boundary
 
 - Dashboard packages may import `@hugo-ui/mui` through npm-style package imports.
-- Local source linking uses the ignored `hugo-ui/` symlink plus `docs/local-hugo-ui.md`; do not commit the symlink or `.local/hugo-ui.json`.
+- Local unpublished Hugo UI builds should be published to a local npm-compatible registry and installed as exact package versions. Do not use `file:` dependencies, a root `hugo-ui/` symlink, or Vite/Vitest source aliases.
 - Keep Hugo SaaS Console docs clear that Hugo UI is external. Do not list Hugo UI packages as packages owned by this repository.
 - Do not add component-library tests, stories, package exports, changesets, or publishing scripts to this repository.
 - If a dashboard task requires a reusable component API change, call out that the change belongs in the external design-system repository before editing.
@@ -39,7 +39,6 @@
 ## Project Skills
 
 - Use `$portfolio-desensitization-review` when adding mock data, business copy, docs, README content, or code adapted from prior experience.
-- Use `$local-hugo-ui-link` when setting up or repairing local symlink-based linking to an external `hugo-ui` clone without npm publishing.
 - Use `$admin-dashboard-feature-slice` before implementing Organization Table, Organization Detail, Activity Log UI, or User Management slices.
 - Use `$activity-log-normalization` only for dashboard consumption of normalized Activity Log records. Backend normalization belongs in `hugo-saas-backend`.
 
@@ -112,7 +111,6 @@ For high-risk changes:
 - Build admin shell: `./scripts/codex-node.sh pnpm run build-admin-console`
 - Build all dashboard packages: `./scripts/codex-node.sh pnpm run build:all`
 - Full repo verification: `./scripts/codex-node.sh pnpm run verify`
-- Set up local Hugo UI link: `./scripts/codex-node.sh pnpm run setup:local-hugo-ui`
 
 Codex command sessions may not inherit the interactive terminal's Node PATH. When running Node.js, pnpm, or package scripts in this repository, use `./scripts/codex-node.sh <command>` so the local Node/pnpm runtime is selected consistently.
 Do not run `./scripts/codex-node.sh pnpm run dev:*` at the end of an implementation unless the user explicitly asks for a running local server.
